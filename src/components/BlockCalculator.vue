@@ -7,10 +7,13 @@ export default {
       active: 4,
     };
   },
+  props: {
+    white: Boolean,
+  },
 };
 </script>
 <template>
-  <div class="wrapper">
+  <div class="wrapper" :class="{ insert: this.white }">
     <h2>Калькулятор доходности</h2>
     <div class="wrapper-btns">
       <button
@@ -69,7 +72,7 @@ export default {
           </div>
         </div>
       </div>
-      <div class="right">
+      <div class="right" :class="{ white: this.white }">
         <div class="title">Ожидаемая прибыль</div>
         <div class="earn">
           <span class="title-earn">60.07 USD</span>
@@ -89,6 +92,11 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+
+.insert {
+  padding: 0 !important;
+  margin: 0 !important;
 }
 
 .wrapper-btns {
@@ -135,6 +143,10 @@ export default {
   align-items: center;
   gap: 40px;
   border-radius: 20px;
+}
+
+.white {
+  background-color: #fff;
 }
 
 .inputs {

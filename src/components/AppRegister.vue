@@ -1,4 +1,5 @@
 <script>
+import axios from "axios";
 export default {
   name: "AppRegister",
   data() {
@@ -23,7 +24,18 @@ export default {
     },
 
     async login() {
-      console.log();
+      try {
+        let response = await axios.post(`/auth/register`, {
+          firstname: this.name,
+          lastname: this.surname,
+          email: this.email,
+          password: this.password,
+          phone: this.number,
+        });
+        console.log(response);
+      } catch (err) {
+        console.log(err.response.data.detail);
+      }
     },
     updateValue(e) {
       let input = e.target.value.replace(/[^+\d]/g, "");
@@ -79,15 +91,6 @@ export default {
       </div>
       <div class="group">
         <input
-          type="email"
-          name="email"
-          v-model="email"
-          placeholder="Введите свою почту"
-        />
-        <span class="group-value">Email</span>
-      </div>
-      <div class="group">
-        <input
           :value="formatPhoneNumber"
           @input="updateValue($event)"
           type="tel"
@@ -108,7 +111,7 @@ export default {
         />
         <span class="group-value">Пароль</span>
       </div>
-      <div class="group">
+      <!-- <div class="group">
         <input
           type="password"
           name="password2"
@@ -116,8 +119,8 @@ export default {
           placeholder="Повторите пароль"
         />
         <span class="group-value">Пароль</span>
-      </div>
-      <button @click="login" class="btn">Войти</button>
+      </div> -->
+      <button @click="login" class="btn">Зарегистрироваться</button>
     </div>
   </div>
 </template>

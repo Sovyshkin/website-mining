@@ -20,7 +20,9 @@ export default {
       </p>
       <div class="wrap-btns">
         <button class="btn learn">Ознакомиться</button>
-        <button class="btn logsys">Войти в систему</button>
+        <button @click="this.$emit('updateLogin', true)" class="btn logsys">
+          Войти в систему
+        </button>
         <button class="btn youtube">
           Смотреть на Youtube
           <img src="../assets/youtube.png" alt="" />
@@ -140,7 +142,7 @@ export default {
   }
 
   .asic {
-    height: 330px;
+    height: 240px;
   }
 }
 </style>

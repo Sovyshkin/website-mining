@@ -5,7 +5,21 @@ export default {
   data() {
     return {
       lang: this.$i18n.locale,
+      names: {
+        marketplace: "Маркетплейс",
+        main: "Главная",
+        dashboard: "Дашбоард",
+        myminers: "Мои майнеры",
+        mypayments: "Мои платежи",
+        accruals: "Начисления и накопления",
+        cart: "Корзина",
+        support: "Справочный центр",
+        profile: "Профиль",
+      },
     };
+  },
+  props: {
+    login: Boolean,
   },
   methods: {
     scrollToBottom(name) {
@@ -17,10 +31,13 @@ export default {
       }
     },
   },
+  mounted() {
+    console.log(this.login);
+  },
 };
 </script>
 <template>
-  <div class="wrapper">
+  <div class="wrapper" v-if="!login">
     <img
       @click="this.$router.push({ name: 'main' })"
       class="logo"
@@ -53,6 +70,22 @@ export default {
       Войти
     </button>
   </div>
+  <div class="wrapper marketplace" v-else>
+    <span class="main"
+      ><span>Главная</span><span>/</span>
+      {{ this.names[this.$route.name] }}</span
+    >
+    <div class="info">
+      <div class="lan">
+        <img class="flag" :src="'../assets/' + lang + '.png'" alt="" />
+        <span>{{ lang }}</span>
+        <img src="" alt="" />
+      </div>
+      <div class="avatar">
+        <img src="../assets/avatar.jpeg" alt="" />
+      </div>
+    </div>
+  </div>
 </template>
 <style scoped>
 .wrapper {
@@ -62,7 +95,7 @@ export default {
   gap: 30px;
   align-items: center;
   padding: 0 40px;
-  justify-content: center;
+  justify-content: space-between;
   background-color: white;
 }
 
@@ -128,6 +161,37 @@ export default {
 .item-nav:hover:after,
 .item-nav:focus:after {
   width: 100%;
+}
+
+.main {
+  font-size: 14px;
+  line-height: 14px;
+  font-weight: 500;
+  color: #0f0f0f;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.main span {
+  opacity: 30%;
+}
+
+.avatar {
+  border-radius: 45px;
+  overflow: hidden;
+}
+
+.avatar img {
+  height: 52px;
+  width: 52px;
+  object-fit: cover;
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 @media (max-width: 1000px) {

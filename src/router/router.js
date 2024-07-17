@@ -1,19 +1,55 @@
 import { createRouter, createWebHistory } from "vue-router";
 import AppVue from "../App.vue";
 import App404 from "../components/App_404.vue";
+import AppMarket from "../components/AppMarket.vue";
+import AppCart from "../components/AppCart.vue";
+import MyMiners from "../components/MyMiners.vue";
+import BlockFaq from "../components/BlockFaq.vue";
+import AppProfile from "../components/AppProfile.vue";
+import AppMain from "../components/AppMain.vue";
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
       path: "/",
-      name: "main",
+      name: "home",
       component: AppVue,
     },
     {
       path: "/404",
       name: "404",
       component: App404,
+    },
+    {
+      path: "/marketplace",
+      name: "marketplace",
+      component: AppMarket,
+    },
+    {
+      path: "/cart",
+      name: "cart",
+      component: AppCart,
+    },
+    {
+      path: "/myminers",
+      name: "myminers",
+      component: MyMiners,
+    },
+    {
+      path: "/support",
+      name: "support",
+      component: BlockFaq,
+    },
+    {
+      path: "/profile",
+      name: "profile",
+      component: AppProfile,
+    },
+    {
+      path: "/main",
+      name: "main",
+      component: AppMain,
     },
   ],
 });

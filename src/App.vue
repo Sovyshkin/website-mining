@@ -12,6 +12,8 @@ import GoTry from "./components/GoTry.vue";
 import AppLogin from "./components/AppLogin.vue";
 import AppRegister from "./components/AppRegister.vue";
 import ResetPassword from "./components/ResetPassword.vue";
+import LeftPanel from "./components/LeftPanel.vue";
+import DeleteWallet from "./components/DeleteWallet.vue";
 import { RouterView } from "vue-router";
 
 export default {
@@ -31,6 +33,8 @@ export default {
     AppRegister,
     ResetPassword,
     RouterView,
+    LeftPanel,
+    DeleteWallet,
   },
   data() {
     return {
@@ -38,6 +42,7 @@ export default {
       login: false,
       register: false,
       reset: false,
+      deleteWallet: false,
     };
   },
   methods: {
@@ -58,6 +63,9 @@ export default {
       this.gotry = false;
       this.register = false;
       this.reset = reset;
+    },
+    handleDelete(deleteWallet) {
+      this.deleteWallet = deleteWallet;
     },
     checkRoute() {
       if (this.$route.fullPath == "/") {
@@ -86,7 +94,7 @@ export default {
       v-if="gotry"
     />
     <AppHeader @updateLogin="handleLogin" />
-    <Block_1 />
+    <Block_1 @updateLogin="handleLogin" />
     <Calculator />
     <Equipment @updateGoTry="handleTry" id="equipment" />
     <Banner_1 />
@@ -95,7 +103,7 @@ export default {
     <Faq id="faq" />
     <Banner_2 />
   </div>
-  <div class="wrap" v-else>
+  <div class="wrap" v-else-if="this.$route.fullPath == '/404'">
     <ResetPassword @updateReset="handleReset" v-if="reset" />
     <AppRegister @updateRegister="handleRegister" v-if="register" />
     <AppLogin
@@ -112,6 +120,14 @@ export default {
     />
     <AppHeader @updateLogin="handleLogin" />
     <RouterView />
+  </div>
+  <div class="wrap market" v-else>
+    <LeftPanel />
+    <DeleteWallet v-if="this.deleteWallet" />
+    <main class="marketplace">
+      <AppHeader :login="true" />
+      <RouterView @updateDeleteWallet="handleDelete" />
+    </main>
   </div>
 </template>
 <style>
@@ -137,6 +153,8 @@ export default {
 .wrap {
   display: flex;
   flex-direction: column;
+  max-width: 1440px;
+  position: relative;
 }
 
 body,
@@ -236,5 +254,26 @@ button::-moz-focus-inner {
 .card:hover {
   transform: scale(1.06);
   box-shadow: 0 0 10px 0 #00000037;
+}
+
+.market {
+  flex-direction: row;
+}
+
+.marketplace {
+  width: 75%;
+}
+
+@media (max-width: 564px) {
+  .marketplace {
+    width: 93%;
+  }
+}
+
+@media (max-width: 420px) {
+  .wrapper {
+    margin-top: 0 !important;
+    padding: 20px !important;
+  }
 }
 </style>

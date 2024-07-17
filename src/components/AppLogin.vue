@@ -1,6 +1,15 @@
 <script>
+import axios from "axios";
 export default {
   name: "AppLogin",
+  data() {
+    return {
+      email: "",
+      password: "",
+      auth: false,
+      code: "",
+    };
+  },
   methods: {
     cancel() {
       document.body.style.overflow = "auto";
@@ -8,7 +17,47 @@ export default {
     },
 
     async login() {
-      console.log();
+      try {
+        if (this.email && this.password) {
+          let response = await axios.post(`/auth/login`, {
+            email: this.email,
+            password: this.password,
+          });
+          let msg = response.data.message;
+          if (msg == "check email") {
+            this.auth = true;
+          }
+        }
+      } catch (res) {
+        let response = res.response.data.detail;
+        if (response) {
+          console.log;
+        }
+      }
+    },
+
+    async verify() {
+      try {
+        if (this.code) {
+          let response = await axios.post(`/auth/verify_totp`, {
+            email: this.email,
+            otp: this.code,
+          });
+          let status = response.status;
+          if (status == 200) {
+            let id = response.data.id;
+            document.cookie = `id=${id}; max-age=0`;
+            document.cookie = `id=${id}; max-age=1123200`;
+          } else {
+            console.log(response);
+          }
+        }
+      } catch (res) {
+        let response = res.response.data.detail;
+        if (response) {
+          console.log;
+        }
+      }
     },
   },
   mounted() {
@@ -19,7 +68,7 @@ export default {
 </script>
 <template>
   <div class="wrapper">
-    <div class="card">
+    <div class="card" v-if="!auth">
       <div class="cancel">
         <span class="title">Вход</span>
         <img @click="cancel" src="../assets/close.png" alt="" />
@@ -54,6 +103,22 @@ export default {
         >
       </div>
     </div>
+    <div class="card" v-else>
+      <div class="cancel">
+        <span class="title">Подтверждение</span>
+        <img @click="cancel" src="../assets/close.png" alt="" />
+      </div>
+      <div class="group">
+        <input
+          type="text"
+          name="code"
+          v-model="code"
+          placeholder="Введите код"
+        />
+        <span class="group-value">2fa</span>
+      </div>
+      <button @click="verify" class="btn">Войти</button>
+    </div>
   </div>
 </template>
 <style scoped>
@@ -77,6 +142,7 @@ export default {
   border-radius: 20px;
   background-color: #fff;
   border: 1px solid #fff;
+  min-width: 350px;
 }
 
 .title {
