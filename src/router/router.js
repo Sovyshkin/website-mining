@@ -7,6 +7,7 @@ import MyMiners from "../components/MyMiners.vue";
 import BlockFaq from "../components/BlockFaq.vue";
 import AppProfile from "../components/AppProfile.vue";
 import AppMain from "../components/AppMain.vue";
+import ControlReset from "../components/СontrolReset.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -50,6 +51,11 @@ const router = createRouter({
       path: "/main",
       name: "main",
       component: AppMain,
+    },
+    {
+      path: "/reset_password",
+      name: "controlreset",
+      component: ControlReset,
     },
   ],
 });

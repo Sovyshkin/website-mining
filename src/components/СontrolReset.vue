@@ -2,66 +2,83 @@
 import axios from "axios";
 
 export default {
-  name: "ResetPassword",
+  name: "ControlReset",
   data() {
     return {
-      email: "",
-      send: false,
+      new_password: "",
+      new_password2: "",
+      token: this.$route.query.token,
+      message: "",
     };
   },
   methods: {
     cancel() {
-      document.body.style.overflow = "auto";
-      this.$emit("updateReset", false);
+      this.$router.push({ name: "home" });
     },
 
-    async login() {
-      console.log();
-    },
-
-    async reset() {
+    async save() {
       try {
-        if (this.email) {
-          axios.post(`/users/requireResetPassword?email=${this.email}`);
+        if (this.new_password == this.new_password2) {
+          let response = await axios.post(`/users/resetPassword`, {
+            request_id: this.token,
+            new_password: this.new_password,
+          });
+          console.log(response);
+          this.message = response.data.message;
+          if (this.message == "ok") {
+            this.message = "Успешно";
+          }
+        } else {
+          this.message = "Пароли не совпадают!";
         }
-        this.send = true;
+        setTimeout(() => {
+          this.message = "";
+          this.$router.push({ name: "home" });
+        }, 2500);
       } catch (err) {
         console.log(err);
       }
     },
   },
-  mounted() {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    document.body.style.overflow = "hidden";
-  },
+  mounted() {},
 };
 </script>
 <template>
   <div class="wrapper">
     <div class="card">
       <div class="cancel">
-        <span class="title">Сбросить пароль</span>
+        <span class="title">Придумайте новый пароль</span>
         <img @click="cancel" src="../assets/close.png" alt="" />
       </div>
-      <div class="group" v-if="!send">
+      <div class="group">
         <input
-          type="email"
-          name="email"
-          id="email"
-          v-model="email"
-          placeholder="Введите свою почту"
+          type="password"
+          name="password"
+          v-model="new_password"
+          placeholder="Введите новый пароль"
         />
-        <span class="group-value">Email</span>
+        <span class="group-value">Новый пароль</span>
       </div>
-      <div class="desc" v-if="send">
-        Ссылка для сброса пароля отправлена по адресу:
-        <span class="red">{{ email }}</span
-        >. Пожалуйста, нажмите на ссылку в письме, чтобы продолжить.
+      <div class="group">
+        <input
+          type="password"
+          name="password2"
+          v-model="new_password2"
+          placeholder="Введите пароль снова"
+        />
+        <span class="group-value">Повторите пароль</span>
       </div>
-      <button v-if="!send" @click="reset" class="btn">Сбросить пароль</button>
-      <button v-if="send" @click="this.$emit('updateReset', false)" class="btn">
-        Понятно
-      </button>
+      <button @click="save" v-if="!message" class="btn">Сохранить</button>
+      <div
+        class="msg"
+        :class="{
+          success: this.message == 'Успешно',
+          error: this.message == 'Пароли не совпадают!',
+        }"
+        v-if="message"
+      >
+        {{ message }}
+      </div>
     </div>
   </div>
 </template>
@@ -186,5 +203,22 @@ input::placeholder {
 .card:hover {
   cursor: auto;
   transform: none;
+}
+.msg {
+  padding: 10px 13px;
+  font-size: 16px;
+  line-height: 16px;
+  color: #fff;
+  border-radius: 15px;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.success {
+  background-color: #45ed0b;
+}
+
+.error {
+  background-color: #cf0032;
 }
 </style>

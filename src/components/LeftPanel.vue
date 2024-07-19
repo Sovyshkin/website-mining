@@ -117,7 +117,7 @@ export default {
 <template>
   <div class="panel">
     <nav class="group-nav">
-      <li class="nav-item" @click="this.$router.push({ name: 'main' })">
+      <li class="nav-item" @click="this.$router.push({ name: 'home' })">
         <img class="logo" src="../assets/logo.png" alt="" />
       </li>
       <li
@@ -305,8 +305,7 @@ export default {
   }
 
   .logo {
-    width: 40px;
-    height: 40px;
+    display: none;
   }
 }
 </style>

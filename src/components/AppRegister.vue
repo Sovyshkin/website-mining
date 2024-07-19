@@ -10,6 +10,7 @@ export default {
       password2: "",
       number: "+7",
       email: "",
+      message: "",
     };
   },
   computed: {
@@ -32,7 +33,16 @@ export default {
           password: this.password,
           phone: this.number,
         });
-        console.log(response);
+        this.message = response.data.message;
+        if (this.message == "ok") {
+          this.message = "Успешно";
+        } else {
+          this.message = "Ошибка";
+        }
+        setTimeout(() => {
+          this.message = "";
+          this.$router.push({ name: "home" });
+        });
       } catch (err) {
         console.log(err.response.data.detail);
       }
@@ -120,14 +130,26 @@ export default {
         />
         <span class="group-value">Пароль</span>
       </div> -->
-      <button @click="login" class="btn">Зарегистрироваться</button>
+      <button @click="login" v-if="!message" class="btn">
+        Зарегистрироваться
+      </button>
+      <div
+        class="msg"
+        :class="{
+          success: this.message == 'Успешно',
+          error: this.message == 'Ошибка',
+        }"
+        v-if="message"
+      >
+        {{ message }}
+      </div>
     </div>
   </div>
 </template>
 <style scoped>
 .wrapper {
   position: absolute;
-  height: 110%;
+  height: 100vh;
   width: 100%;
   backdrop-filter: blur(4px);
   display: flex;
@@ -241,6 +263,24 @@ input::placeholder {
 .card:hover {
   cursor: auto;
   transform: none;
+}
+
+.msg {
+  padding: 10px 13px;
+  font-size: 16px;
+  line-height: 16px;
+  color: #fff;
+  border-radius: 15px;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.success {
+  background-color: #45ed0b;
+}
+
+.error {
+  background-color: #cf0032;
 }
 
 @media (max-width: 680px) {

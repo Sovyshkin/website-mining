@@ -17,7 +17,7 @@ const messages = {
 };
 
 const i18n = createI18n({
-  locale: "RU", // Задайте здесь язык по умолчанию
+  locale: "RU",
   messages,
 });
 

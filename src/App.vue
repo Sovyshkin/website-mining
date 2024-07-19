@@ -103,7 +103,12 @@ export default {
     <Faq id="faq" />
     <Banner_2 />
   </div>
-  <div class="wrap" v-else-if="this.$route.fullPath == '/404'">
+  <div
+    class="wrap"
+    v-else-if="
+      this.$route.fullPath == '/404' || this.$route.name == 'controlreset'
+    "
+  >
     <ResetPassword @updateReset="handleReset" v-if="reset" />
     <AppRegister @updateRegister="handleRegister" v-if="register" />
     <AppLogin
@@ -155,6 +160,7 @@ export default {
   flex-direction: column;
   max-width: 1440px;
   position: relative;
+  margin: 0 auto;
 }
 
 body,

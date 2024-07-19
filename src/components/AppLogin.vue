@@ -8,6 +8,7 @@ export default {
       password: "",
       auth: false,
       code: "",
+      message: "",
     };
   },
   methods: {
@@ -46,8 +47,15 @@ export default {
           let status = response.status;
           if (status == 200) {
             let id = response.data.id;
-            document.cookie = `id=${id}; max-age=0`;
-            document.cookie = `id=${id}; max-age=1123200`;
+            let token = response.data.token;
+            localStorage.setItem("id", id);
+            localStorage.setItem("token", token);
+            this.message = "Успешно";
+            setTimeout(() => {
+              this.message = "";
+              this.$emit("updateLogin", false);
+              location.reload();
+            }, 3000);
           } else {
             console.log(response);
           }
@@ -115,16 +123,26 @@ export default {
           v-model="code"
           placeholder="Введите код"
         />
-        <span class="group-value">2fa</span>
+        <span class="group-value">Код из письма email</span>
       </div>
-      <button @click="verify" class="btn">Войти</button>
+      <button @click="verify" v-if="!message" class="btn">Войти</button>
+      <div
+        class="msg"
+        :class="{
+          success: this.message == 'Успешно',
+          error: this.message == 'Неверный код',
+        }"
+        v-if="message"
+      >
+        {{ message }}
+      </div>
     </div>
   </div>
 </template>
 <style scoped>
 .wrapper {
   position: absolute;
-  height: 110%;
+  height: 100vh;
   width: 100%;
   backdrop-filter: blur(4px);
   display: flex;
@@ -238,5 +256,23 @@ input::placeholder {
 .card:hover {
   cursor: auto;
   transform: none;
+}
+
+.msg {
+  padding: 10px 13px;
+  font-size: 16px;
+  line-height: 16px;
+  color: #fff;
+  border-radius: 15px;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.success {
+  background-color: #45ed0b;
+}
+
+.error {
+  background-color: #cf0032;
 }
 </style>

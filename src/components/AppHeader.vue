@@ -16,6 +16,7 @@ export default {
         support: "Справочный центр",
         profile: "Профиль",
       },
+      id: null,
     };
   },
   props: {
@@ -32,12 +33,17 @@ export default {
     },
   },
   mounted() {
-    console.log(this.login);
+    this.id = localStorage.getItem("id") || null;
+
+    window.addEventListener("storage", () => {
+      console.log("я тут");
+      this.id = localStorage.getItem("id") || null;
+    });
   },
 };
 </script>
 <template>
-  <div class="wrapper" v-if="!login">
+  <div class="wrapper" v-if="!id">
     <img
       @click="this.$router.push({ name: 'main' })"
       class="logo"
@@ -81,7 +87,7 @@ export default {
         <span>{{ lang }}</span>
         <img src="" alt="" />
       </div>
-      <div class="avatar">
+      <div class="avatar" @click="this.$router.push({ name: 'profile' })">
         <img src="../assets/avatar.jpeg" alt="" />
       </div>
     </div>
@@ -180,6 +186,7 @@ export default {
 .avatar {
   border-radius: 45px;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .avatar img {

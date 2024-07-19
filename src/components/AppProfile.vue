@@ -1,24 +1,31 @@
 <script>
+import axios from "axios";
+
 export default {
   name: "AppProfile",
   components: {},
   data() {
     return {
       active: 1,
-      type: "id",
+      profiletype: "",
       firstname: "",
       lastname: "",
       email: "",
       phone: "",
-      country: "ru",
+      country: "",
       address: "",
       inn: "",
       telegram: "",
-      password: "",
+      old_password: "",
+      new_password: "",
+      new_password2: "",
       code_2fa: "",
       wallet: "",
       walletNew: "",
       code: "",
+      countries: [],
+      message: "",
+      message2: "",
     };
   },
   computed: {
@@ -38,8 +45,102 @@ export default {
       this.phone = input;
       e.target.value = this.formatPhoneNumber;
     },
+
+    async load_info() {
+      try {
+        let res = await axios.get(`/users/countries`);
+        this.countries = res.data;
+        let response = await axios.get(`/users/${localStorage.getItem("id")}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        this.email = response.data.email;
+        this.phone = response.data.phone;
+        this.firstname = response.data.firstname;
+        this.lastname = response.data.lastname;
+        this.country = response.data.country;
+        this.profiletype = response.data.profileType;
+        this.inn = response.data.inn;
+        this.address = response.data.address;
+        this.telegram = response.data.telegram;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
+    async updateProfile() {
+      try {
+        let response = await axios.post(
+          "/users/updateProfile",
+          {
+            id: localStorage.getItem("id"),
+            firstname: this.firstname,
+            lastname: this.lastname,
+            profiletype: this.profiletype,
+            email: this.email,
+            phone: this.phone,
+            country: this.country,
+            address: this.address,
+            inn: this.inn,
+            telegram: this.telegram,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+
+        this.message = response.data.message;
+        if (this.message == "ok") {
+          this.message = "Успешно";
+        } else {
+          this.message = "Ошибка";
+        }
+        setTimeout(() => {
+          this.message = "";
+        }, 2500);
+        this.load_info();
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
+    async updatePassword() {
+      try {
+        if (this.new_password == this.new_password2) {
+          let response = await axios.post(
+            `/users/updatePassword`,
+            {
+              old_password: this.old_password,
+              new_password: this.new_password,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }
+          );
+          this.message2 = response.data.message;
+          if (this.message2 == "ok") {
+            this.message2 = "Успешно";
+          }
+        } else {
+          this.message2 = "Пароли не совпадают!";
+        }
+        setTimeout(() => {
+          this.message2 = "";
+        }, 2500);
+      } catch (err) {
+        console.log(err);
+      }
+    },
   },
-  mounted() {},
+  mounted() {
+    document.body.style.overflow = "auto";
+    this.load_info();
+  },
 };
 </script>
 <template>
@@ -73,8 +174,9 @@ export default {
         <h3>Личные данные</h3>
         <div class="personal_info">
           <div class="group">
-            <select v-model="type" id="">
+            <select v-model="profiletype" id="">
               <option value="id">Индивидуальный</option>
+              <option value="business">Бизнес</option>
             </select>
             <span class="group-value">Тип профиля</span>
           </div>
@@ -119,8 +221,14 @@ export default {
             <span class="group-value">Телефон</span>
           </div>
           <div class="group">
-            <select v-model="country" id="">
-              <option value="ru">Россия</option>
+            <select v-model="country">
+              <option
+                v-for="item in countries"
+                :value="item.short_code"
+                :key="item.id"
+              >
+                {{ item.name }}
+              </option>
             </select>
             <span class="group-value">Страна</span>
           </div>
@@ -151,7 +259,19 @@ export default {
             />
             <span class="group-value">Telegram</span>
           </div>
-          <button class="btn">Обновить информацию</button>
+          <button v-if="!this.message" class="btn" @click="updateProfile">
+            Обновить информацию
+          </button>
+          <div
+            class="msg"
+            :class="{
+              success: this.message == 'Успешно',
+              error: this.message == 'Ошибка',
+            }"
+            v-if="message"
+          >
+            {{ message }}
+          </div>
         </div>
       </div>
       <div class="pass">
@@ -161,7 +281,7 @@ export default {
             <input
               type="password"
               name="password"
-              v-model="lastPassword"
+              v-model="old_password"
               placeholder="Введите пароль"
             />
             <span class="group-value">Старый пароль</span>
@@ -170,7 +290,7 @@ export default {
             <input
               type="password"
               name="password"
-              v-model="password"
+              v-model="new_password"
               placeholder="Введите новый пароль"
             />
             <span class="group-value">Новый пароль</span>
@@ -179,12 +299,24 @@ export default {
             <input
               type="password"
               name="password2"
-              v-model="password2"
+              v-model="new_password2"
               placeholder="Введите пароль снова"
             />
             <span class="group-value">Повторите пароль</span>
           </div>
-          <button class="btn">Изменить пароль</button>
+          <button class="btn" v-if="!message2" @click="updatePassword">
+            Изменить пароль
+          </button>
+          <div
+            class="msg"
+            :class="{
+              success: this.message2 == 'Успешно',
+              error: this.message2 == 'Пароли не совпадают!',
+            }"
+            v-if="message2"
+          >
+            {{ message2 }}
+          </div>
         </div>
       </div>
     </div>
@@ -385,5 +517,40 @@ h3 {
   font-size: 20px;
   line-height: 20px;
   font-weight: 600;
+}
+.msg {
+  padding: 10px 13px;
+  font-size: 16px;
+  line-height: 16px;
+  color: #fff;
+  border-radius: 15px;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.success {
+  background-color: #45ed0b;
+}
+
+.error {
+  background-color: #cf0032;
+}
+
+@media (max-width: 980px) {
+  .info,
+  .wallet,
+  .fa2 {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 620px) {
+  .wrap_btns {
+    flex-direction: column;
+  }
+
+  .wrap_btns button {
+    width: 100%;
+  }
 }
 </style>
