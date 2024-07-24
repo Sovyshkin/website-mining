@@ -137,7 +137,7 @@ export default {
         class="msg"
         :class="{
           success: this.message == 'Успешно',
-          error: this.message == 'Ошибка',
+          error: this.message != 'Успешно',
         }"
         v-if="message"
       >

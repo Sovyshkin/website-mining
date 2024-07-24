@@ -1,50 +1,12 @@
 <script>
+import axios from "axios";
+
 export default {
   name: "AppMarket",
   components: {},
   data() {
     return {
-      card: {
-        id: 1,
-        price: "2600",
-        name: "ANTMINER S19K PRO 120TH",
-        hashrate: "120",
-        hosting: "95.18",
-        profit: "88.42",
-        earn: "77.42",
-        power: "32 760",
-        time_profit: "5 месяцев",
-        img: "asic",
-        online: true,
-      },
-      cards: [
-        {
-          id: 1,
-          price: "2600",
-          name: "ANTMINER S19K PRO 120TH",
-          hashrate: "120",
-          hosting: "95.18",
-          profit: "88.42",
-          earn: "77.42",
-          power: "32 760",
-          time_profit: "5 месяцев",
-          img: "asic",
-          online: true,
-        },
-        {
-          id: 2,
-          price: "2600",
-          name: "ANTMINER S19K PRO 120TH",
-          hashrate: "120",
-          hosting: "95.18",
-          profit: "88.42",
-          earn: "77.42",
-          power: "32 760",
-          time_profit: "5 месяцев",
-          img: "asic",
-          online: false,
-        },
-      ],
+      cards: [],
     };
   },
   methods: {
@@ -62,10 +24,23 @@ export default {
       this.card.count++;
     },
 
-    async load_info() {},
+    async load_info() {
+      try {
+        let response = await axios.get(`/workers`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        console.log(response);
+        this.cards = response.data;
+      } catch (err) {
+        console.log(err);
+      }
+    },
   },
   mounted() {
     document.body.style.overflow = "auto";
+    this.load_info();
   },
 };
 </script>

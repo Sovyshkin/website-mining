@@ -1,4 +1,5 @@
 <script>
+import axios from "axios";
 export default {
   name: "AppHeader",
   components: {},
@@ -8,10 +9,10 @@ export default {
       names: {
         marketplace: "Маркетплейс",
         main: "Главная",
-        dashboard: "Дашбоард",
+        dashboard: "Приборная панель",
         myminers: "Мои майнеры",
         mypayments: "Мои платежи",
-        accruals: "Начисления и накопления",
+        accruals: "Начисления и списания",
         cart: "Корзина",
         support: "Справочный центр",
         profile: "Профиль",
@@ -31,12 +32,35 @@ export default {
         this.$router.push({ name: "main" });
       }
     },
+
+    async verify_token() {
+      try {
+        let response = await axios.post(
+          `/auth/validate`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        // let message = response.data.message;
+        console.log(response);
+        // if (message != "ok") {
+        //   this.$router.push({ name: "home" });
+        // }
+      } catch (err) {
+        console.log(err);
+        localStorage.clear();
+        this.$router.push({ name: "home" });
+      }
+    },
   },
   mounted() {
+    this.verify_token();
     this.id = localStorage.getItem("id") || null;
 
     window.addEventListener("storage", () => {
-      console.log("я тут");
       this.id = localStorage.getItem("id") || null;
     });
   },

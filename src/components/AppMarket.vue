@@ -1,101 +1,31 @@
 <script>
+import axios from "axios";
+
 export default {
   name: "AppMarket",
   components: {},
   data() {
     return {
-      cards: [
-        {
-          price: "2600",
-          name: "ANTMINER S19K PRO 120TH",
-          hashrate: "120",
-          profit: "460",
-          power: 2760,
-          time_profit: "5 месяцев",
-          img: "asic",
-        },
-        {
-          price: "2600",
-          name: "ANTMINER S19K PRO 120TH",
-          hashrate: "120",
-          profit: "460",
-          power: 2760,
-          time_profit: "5 месяцев",
-          img: "asic",
-        },
-        {
-          price: "2600",
-          name: "ANTMINER S19K PRO 120TH",
-          hashrate: "120",
-          profit: "460",
-          power: 2760,
-          time_profit: "5 месяцев",
-          img: "asic",
-        },
-        {
-          price: "2600",
-          name: "ANTMINER S19K PRO 120TH",
-          hashrate: "120",
-          profit: "460",
-          power: 2760,
-          time_profit: "5 месяцев",
-          img: "asic",
-        },
-        {
-          price: "2600",
-          name: "ANTMINER S19K PRO 120TH",
-          hashrate: "120",
-          profit: "460",
-          power: 2760,
-          time_profit: "5 месяцев",
-          img: "asic",
-        },
-        {
-          price: "2600",
-          name: "ANTMINER S19K PRO 120TH",
-          hashrate: "120",
-          profit: "460",
-          power: 2760,
-          time_profit: "5 месяцев",
-          img: "asic",
-        },
-        {
-          price: "2600",
-          name: "ANTMINER S19K PRO 120TH",
-          hashrate: "120",
-          profit: "460",
-          power: 2760,
-          time_profit: "5 месяцев",
-          img: "asic",
-        },
-        {
-          price: "2600",
-          name: "ANTMINER S19K PRO 120TH",
-          hashrate: "120",
-          profit: "460",
-          power: 2760,
-          time_profit: "5 месяцев",
-          img: "asic",
-        },
-        {
-          price: "2600",
-          name: "ANTMINER S19K PRO 120TH",
-          hashrate: "120",
-          profit: "460",
-          power: 2760,
-          time_profit: "5 месяцев",
-          img: "asic",
-        },
-      ],
+      cards: [],
     };
   },
   methods: {
     goTry() {
       this.$emit("updateGoTry", true);
     },
+
+    async load_info() {
+      try {
+        let response = await axios.get(`/market/miners`);
+        this.cards = response.data;
+      } catch (err) {
+        console.log(err);
+      }
+    },
   },
   mounted() {
     document.body.style.overflow = "auto";
+    this.load_info();
   },
 };
 </script>
@@ -106,21 +36,21 @@ export default {
       <div class="card" v-for="card in cards" :key="card.id">
         <img class="asic" src="../assets/asic.png" alt="" />
         <div class="scale"></div>
-        <div class="time_profit">Время окупаемости: {{ card.time_profit }}</div>
+        <div class="time_profit">Время окупаемости:</div>
         <div class="info">
-          <span class="price">${{ card.price }}</span>
+          <span class="price">${{ card.buy_cost / 100 }}</span>
           <span class="name">{{ card.name }}</span>
           <div class="group">
             <span class="group-name">Хешрейт:</span>
-            <span class="group-value">{{ card.hashrate }} TH/s</span>
+            <span class="group-value">{{ card.hashrate }}</span>
           </div>
           <div class="group">
             <span class="group-name">Доход:</span>
-            <span class="group-value">${{ card.profit }}/месяц</span>
+            <span class="group-value">${{ card.dohod }}/месяц</span>
           </div>
           <div class="group">
             <span class="group-name">Расход:</span>
-            <span class="group-value">{{ card.power }} Вт</span>
+            <span class="group-value">{{ card.rashod }} Вт</span>
           </div>
         </div>
         <button @click="goTry" class="btn">Заказать</button>
@@ -147,7 +77,7 @@ export default {
 
 .card {
   min-height: 474px;
-  flex: 30%;
+  flex: 48%;
   border-radius: 20px;
   display: flex;
   flex-direction: column;
@@ -251,11 +181,6 @@ export default {
 @media (max-width: 1060px) {
   .cards {
     flex-wrap: wrap;
-  }
-
-  .card {
-    width: 33%;
-    max-width: 33%;
   }
 }
 

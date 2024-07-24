@@ -1,9 +1,10 @@
 <script>
 import axios from "axios";
+import Qrcode from "qrcode.vue";
 
 export default {
   name: "AppProfile",
-  components: {},
+  components: { Qrcode },
   data() {
     return {
       active: 1,
@@ -22,10 +23,14 @@ export default {
       code_2fa: "",
       wallet: "",
       walletNew: "",
-      code: "",
+      otp: "",
       countries: [],
       message: "",
       message2: "",
+      message3: "",
+      message4: "",
+      mfa_url: "",
+      confirm2fa: false,
     };
   },
   computed: {
@@ -64,6 +69,7 @@ export default {
         this.inn = response.data.inn;
         this.address = response.data.address;
         this.telegram = response.data.telegram;
+        this.wallet = response.data.wallet;
       } catch (err) {
         console.log(err);
       }
@@ -100,8 +106,8 @@ export default {
         }
         setTimeout(() => {
           this.message = "";
+          this.load_info();
         }, 2500);
-        this.load_info();
       } catch (err) {
         console.log(err);
       }
@@ -134,6 +140,85 @@ export default {
         }, 2500);
       } catch (err) {
         console.log(err);
+      }
+    },
+
+    async getmfa() {
+      try {
+        let response = await axios.get(
+          `/auth/getmfa?password=${this.password}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        this.mfa_url = response.data.mfa_url;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
+    async enablemfa() {
+      try {
+        if (this.code_2fa) {
+          let response = await axios.post(
+            `/auth/enablemfa?otp=${this.code_2fa}`,
+            {},
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }
+          );
+          this.message3 = response.data.message;
+          if (this.message3 == "ok") {
+            this.message3 = "Успешно";
+            this.load_info();
+          }
+        }
+      } catch (err) {
+        console.log(err);
+        this.message3 = "Неверный код";
+        setTimeout(() => {
+          this.message3 = "";
+        }, 3000);
+      }
+    },
+
+    authComfirm() {
+      this.confirm2fa = true;
+      this.mfa_url = "";
+    },
+
+    async setWallet() {
+      try {
+        let response = await axios.post(
+          `/users/setWallet`,
+          {
+            wallet: this.walletNew,
+            otp: this.otp,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        this.message4 = response.data.message;
+        if (this.message4 == "ok") {
+          this.message4 = "Успешно";
+          setTimeout(() => {
+            this.message4 = "";
+            this.load_info();
+          }, 3000);
+        }
+      } catch (err) {
+        console.log(err);
+        this.message4 = "Неверный код";
+        setTimeout(() => {
+          this.message4 = "";
+        }, 3000);
       }
     },
   },
@@ -320,8 +405,8 @@ export default {
         </div>
       </div>
     </div>
-    <div class="fa2" v-if="active == 2">
-      <div class="open">
+    <div class="fa2" v-if="active == 2 && !mfa_url">
+      <div class="open" v-if="!confirm2fa">
         <h3>1. Откройте приложение Google 2Fa</h3>
         <div class="open_info">
           <p class="text">
@@ -337,15 +422,16 @@ export default {
             />
             <span class="group-value">Пароль</span>
           </div>
-          <button class="btn">Получить QR-code</button>
+          <button @click="getmfa" type="button" class="btn">
+            Получить QR-code
+          </button>
         </div>
       </div>
-      <div class="confirmation">
+      <div class="confirmation" v-if="confirm2fa">
         <h3>2. Подтвердите код Google 2Fa</h3>
         <div class="confirmation_info">
           <p class="text">
-            Введите ниже код 2Fa, сгенерированный приложением Google, и ваш
-            текущий пароль.
+            Введите ниже код 2Fa, сгенерированный приложением Google.
           </p>
           <div class="group">
             <input
@@ -356,9 +442,27 @@ export default {
             />
             <span class="group-value">Код Google 2Fa из приложения:</span>
           </div>
-          <button class="btn">Включить Google 2Fa</button>
+          <button v-if="!message3" type="button" class="btn" @click="enablemfa">
+            Включить Google 2Fa
+          </button>
+          <div
+            class="msg"
+            :class="{
+              success: this.message3 == 'Успешно',
+              error: this.message3 == 'Неверный код',
+            }"
+            v-if="message3"
+          >
+            {{ message3 }}
+          </div>
         </div>
       </div>
+    </div>
+    <div class="qr" v-if="mfa_url && !confirm2fa">
+      <span>Отсканируйте QR-code</span>
+      <qrcode class="qrcode" :value="mfa_url"></qrcode>
+      <a :href="mfa_url">{{ mfa_url }}</a>
+      <button @click="authComfirm" type="button" class="btn">Продолжить</button>
     </div>
     <div class="wallet" v-if="active == 3">
       <div class="current_wallet">
@@ -387,12 +491,24 @@ export default {
             <input
               type="text"
               name="code"
-              v-model="code"
+              v-model="otp"
               placeholder="Введите код"
             />
             <span class="group-value">Код Google 2Fa из приложения:</span>
           </div>
-          <button class="btn">Добавить</button>
+          <button v-if="!message4" @click="setWallet" class="btn">
+            Добавить
+          </button>
+          <div
+            class="msg"
+            :class="{
+              success: this.message4 == 'Успешно',
+              error: this.message4 == 'Неверный код',
+            }"
+            v-if="message4"
+          >
+            {{ message4 }}
+          </div>
         </div>
       </div>
     </div>
@@ -534,6 +650,35 @@ h3 {
 
 .error {
   background-color: #cf0032;
+}
+
+.qr {
+  width: fit-content;
+  background-color: #fff;
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.qr span {
+  font-size: 20px;
+  line-height: 20px;
+  font-weight: 600;
+}
+
+.qr .btn {
+  background-color: #cf0032;
+  color: #fff;
+}
+
+.qrcode {
+  width: 200px !important;
+  height: 200px !important;
 }
 
 @media (max-width: 980px) {

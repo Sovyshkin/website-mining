@@ -104,7 +104,7 @@ export default {
     <Banner_2 />
   </div>
   <div
-    class="wrap"
+    class="wrap more"
     v-else-if="
       this.$route.fullPath == '/404' || this.$route.name == 'controlreset'
     "
@@ -161,6 +161,12 @@ export default {
   max-width: 1440px;
   position: relative;
   margin: 0 auto;
+}
+
+.market,
+.more {
+  width: 100%;
+  max-width: none;
 }
 
 body,

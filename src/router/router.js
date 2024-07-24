@@ -8,6 +8,9 @@ import BlockFaq from "../components/BlockFaq.vue";
 import AppProfile from "../components/AppProfile.vue";
 import AppMain from "../components/AppMain.vue";
 import ControlReset from "../components/СontrolReset.vue";
+import MyPayments from "@/components/MyPayments.vue";
+import AppAccruals from "@/components/AppAccruals.vue";
+import AppDashboard from "@/components/AppDashboard.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -56,6 +59,21 @@ const router = createRouter({
       path: "/reset_password",
       name: "controlreset",
       component: ControlReset,
+    },
+    {
+      path: "/mypayments",
+      name: "mypayments",
+      component: MyPayments,
+    },
+    {
+      path: "/accruals",
+      name: "accruals",
+      component: AppAccruals,
+    },
+    {
+      path: "/dashboard",
+      name: "dashboard",
+      component: AppDashboard,
     },
   ],
 });
