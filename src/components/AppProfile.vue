@@ -29,6 +29,7 @@ export default {
       message2: "",
       message3: "",
       message4: "",
+      message5: "",
       mfa_url: "",
       confirm2fa: false,
     };
@@ -145,17 +146,28 @@ export default {
 
     async getmfa() {
       try {
-        let response = await axios.get(
-          `/auth/getmfa?password=${this.password}`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-        this.mfa_url = response.data.mfa_url;
+        if (this.password) {
+          let response = await axios.get(
+            `/auth/getmfa?password=${this.password}`,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }
+          );
+          this.mfa_url = response.data.mfa_url;
+        } else {
+          this.message5 = "Введите пароль";
+          setTimeout(() => {
+            this.message5 = "";
+          }, 3000);
+        }
       } catch (err) {
         console.log(err);
+        this.message5 = "Пароль неверный";
+        setTimeout(() => {
+          this.message5 = "";
+        }, 3000);
       }
     },
 
@@ -422,9 +434,19 @@ export default {
             />
             <span class="group-value">Пароль</span>
           </div>
-          <button @click="getmfa" type="button" class="btn">
+          <button @click="getmfa" type="button" class="btn" v-if="!message5">
             Получить QR-code
           </button>
+          <div
+            class="msg"
+            :class="{
+              success: this.message5 == 'Успешно',
+              error: this.message5 != 'Успешно',
+            }"
+            v-if="message5"
+          >
+            {{ message5 }}
+          </div>
         </div>
       </div>
       <div class="confirmation" v-if="confirm2fa">
@@ -653,7 +675,7 @@ h3 {
 }
 
 .qr {
-  width: fit-content;
+  width: 100%;
   background-color: #fff;
   border-radius: 20px;
   padding: 20px;
@@ -669,6 +691,10 @@ h3 {
   font-size: 20px;
   line-height: 20px;
   font-weight: 600;
+}
+
+.qr a {
+  word-break: break-all;
 }
 
 .qr .btn {
