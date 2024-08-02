@@ -7,7 +7,7 @@ export default {
   data() {
     return {
       active: 1,
-      invest: 3800,
+      invest: 5400,
       dohod: 0,
       rashod: 0.06 * 24 * 3.6,
       electricity: 0,
@@ -16,6 +16,8 @@ export default {
       dif: 90666502495565,
       btc_price: 65000,
       hashrate_cost: 24,
+      btc: 0,
+      procent: 0,
     };
   },
   props: {
@@ -44,7 +46,9 @@ export default {
         Math.round(((hashrate * 15 * 24) / 1000) * days * 100) / 100;
       console.log(hashrate);
       this.rashod = Math.round(0.06 * this.electricity * 100) / 100;
-      this.profit = this.dohod - this.rashod;
+      this.profit = Math.round((this.dohod - this.rashod) * 100) / 100;
+      this.procent = (this.profit / this.invest) * 100;
+      this.btc = this.profit / this.btc_price;
     },
 
     async load_info() {
@@ -66,6 +70,7 @@ export default {
   },
   mounted() {
     this.load_info();
+    this.calc();
   },
 };
 </script>
@@ -113,7 +118,7 @@ export default {
             <input
               v-model="invest"
               @input="calc"
-              min="3800"
+              min="5400"
               max="300000"
               type="range"
               class="range"
@@ -170,12 +175,14 @@ export default {
       <div class="right" :class="{ white: this.white }">
         <div class="title">Ожидаемая прибыль</div>
         <div class="earn">
-          <span class="title-earn">60.07 USD</span>
-          <span class="procent">0.005%</span>
-          <span class="btc">(0.00057 BTC)</span>
-          <span class="btc">Возврат инвестиций</span>
+          <span class="title-earn">{{ this.profit }} USD</span>
+          <span class="btc">{{ btc }} BTC</span>
+          <span class="procent">({{ procent }}%)</span>
+          <span class="procent">Возврат инвестиций</span>
         </div>
-        <div class="earn-time">За день</div>
+        <div class="earn-time" v-if="active == 1">За день</div>
+        <div class="earn-time" v-if="active == 2">За месяц</div>
+        <div class="earn-time" v-if="active == 3">За год</div>
       </div>
     </div>
   </div>
@@ -320,14 +327,14 @@ export default {
   line-height: 44.8px;
 }
 
-.procent {
+.btc {
   color: #141414;
   font-size: 18px;
   line-height: 25.2px;
   font-weight: 600;
 }
 
-.btc {
+.procent {
   color: #9298b4;
   font-weight: 500;
   font-size: 14px;
