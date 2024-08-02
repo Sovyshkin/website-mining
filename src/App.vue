@@ -13,6 +13,7 @@ import AppLogin from "./components/AppLogin.vue";
 import AppRegister from "./components/AppRegister.vue";
 import ResetPassword from "./components/ResetPassword.vue";
 import LeftPanel from "./components/LeftPanel.vue";
+import BottomPanel from "./components/BottomPanel.vue";
 import DeleteWallet from "./components/DeleteWallet.vue";
 import { RouterView } from "vue-router";
 
@@ -34,6 +35,7 @@ export default {
     ResetPassword,
     RouterView,
     LeftPanel,
+    BottomPanel,
     DeleteWallet,
   },
   data() {
@@ -127,7 +129,8 @@ export default {
     <RouterView />
   </div>
   <div class="wrap market" v-else>
-    <LeftPanel />
+    <LeftPanel class="leftPanel" />
+    <BottomPanel class="bottomPanel" />
     <DeleteWallet v-if="this.deleteWallet" />
     <main class="marketplace">
       <AppHeader :login="true" />
@@ -158,6 +161,7 @@ export default {
 .wrap {
   display: flex;
   flex-direction: column;
+  width: 100%;
   max-width: 1440px;
   position: relative;
   margin: 0 auto;
@@ -276,9 +280,21 @@ button::-moz-focus-inner {
   width: 75%;
 }
 
-@media (max-width: 564px) {
+.bottomPanel {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .leftPanel {
+    display: none;
+  }
+
+  .bottomPanel {
+    display: block;
+  }
+
   .marketplace {
-    width: 93%;
+    width: 100%;
   }
 }
 

@@ -34,6 +34,7 @@ export default {
           phone: this.number,
         });
         this.message = response.data.message;
+        console.log(this.message);
         if (this.message == "ok") {
           this.message = "Успешно";
         } else {
@@ -41,10 +42,16 @@ export default {
         }
         setTimeout(() => {
           this.message = "";
-          this.$router.push({ name: "home" });
-        });
+          this.$emit("updateRegister", false);
+        }, 3000);
       } catch (err) {
         console.log(err.response.data.detail);
+        if (err.response.data.detail == "User already exists") {
+          this.message = "Пользователь с такими данными уже существует";
+          setTimeout(() => {
+            this.message = "";
+          }, 3000);
+        }
       }
     },
     updateValue(e) {

@@ -7,16 +7,10 @@ import payments from "../assets/payments.svg";
 import payments_active from "../assets/payments_active.svg";
 import marketplace from "../assets/marketplace.svg";
 import marketplace_active from "../assets/marketplace_active.svg";
-import accruals from "../assets/accruals.svg";
-import accruals_active from "../assets/accruals_active.svg";
-import cart from "../assets/cart.svg";
-import cart_active from "../assets/cart_active.svg";
-import support from "../assets/support.svg";
-import support_active from "../assets/support_active.svg";
 import myminers from "../assets/myminers.svg";
 import myminers_active from "../assets/myminers_active.svg";
 export default {
-  name: "LeftPanel",
+  name: "BottomPanel",
   data() {
     return {
       cards: [
@@ -37,14 +31,14 @@ export default {
         {
           img: myminers,
           img_active: myminers_active,
-          name: "Мои майнеры",
+          name: "Майнеры",
           active: false,
           route: "myminers",
         },
         {
           img: payments,
           img_active: payments_active,
-          name: "Мои платежи",
+          name: "Платежи",
           active: false,
           route: "mypayments",
         },
@@ -54,27 +48,6 @@ export default {
           name: "Маркет",
           active: false,
           route: "marketplace",
-        },
-        {
-          img: accruals,
-          img_active: accruals_active,
-          name: "Начисления и списания",
-          active: false,
-          route: "accruals",
-        },
-        {
-          img: cart,
-          img_active: cart_active,
-          name: "Корзина",
-          active: false,
-          route: "cart",
-        },
-        {
-          img: support,
-          img_active: support_active,
-          name: "Центр помощи",
-          active: false,
-          route: "support",
         },
       ],
     };
@@ -108,9 +81,6 @@ export default {
 <template>
   <div class="panel">
     <nav class="group-nav">
-      <li class="nav-item" @click="this.$router.push({ name: 'home' })">
-        <img class="logo" src="../assets/logo.png" alt="" />
-      </li>
       <li
         class="nav-item"
         @click="navClick(item.name)"
@@ -122,37 +92,17 @@ export default {
         <span :class="{ red: item.active }">{{ item.name }}</span>
       </li>
     </nav>
-    <div class="footer">
-      <div class="banner">
-        <div class="background"></div>
-        <div class="title">ТЕСТОВЫЙ ПЕРИОД 7 ДНЕЙ</div>
-        <div class="scale"></div>
-        <img class="asic" src="../assets/asic.png" alt="" />
-      </div>
-      <div @click="navClick(this.cards.slice(-1)[0].name)" class="nav-item">
-        <img
-          v-if="!this.cards.slice(-1)[0].active"
-          src="../assets/support.svg"
-          alt=""
-        />
-        <img
-          v-if="this.cards.slice(-1)[0].active"
-          src="../assets/support_active.svg"
-          alt=""
-        />
-        <span :class="{ red: this.cards.slice(-1)[0].active }">{{
-          this.cards.slice(-1)[0].name
-        }}</span>
-      </div>
-    </div>
   </div>
 </template>
 <style scoped>
 .panel {
-  width: 25%;
-  max-width: 310px;
+  width: 100%;
   background-color: #fff;
-  padding: 0 40px 40px 40px;
+  position: fixed;
+  bottom: 0;
+  z-index: 3;
+  min-height: 70px;
+  padding: 12px 16px;
 }
 
 .logo {
@@ -163,22 +113,31 @@ export default {
 .group-nav {
   list-style: none;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   gap: 20px;
+  margin: 0 auto;
 }
 
 .nav-item {
   cursor: pointer;
   display: flex;
-  gap: 10px;
+  gap: 6px;
   align-items: center;
+  flex-direction: column;
+}
+
+.nav-item img {
+  height: 24px;
+  width: 24px;
 }
 
 .nav-item span {
-  font-weight: 500;
-  font-size: 16px;
+  font-weight: 400;
+  font-size: 10px;
   line-height: 16px;
   color: #0f0f0f;
+  opacity: 40%;
 }
 
 .banner {
@@ -242,62 +201,5 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 20px;
-}
-
-@media (max-width: 1160px) {
-  .asic {
-    height: 95px;
-  }
-
-  .banner {
-    width: 170px;
-    height: 170px;
-  }
-}
-
-@media (max-width: 920px) {
-  .panel {
-    padding: 0 15px 15px 15px;
-  }
-}
-
-@media (max-width: 800px) {
-  .banner {
-    display: none;
-  }
-}
-
-@media (max-width: 644px) {
-  .nav-item span {
-    font-size: small;
-  }
-}
-
-@media (max-width: 564px) {
-  .nav-item span {
-    display: none;
-  }
-
-  .nav-item {
-    justify-content: center;
-  }
-
-  .group-nav {
-    gap: 20px;
-  }
-
-  .panel {
-    width: 7%;
-  }
-
-  img {
-    height: 20px;
-    width: 20px;
-    max-width: none;
-  }
-
-  .logo {
-    display: none;
-  }
 }
 </style>

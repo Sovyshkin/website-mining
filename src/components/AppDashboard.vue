@@ -96,4 +96,29 @@ export default {
   border: 1px solid #cf0032;
   background-color: transparent;
 }
+
+@media (max-width: 940px) {
+  .balance {
+    flex-direction: column;
+    align-items: start;
+  }
+
+  .wrap_btns {
+    width: 100%;
+  }
+
+  .wrap_btns button {
+    width: 50%;
+  }
+}
+
+@media (max-width: 768px) {
+  .wrap_btns {
+    flex-direction: column;
+  }
+
+  .wrap_btns button {
+    width: 100%;
+  }
+}
 </style>

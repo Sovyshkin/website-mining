@@ -31,7 +31,7 @@ export default {
 </script>
 <template>
   <div class="wrapper">
-    <h2>Маркетплейс</h2>
+    <h2>Маркет</h2>
     <div class="cards">
       <div class="card" v-for="card in cards" :key="card.id">
         <img class="asic" src="../assets/asic.png" alt="" />

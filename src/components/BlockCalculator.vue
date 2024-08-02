@@ -1,14 +1,64 @@
 <script>
+import axios from "axios";
+
 export default {
   name: "BlockCalculator",
   components: {},
   data() {
     return {
-      active: 4,
+      active: 1,
+      invest: 3800,
+      dohod: 0,
+      rashod: 0.06 * 24 * 3.6,
+      electricity: 0,
+      hashrate: 234 * 10 ** 12,
+      reward: 3.17,
+      dif: 90666502495565,
+      btc_price: 65000,
+      hashrate_cost: 24,
     };
   },
   props: {
     white: Boolean,
+  },
+  methods: {
+    calc() {
+      let days = 1;
+      if (this.active == 1) {
+        days = 1;
+      } else if (this.active == 2) {
+        days = 30;
+      } else if (this.active == 3) {
+        days = 365;
+      }
+      let hashrate = this.invest / this.hashrate_cost;
+      this.dohod =
+        Math.round(
+          ((hashrate * 10 ** 12 * this.reward * this.btc_price * 84000) /
+            (this.dif * 2 ** 32)) *
+            100
+        ) / 100;
+      this.electricity =
+        Math.round(((hashrate * 15 * 24) / 1000) * days * 100) / 100;
+      console.log(hashrate);
+      this.rashod = Math.round(0.06 * this.electricity * 100) / 100;
+      this.profit = this.dohod - this.rashod;
+    },
+
+    async load_info() {
+      try {
+        let response = await axios.get(`/market/calculator`);
+        this.dif = response.data.difficulty;
+        this.reward = response.data.reward;
+        this.btc_price = response.data.btc_price;
+        this.hashrate_cost = response.data.hashrate_cost;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+  },
+  mounted() {
+    this.load_info();
   },
 };
 </script>
@@ -47,26 +97,64 @@ export default {
     </div>
     <div class="main">
       <div class="left">
-        <div class="inputs">
+        <div class="inputs_range" v-if="active != 4">
+          <div class="group-range">
+            <label class="group-label" for="range"
+              ><span class="invest">Инвестиции</span>
+              <span class="rangeUsd">{{ invest }} USD / 300000 USD</span></label
+            >
+            <input
+              v-model="invest"
+              @input="calc"
+              min="3800"
+              max="300000"
+              type="range"
+              class="range"
+              id="range"
+            />
+          </div>
+          <div class="group-range">
+            <label class="group-label" for="range2"
+              ><span class="invest">Bitcoin</span>
+              <span class="rangeUsd">1 BTC = {{ btc_price }} USD</span></label
+            >
+            <input
+              v-model="btc_price"
+              @input="calc"
+              min="30000"
+              max="130000"
+              type="range"
+              class="range"
+              id="range2"
+            />
+          </div>
+        </div>
+        <div class="inputs" v-if="active == 4">
           <input class="profit" placeholder="Укажите желаемый доход" />
           <select class="time" name="" id="">
             <option value="day">В день</option>
+            <option value="month">В месяц</option>
+            <option value="year">В год</option>
           </select>
         </div>
         <div class="info">
-          <div class="group">
+          <div class="group" v-if="active == 4">
             <span class="group-name">Инвестиции:</span>
             <span class="group-value">$8 999.00</span>
           </div>
+          <div class="group" v-if="active != 4">
+            <span class="group-name">Доход:</span>
+            <span class="group-value">${{ dohod }}</span>
+          </div>
           <div class="group">
             <span class="group-name">Расходы на хостинг:</span>
-            <span class="group-value">$38.93</span>
+            <span class="group-value">${{ rashod }}</span>
           </div>
           <div class="group">
             <span class="group-name">Электричество</span>
-            <span class="group-value">618.86/kW</span>
+            <span class="group-value">{{ electricity }}/kW</span>
           </div>
-          <div class="group">
+          <div class="group" v-if="active == 4">
             <span class="group-name">Bitcoin:</span>
             <span class="group-value">90 000 USD</span>
           </div>
@@ -246,6 +334,86 @@ export default {
   color: #141414;
 }
 
+.range {
+  accent-color: #cf0132;
+  border: none !important;
+  outline: none !important;
+  cursor: pointer;
+  width: 100%;
+  height: 7px;
+}
+
+.inputs_range {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.group-range {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.group-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.invest {
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 20px;
+  color: #0f0f0f;
+}
+
+.rangeUsd {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 16px;
+  color: #0f0f0f;
+  opacity: 40%;
+}
+
+/* input[type="range"] {
+  overflow-x: hidden;
+  width: 100%;
+  height: 7px;
+  -webkit-appearance: none;
+  background-color: #f5f5f8;
+  border-radius: 5px;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 10px;
+  -webkit-appearance: none;
+  color: #13bba4;
+  margin-top: -1px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  width: 15px;
+  -webkit-appearance: none;
+  height: 15px;
+  cursor: ew-resize;
+  border-radius: 100%;
+  background: #cf0132;
+  box-shadow: -2000px 0 0 2000px #cf0132;
+}
+input[type="range"]::-moz-range-progress {
+  background-color: #cf0132;
+}
+input[type="range"]::-moz-range-track {
+  background-color: #f5f5f8;
+}
+input[type="range"]::-ms-fill-lower {
+  background-color: #cf0132;
+}
+input[type="range"]::-ms-fill-upper {
+  background-color: #f5f5f8;
+} */
+
 @media (max-width: 880px) {
   .left,
   .right {
@@ -275,9 +443,26 @@ export default {
   }
 }
 
+@media (max-width: 460px) {
+  .invest {
+    font-size: 16px;
+    line-height: 16px;
+  }
+
+  .rangeUsd {
+    font-size: 14px;
+    line-height: 14px;
+  }
+}
+
 @media (max-width: 380px) {
   .wrapper-btns {
     flex-direction: column;
+  }
+
+  .rangeUsd {
+    font-size: 12px;
+    line-height: 12px;
   }
 }
 </style>

@@ -30,10 +30,10 @@ export default {
           }
         }
       } catch (res) {
-        let response = res.response.data.detail;
-        if (response) {
-          console.log;
-        }
+        this.message = "Пользователь с такими данными не найден";
+        setTimeout(() => {
+          this.message = "";
+        }, 2500);
       }
     },
 
@@ -103,7 +103,17 @@ export default {
       <div class="forget_pass">
         <a @click="this.$emit('updateReset', true)" href="#">Забыли пароль?</a>
       </div>
-      <button @click="login" class="btn">Войти</button>
+      <button v-if="!message" @click="login" class="btn">Войти</button>
+      <div
+        class="msg"
+        :class="{
+          success: this.message == 'Успешно',
+          error: this.message != 'Успешно',
+        }"
+        v-if="message"
+      >
+        {{ message }}
+      </div>
       <div class="log">
         <span>Ещё не зарегистрировались?</span>
         <a @click="this.$emit('updateRegister', true)" href="#"

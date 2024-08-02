@@ -7,14 +7,14 @@ export default {
     return {
       lang: this.$i18n.locale,
       names: {
-        marketplace: "Маркетплейс",
+        marketplace: "Маркет",
         main: "Главная",
         dashboard: "Приборная панель",
         myminers: "Мои майнеры",
         mypayments: "Мои платежи",
         accruals: "Начисления и списания",
         cart: "Корзина",
-        support: "Справочный центр",
+        support: "Центр помощи",
         profile: "Профиль",
       },
       id: null,
@@ -51,13 +51,16 @@ export default {
         // }
       } catch (err) {
         console.log(err);
-        localStorage.clear();
-        this.$router.push({ name: "home" });
+        let token = this.$route.query.token;
+        if (!token) {
+          localStorage.clear();
+          this.$router.push({ name: "home" });
+        }
       }
     },
   },
   mounted() {
-    this.verify_token();
+    // this.verify_token();
     this.id = localStorage.getItem("id") || null;
 
     window.addEventListener("storage", () => {
@@ -100,8 +103,14 @@ export default {
       Войти
     </button>
   </div>
-  <div class="wrapper marketplace" v-else>
-    <span class="main"
+  <div class="wrapper" v-else>
+    <img
+      @click="this.$router.push({ name: 'main' })"
+      class="logo logoAdap"
+      src="../assets/logo.png"
+      alt=""
+    />
+    <span class="main mainAdap"
       ><span>Главная</span><span>/</span>
       {{ this.names[this.$route.name] }}</span
     >
@@ -225,6 +234,10 @@ export default {
   gap: 10px;
 }
 
+.logoAdap {
+  display: none;
+}
+
 @media (max-width: 1000px) {
   .group-nav {
     display: none;
@@ -232,6 +245,15 @@ export default {
 
   .login {
     padding: 7px 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .logoAdap {
+    display: block;
+  }
+  .mainAdap {
+    display: none;
   }
 }
 
@@ -243,16 +265,6 @@ export default {
   .wrapper {
     gap: 10px;
     padding: 0 15px;
-  }
-}
-
-@media (max-width: 460px) {
-  .number {
-    font-size: 11px;
-  }
-
-  .logo {
-    height: 40px;
   }
 }
 
