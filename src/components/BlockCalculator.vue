@@ -26,15 +26,17 @@ export default {
       let days = 1;
       if (this.active == 1) {
         days = 1;
-      } else if (this.active == 2) {
+      }
+      if (this.active == 2) {
         days = 30;
-      } else if (this.active == 3) {
+      }
+      if (this.active == 3) {
         days = 365;
       }
       let hashrate = this.invest / this.hashrate_cost;
       this.dohod =
         Math.round(
-          ((hashrate * 10 ** 12 * this.reward * this.btc_price * 84000) /
+          ((hashrate * 10 ** 12 * this.reward * this.btc_price * 84000 * days) /
             (this.dif * 2 ** 32)) *
             100
         ) / 100;
@@ -56,6 +58,11 @@ export default {
         console.log(err);
       }
     },
+
+    updateActive(num) {
+      this.active = num;
+      this.calc();
+    },
   },
   mounted() {
     this.load_info();
@@ -67,28 +74,28 @@ export default {
     <h2>Калькулятор доходности</h2>
     <div class="wrapper-btns">
       <button
-        @click="this.active = 1"
+        @click="updateActive(1)"
         class="btn"
         :class="{ active: this.active == 1 }"
       >
         За день
       </button>
       <button
-        @click="this.active = 2"
+        @click="updateActive(2)"
         class="btn"
         :class="{ active: this.active == 2 }"
       >
         За месяц
       </button>
       <button
-        @click="this.active = 3"
+        @click="updateActive(3)"
         class="btn"
         :class="{ active: this.active == 3 }"
       >
         За год
       </button>
       <button
-        @click="this.active = 4"
+        @click="updateActive(4)"
         class="btn"
         :class="{ active: this.active == 4 }"
       >
