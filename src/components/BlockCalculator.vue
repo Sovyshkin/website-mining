@@ -15,7 +15,7 @@ export default {
       reward: 3.17,
       dif: 90666502495565,
       btc_price: 65000,
-      hashrate_cost: 24,
+      hashrate_cost: 19,
       btc: 0,
       procent: 0,
     };
@@ -49,6 +49,45 @@ export default {
       this.profit = Math.round((this.dohod - this.rashod) * 100) / 100;
       this.procent = (this.profit / this.invest) * 100;
       this.btc = this.profit / this.btc_price;
+      if (this.btc) {
+        this.btc = String(this.btc).slice(0, 8);
+      }
+      if (this.procent) {
+        this.procent = String(this.procent).slice(0, 5);
+      }
+    },
+
+    twoCalc() {
+      let days = 1;
+      if (this.active == 1) {
+        days = 1;
+      }
+      if (this.active == 2) {
+        days = 30;
+      }
+      if (this.active == 3) {
+        days = 365;
+      }
+
+      let hashrate =
+        Math.round(
+          ((this.dohod * this.dif * 2 ** 32) /
+            (10 ** 12 * this.reward * this.btc_price * 84000 * days)) *
+            100
+        ) / 100;
+      this.invest = this.hashrate_cost * hashrate;
+      this.electricity =
+        Math.round(((hashrate * 15 * 24) / 1000) * days * 100) / 100;
+      this.rashod = Math.round(0.06 * this.electricity * 100) / 100;
+      this.profit = Math.round((this.dohod - this.rashod) * 100) / 100;
+      this.procent = (this.profit / this.invest) * 100;
+      this.btc = this.profit / this.btc_price;
+      if (this.btc) {
+        this.btc = String(this.btc).slice(0, 8);
+      }
+      if (this.procent) {
+        this.procent = String(this.procent).slice(0, 5);
+      }
     },
 
     async load_info() {
@@ -68,8 +107,8 @@ export default {
       this.calc();
     },
   },
-  mounted() {
-    this.load_info();
+  async mounted() {
+    await this.load_info();
     this.calc();
   },
 };
@@ -142,7 +181,12 @@ export default {
           </div>
         </div>
         <div class="inputs" v-if="active == 4">
-          <input class="profit" placeholder="Укажите желаемый доход" />
+          <input
+            @input="twoCalc()"
+            class="profit"
+            v-model="dohod"
+            placeholder="Укажите желаемый доход"
+          />
           <select class="time" name="" id="">
             <option value="day">В день</option>
             <option value="month">В месяц</option>
@@ -152,7 +196,7 @@ export default {
         <div class="info">
           <div class="group" v-if="active == 4">
             <span class="group-name">Инвестиции:</span>
-            <span class="group-value">$8 999.00</span>
+            <span class="group-value">${{ invest }}</span>
           </div>
           <div class="group" v-if="active != 4">
             <span class="group-name">Доход:</span>
@@ -168,7 +212,7 @@ export default {
           </div>
           <div class="group" v-if="active == 4">
             <span class="group-name">Bitcoin:</span>
-            <span class="group-value">90 000 USD</span>
+            <span class="group-value">{{ btc_price }} USD</span>
           </div>
         </div>
       </div>
@@ -388,6 +432,10 @@ export default {
   line-height: 16px;
   color: #0f0f0f;
   opacity: 40%;
+}
+
+span {
+  word-break: break-all;
 }
 
 /* input[type="range"] {
