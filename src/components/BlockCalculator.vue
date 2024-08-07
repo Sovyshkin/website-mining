@@ -7,7 +7,7 @@ export default {
   data() {
     return {
       active: 1,
-      invest: 5400,
+      invest: 5500,
       dohod: 0,
       rashod: 0.06 * 24 * 3.6,
       electricity: 0,
@@ -43,9 +43,14 @@ export default {
             100
         ) / 100;
       this.electricity =
-        Math.round(((hashrate * 15 * 24) / 1000) * days * 100) / 100;
+        Math.round(
+          ((hashrate * this.hash_rate_electricity_consumption * 24) / 1000) *
+            days *
+            100
+        ) / 100;
       console.log(hashrate);
-      this.rashod = Math.round(0.06 * this.electricity * 100) / 100;
+      this.rashod =
+        Math.round(this.electricity_cost * this.electricity * 100) / 100;
       this.profit = Math.round((this.dohod - this.rashod) * 100) / 100;
       this.procent = (this.profit / this.invest) * 100;
       this.btc = this.profit / this.btc_price;
@@ -77,8 +82,13 @@ export default {
         ) / 100;
       this.invest = this.hashrate_cost * hashrate;
       this.electricity =
-        Math.round(((hashrate * 15 * 24) / 1000) * days * 100) / 100;
-      this.rashod = Math.round(0.06 * this.electricity * 100) / 100;
+        Math.round(
+          ((hashrate * this.hash_rate_electricity_consumption * 24) / 1000) *
+            days *
+            100
+        ) / 100;
+      this.rashod =
+        Math.round(this.electricity_cost * this.electricity * 100) / 100;
       this.profit = Math.round((this.dohod - this.rashod) * 100) / 100;
       this.procent = (this.profit / this.invest) * 100;
       this.btc = this.profit / this.btc_price;
@@ -93,10 +103,15 @@ export default {
     async load_info() {
       try {
         let response = await axios.get(`/market/calculator`);
+        this.invest_min = response.data.invest_min;
+        this.invest_max = response.data.invest_max;
         this.dif = response.data.difficulty;
         this.reward = response.data.reward;
         this.btc_price = response.data.btc_price;
-        this.hashrate_cost = response.data.hashrate_cost;
+        this.hashrate_cost = response.data.hash_rate_cost;
+        this.electricity_cost = response.data.electricity_cost;
+        this.hash_rate_electricity_consumption =
+          response.data.hash_rate_electricity_consumption;
       } catch (err) {
         console.log(err);
       }
@@ -157,8 +172,8 @@ export default {
             <input
               v-model="invest"
               @input="calc"
-              min="5400"
-              max="300000"
+              :min="invest_min"
+              :max="invest_max"
               type="range"
               class="range"
               id="range"

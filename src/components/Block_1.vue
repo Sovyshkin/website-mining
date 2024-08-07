@@ -30,8 +30,18 @@ export default {
       </div>
     </div>
     <div class="right">
-      <img class="asic asic1" src="../assets/asic.png" alt="" />
-      <img class="asic asic2" src="../assets/asic.png" alt="" />
+      <!-- <img class="asic asic1" src="../assets/asic.png" alt="" />
+      <img class="asic asic2" src="../assets/asic.png" alt="" /> -->
+      <video
+        ref="player"
+        src="../assets/asic.mp4"
+        muted
+        loop
+        autoplay
+        oncanplay="this.muted=true"
+      >
+        Ваш браузер не поддерживает HTML5 видео.
+      </video>
     </div>
   </div>
 </template>
@@ -46,6 +56,7 @@ export default {
   align-items: center;
   justify-content: center;
   padding: 40px;
+  gap: 20px;
   position: relative;
 }
 
@@ -113,6 +124,11 @@ export default {
   flex: 48%;
   padding: 17px 24px;
   border-radius: 10px;
+}
+
+video {
+  width: 100%;
+  border-radius: 15px;
 }
 
 @media (max-width: 780px) {
