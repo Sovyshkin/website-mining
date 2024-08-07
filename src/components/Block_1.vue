@@ -129,6 +129,7 @@ export default {
 video {
   width: 100%;
   border-radius: 15px;
+  pointer-events: none;
 }
 
 @media (max-width: 780px) {
