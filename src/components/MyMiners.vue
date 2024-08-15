@@ -26,7 +26,7 @@ export default {
 
     async load_info() {
       try {
-        let response = await axios.get(`/workers`, {
+        let response = await axios.get(`/miners/workers`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },

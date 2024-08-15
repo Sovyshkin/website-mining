@@ -17,7 +17,8 @@ export default {
     async load_info() {
       try {
         let response = await axios.get(`/market/miners`);
-        this.cards = response.data;
+        console.log(response);
+        this.cards = response.data.data;
       } catch (err) {
         console.log(err);
       }
@@ -36,21 +37,21 @@ export default {
       <div class="card" v-for="card in cards" :key="card.id">
         <img class="asic" src="../assets/asic.png" alt="" />
         <div class="scale"></div>
-        <div class="time_profit">Время окупаемости:</div>
+        <div class="time_profit">Время окупаемости: {{ card.payback }}</div>
         <div class="info">
-          <span class="price">${{ card.buy_cost / 100 }}</span>
+          <span class="price">${{ card.price }}</span>
           <span class="name">{{ card.name }}</span>
           <div class="group">
             <span class="group-name">Хешрейт:</span>
-            <span class="group-value">{{ card.hashrate }}</span>
+            <span class="group-value">{{ card.hash_rate_str }}</span>
           </div>
           <div class="group">
             <span class="group-name">Доход:</span>
-            <span class="group-value">${{ card.dohod }}/месяц</span>
+            <span class="group-value">${{ card.income }}/месяц</span>
           </div>
           <div class="group">
             <span class="group-name">Расход:</span>
-            <span class="group-value">{{ card.rashod }} Вт</span>
+            <span class="group-value">{{ card.energy_consumption }} Вт</span>
           </div>
         </div>
         <button @click="goTry" class="btn">Заказать</button>

@@ -45,6 +45,7 @@ export default {
             otp: this.code,
           });
           let status = response.status;
+
           if (status == 200) {
             let id = response.data.id;
             let token = response.data.token;

@@ -1,9 +1,79 @@
 <script>
+import axios from "axios";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+} from "chart.js";
+import { Line } from "vue-chartjs";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip
+);
+
 export default {
   name: "AppDashboard",
-  components: {},
+  components: { Line },
   data() {
-    return {};
+    return {
+      chartData: {
+        labels: [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+        ],
+        datasets: [
+          {
+            backgroundColor: "#00CF91",
+            borderColor: "#00CF91",
+            pointRadius: 2,
+            data: [40, 39, 10, 40, 39, 80, 40],
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+      },
+      dashboards: [],
+      income: [],
+      income_show: false,
+    };
+  },
+  methods: {
+    async load_info() {
+      try {
+        let response = await axios.get(`/miners/dashboards`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        console.log(response);
+        this.dashboards = response.data.dashboards;
+        this.income = this.dashboards.income;
+        this.chartData.labels = Object.keys(this.income);
+        this.chartData.datasets[0].data = Object.values(this.income);
+        this.income_show = true;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+  },
+  mounted() {
+    this.load_info();
   },
 };
 </script>
@@ -23,6 +93,12 @@ export default {
         <button class="btn withdraw">Вывести</button>
       </div>
     </div>
+    <Line
+      v-if="income_show"
+      class="line"
+      :data="chartData"
+      :options="options"
+    />
   </div>
 </template>
 <style scoped>
@@ -95,6 +171,10 @@ export default {
   color: #cf0032;
   border: 1px solid #cf0032;
   background-color: transparent;
+}
+
+.line {
+  max-height: 400px;
 }
 
 @media (max-width: 940px) {

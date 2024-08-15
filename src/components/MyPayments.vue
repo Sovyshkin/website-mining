@@ -1,51 +1,67 @@
 <script>
+import axios from "axios";
+
 export default {
   name: "MyPayments",
   components: {},
   data() {
     return {
-      cards: [
-        {
-          name: "Плата за хостинг",
-          date: "21/11/2024",
-          summ: "94.00",
-        },
-        {
-          name: "Пополнение",
-          date: "21/11/2024",
-          summ: "94.00",
-        },
-        {
-          name: "Пополнение",
-          date: "21/11/2024",
-          summ: "94.00",
-        },
-      ],
+      payments: [],
     };
   },
   methods: {
-    async load_info() {},
+    async load_info() {
+      let response = await axios.get(`/miners/payments`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      this.payments = response.data.data;
+      console.log(response);
+    },
+
+    printType(type) {
+      if (type == "hosting") {
+        return "Плата за хостинг";
+      } else if (type == "reward") {
+        return "Награда за майнинг";
+      } else if (type == "payout") {
+        return "Вывод средств";
+      }
+      return "";
+    },
+
+    checkSum(sum) {
+      if (sum) {
+        sum = Number(sum);
+        if (sum > 0) {
+          return true;
+        }
+        return false;
+      }
+    },
   },
   mounted() {
     document.body.style.overflow = "auto";
+    this.load_info();
   },
 };
 </script>
 <template>
   <div class="wrapper">
     <h2>Мои платежи</h2>
-    <div class="cards" v-if="this.cards.length > 0">
-      <div class="card" v-for="card in cards" :key="card.id">
+    <div class="cards" v-if="this.payments.length > 0">
+      <div class="card" v-for="card in payments" :key="card.id">
         <div class="info">
-          <span class="name">{{ card.name }}</span>
+          <span class="name">{{ printType(card.type) }}</span>
           <span class="date">{{ card.date }}</span>
         </div>
         <div class="summ_info">
-          <span class="summ plus" v-if="card.name == 'Пополнение'"
-            >+{{ card.summ }}$</span
+          <span class="summ plus" v-if="checkSum(card.value_usd)"
+            >+{{ card.value_usd }}$</span
           >
-          <span class="summ minus" v-if="card.name != 'Пополнение'"
-            >-{{ card.summ }}$</span
+          <span class="summ minus" v-if="!checkSum(card.value_usd)"
+            >-{{ card.value_usd }}$</span
           >
           <img src="" alt="" />
         </div>
