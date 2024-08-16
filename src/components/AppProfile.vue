@@ -233,10 +233,23 @@ export default {
         }, 3000);
       }
     },
+
+    exit() {
+      localStorage.clear();
+      this.checkToken();
+    },
+
+    checkToken() {
+      let token = localStorage.getItem("token");
+      if (!token) {
+        this.$router.push({ name: "home" });
+      }
+    },
   },
   mounted() {
     document.body.style.overflow = "auto";
     this.load_info();
+    this.checkToken();
   },
 };
 </script>
@@ -534,6 +547,7 @@ export default {
         </div>
       </div>
     </div>
+    <button @click="exit()" class="btn exit">Выйти</button>
   </div>
 </template>
 <style scoped>
@@ -705,6 +719,11 @@ h3 {
 .qrcode {
   width: 200px !important;
   height: 200px !important;
+}
+
+.exit {
+  background-color: #cf0032;
+  color: #fff;
 }
 
 @media (max-width: 980px) {

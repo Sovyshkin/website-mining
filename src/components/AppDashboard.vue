@@ -68,8 +68,8 @@ export default {
           },
         ],
       },
-      value_usd: "",
-      btc: "",
+      value_usd: 0,
+      btc: 0,
     };
   },
   methods: {
@@ -80,8 +80,8 @@ export default {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
-        this.value_usd = resp.data.value_usd;
-        this.btc = resp.data.value;
+        this.value_usd = resp.data.value_usd || 0;
+        this.btc = resp.data.value || 0;
         let response = await axios.get(`/miners/dashboards`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
