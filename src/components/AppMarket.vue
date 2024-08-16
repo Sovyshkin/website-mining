@@ -7,11 +7,31 @@ export default {
   data() {
     return {
       cards: [],
+      cart: false,
     };
   },
   methods: {
-    goTry() {
-      this.$emit("updateGoTry", true);
+    async goTry(id) {
+      try {
+        this.$emit("updateGoTry", true);
+        let response = await axios.get(
+          `/market/cart/set?miner_item_id=${id}&count=1`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        if (response.data.status == "ok") {
+          this.cart = true;
+          setTimeout(() => {
+            this.cart = false;
+          }, 3000);
+        }
+      } catch (err) {
+        console.log(err);
+        this.cart = "Ошибка";
+      }
     },
 
     async load_info() {
@@ -54,10 +74,18 @@ export default {
             <span class="group-value">{{ card.energy_consumption }} Вт</span>
           </div>
         </div>
-        <button @click="goTry" class="btn">Заказать</button>
+        <button @click="goTry(card.id)" class="btn">Заказать</button>
       </div>
     </div>
   </div>
+  <div
+    v-if="cart && cart != 'Ошибка'"
+    @click="this.$router.push({ name: 'cart' })"
+    class="cart"
+  >
+    Добавлено в корзину
+  </div>
+  <div v-if="cart == 'Ошибка'" class="cart cart_error">Ошибка</div>
 </template>
 <style scoped>
 .wrapper {
@@ -177,6 +205,25 @@ export default {
   height: 6px;
   width: 70%;
   background: linear-gradient(to right, #e11111 0%, #ecf02b 50%, #2ee111 100%);
+}
+
+.cart {
+  width: fit-content;
+  position: fixed;
+  bottom: 5%;
+  left: 45%;
+  background-color: #2ee111;
+  color: #fff;
+  font-size: 16px;
+  padding: 17px 24px;
+  border-radius: 10px;
+  font-weight: 600;
+  z-index: 5;
+  cursor: pointer;
+}
+
+.cart_error {
+  background-color: #cf0032;
 }
 
 @media (max-width: 1060px) {

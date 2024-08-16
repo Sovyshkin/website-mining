@@ -26,21 +26,13 @@ export default {
   data() {
     return {
       chartData: {
-        labels: [
-          "January",
-          "February",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July",
-        ],
+        labels: [],
         datasets: [
           {
             backgroundColor: "#00CF91",
             borderColor: "#00CF91",
             pointRadius: 2,
-            data: [40, 39, 10, 40, 39, 80, 40],
+            data: [],
           },
         ],
       },
@@ -51,11 +43,45 @@ export default {
       dashboards: [],
       income: [],
       income_show: false,
+      hosting_show: false,
+      hostingData: {
+        labels: [],
+        datasets: [
+          {
+            backgroundColor: "#CF0032BA",
+            borderColor: "#CF0032BA",
+            pointRadius: 2,
+            fill: "#CF0032BA",
+            data: [],
+          },
+        ],
+      },
+      hashrate_show: false,
+      hashrateData: {
+        labels: [],
+        datasets: [
+          {
+            backgroundColor: "#0084CF",
+            borderColor: "#0084CF",
+            pointRadius: 2,
+            data: [],
+          },
+        ],
+      },
+      value_usd: "",
+      btc: "",
     };
   },
   methods: {
     async load_info() {
       try {
+        let resp = await axios.get(`/miners/balance`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        this.value_usd = resp.data.value_usd;
+        this.btc = resp.data.value;
         let response = await axios.get(`/miners/dashboards`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -67,6 +93,18 @@ export default {
         this.chartData.labels = Object.keys(this.income);
         this.chartData.datasets[0].data = Object.values(this.income);
         this.income_show = true;
+        this.hostingData.labels = Object.keys(response.data.dashboards.hosting);
+        this.hostingData.datasets[0].data = Object.values(
+          response.data.dashboards.hosting
+        );
+        this.hosting_show = true;
+        this.hashrateData.labels = Object.keys(
+          response.data.dashboards.hash_rate
+        );
+        this.hashrateData.datasets[0].data = Object.values(
+          response.data.dashboards.hash_rate
+        );
+        this.hashrate_show = true;
       } catch (err) {
         console.log(err);
       }
@@ -84,8 +122,8 @@ export default {
       <div class="info">
         <span class="name">Баланс</span>
         <div class="group">
-          <span class="usd">0.09$</span>
-          <span class="btc">(~0.000036 BTC)</span>
+          <span class="usd">{{ value_usd }} $</span>
+          <span class="btc">(~{{ btc }} BTC)</span>
         </div>
       </div>
       <div class="wrap_btns">
@@ -93,12 +131,36 @@ export default {
         <button class="btn withdraw">Вывести</button>
       </div>
     </div>
-    <Line
-      v-if="income_show"
-      class="line"
-      :data="chartData"
-      :options="options"
-    />
+    <div class="wrap-chart">
+      <h2>Доход</h2>
+      <Line
+        v-if="income_show"
+        class="line"
+        :data="chartData"
+        :options="options"
+        ref="chart"
+      />
+    </div>
+
+    <div class="wrap-chart">
+      <h2>Cтоимость хостинга</h2>
+      <Line
+        v-if="hosting_show"
+        class="line"
+        :data="hostingData"
+        :options="options"
+      />
+    </div>
+
+    <div class="wrap-chart">
+      <h2>Хешрейт</h2>
+      <Line
+        v-if="hashrate_show"
+        class="line"
+        :data="hashrateData"
+        :options="options"
+      />
+    </div>
   </div>
 </template>
 <style scoped>
@@ -175,6 +237,15 @@ export default {
 
 .line {
   max-height: 400px;
+}
+
+.wrap-chart {
+  background-color: #fff;
+  border-radius: 20px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 @media (max-width: 940px) {

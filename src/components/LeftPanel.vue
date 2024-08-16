@@ -101,8 +101,21 @@ export default {
         this.$router.push({ name: "404" });
       }
     },
+
+    checkRoute() {
+      let name = this.$route.name;
+      for (let i = 0; i < this.cards.length; i++) {
+        let card = this.cards[i];
+        if (card.route == name) {
+          card.active = true;
+          this.cards[i] = card;
+        }
+      }
+    },
   },
-  mounted() {},
+  mounted() {
+    this.checkRoute();
+  },
 };
 </script>
 <template>

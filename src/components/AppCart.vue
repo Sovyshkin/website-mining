@@ -1,22 +1,13 @@
 <script>
+import axios from "axios";
+
 export default {
-  name: "AppMarket",
+  name: "AppCart",
   components: {},
   data() {
     return {
-      card: {
-        id: 1,
-        price: "2600",
-        name: "ANTMINER S19K PRO 120TH",
-        hashrate: "120",
-        hosting: "95.18",
-        profit: "88.42",
-        earn: "77.42",
-        power: "32 760",
-        time_profit: "5 месяцев",
-        img: "asic",
-        count: 1,
-      },
+      cards: [],
+      summary: 0,
     };
   },
   methods: {
@@ -24,18 +15,57 @@ export default {
       this.$emit("updateGoTry", true);
     },
 
-    minus() {
-      if (this.card.count > 1) {
-        this.card.count -= 1;
+    async minus(id, count) {
+      count -= 1;
+      let response = await axios.get(
+        `/market/cart/set?miner_item_id=${id}&count=${count}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      this.cards = response.data.data;
+      this.summary = response.data.summary;
+    },
+    async plus(id, count) {
+      count += 1;
+      let response = await axios.get(
+        `/market/cart/set?miner_item_id=${id}&count=${count}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      this.cards = response.data.data;
+      this.summary = response.data.summary;
+    },
+
+    async load_info() {
+      try {
+        let response = await axios.get(`/market/cart/get`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        this.cards = response.data.data;
+        this.summary = response.data.summary;
+        console.log(this.cards);
+      } catch (err) {
+        console.log(err);
       }
     },
 
-    plus() {
-      this.card.count++;
+    roundTwo(n) {
+      if (n) {
+        return Math.round(n * 100) / 100;
+      }
     },
   },
   mounted() {
     document.body.style.overflow = "auto";
+    this.load_info();
   },
 };
 </script>
@@ -43,34 +73,40 @@ export default {
   <div class="wrapper">
     <h2>Корзина</h2>
     <div class="cards">
-      <div class="card">
+      <div class="card" v-for="card in cards" :key="card.id">
         <img class="asic" src="../assets/asic.png" alt="" />
         <div class="info">
           <span class="name">{{ card.name }}</span>
           <div class="group">
             <span class="group-name">Хостинг:</span>
-            <span class="group-value">${{ card.hosting }} / месяц</span>
+            <span class="group-value"
+              >${{ roundTwo(card.hosting * 31) }} / месяц</span
+            >
           </div>
           <div class="group">
             <span class="group-name">Доход:</span>
-            <span class="group-value">${{ card.profit }} / месяц</span>
+            <span class="group-value"
+              >${{ roundTwo(card.income * 31) }} / месяц</span
+            >
           </div>
           <div class="group">
             <span class="group-name">Расход:</span>
-            <span class="group-value">{{ card.power }} Вт / месяц</span>
+            <span class="group-value"
+              >{{ roundTwo(card.energy_consumption * 31) }} Вт / месяц</span
+            >
           </div>
           <div class="group">
             <span class="group-name">Прибыль:</span>
-            <span class="group-value">${{ card.power }} / месяц</span>
+            <span class="group-value"
+              >${{ roundTwo(card.profit * 31) }} / месяц</span
+            >
           </div>
           <div class="scale"></div>
-          <div class="time_profit">
-            Время окупаемости: {{ card.time_profit }}
-          </div>
+          <div class="time_profit">Время окупаемости: {{ card.payback }}</div>
           <div class="counter">
-            <div class="minus" @click="minus">-</div>
+            <div class="minus" @click="minus(card.id, card.count)">-</div>
             <div class="count">{{ card.count }}</div>
-            <div class="plus" @click="plus">+</div>
+            <div class="plus" @click="plus(card.id, card.count)">+</div>
           </div>
         </div>
         <!-- <button @click="goTry" class="btn">Оформить заказ</button> -->
@@ -78,8 +114,11 @@ export default {
     </div>
     <div class="itog">
       <span class="result">Итого:</span>
-      <span class="price">$ {{ card.price * card.count }}</span>
+      <span class="price">$ {{ summary }}</span>
     </div>
+    <h2>Выберите способ оплаты</h2>
+    <div class="payments"></div>
+    <button class="buy">Оформить заказ</button>
   </div>
 </template>
 <style scoped>
@@ -90,6 +129,7 @@ export default {
   gap: 20px;
   overflow-x: hidden;
   overflow-y: scroll;
+  margin-bottom: 100px;
 }
 .cards {
   display: flex;
@@ -258,6 +298,18 @@ export default {
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+.buy {
+  width: fit-content;
+  min-width: 200px;
+  padding: 17px 24px;
+  border-radius: 10px;
+  background-color: #cf0101;
+  color: #fff;
+  font-size: 16px;
+  line-height: 16px;
+  font-weight: 600;
 }
 
 @media (max-width: 765px) {
