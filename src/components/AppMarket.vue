@@ -55,7 +55,7 @@ export default {
     <h2>Маркет</h2>
     <div class="cards">
       <div class="card" v-for="card in cards" :key="card.id">
-        <img class="asic" src="../assets/asic.png" alt="" />
+        <img class="asic" v-if="card.image" :src="card.image.url" alt="" />
         <div class="scale"></div>
         <div class="time_profit">Время окупаемости: {{ card.payback }}</div>
         <div class="info">

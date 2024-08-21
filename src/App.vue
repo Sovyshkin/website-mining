@@ -16,6 +16,8 @@ import LeftPanel from "./components/LeftPanel.vue";
 import BottomPanel from "./components/BottomPanel.vue";
 import DeleteWallet from "./components/DeleteWallet.vue";
 import { RouterView } from "vue-router";
+import SliderImg from "./components/SliderImg.vue";
+import ChangeAvatar from "./components/ChangeAvatar.vue";
 
 export default {
   name: "App",
@@ -37,6 +39,8 @@ export default {
     LeftPanel,
     BottomPanel,
     DeleteWallet,
+    SliderImg,
+    ChangeAvatar,
   },
   data() {
     return {
@@ -45,6 +49,8 @@ export default {
       register: false,
       reset: false,
       deleteWallet: false,
+      slider: false,
+      avatar: false,
     };
   },
   methods: {
@@ -69,11 +75,19 @@ export default {
     handleDelete(deleteWallet) {
       this.deleteWallet = deleteWallet;
     },
+
+    handleAvatar(avatar) {
+      this.avatar = avatar;
+    },
     checkRoute() {
       if (this.$route.fullPath == "/") {
         return true;
       }
       return false;
+    },
+
+    pass() {
+      console.log("Тут");
     },
   },
   mounted() {},
@@ -104,6 +118,7 @@ export default {
     <Business id="business" />
     <Faq id="faq" />
     <Banner_2 />
+    <SliderImg @passcallback="pass" v-if="slider" />
   </div>
   <div
     class="wrap more"
@@ -129,12 +144,16 @@ export default {
     <RouterView />
   </div>
   <div class="wrap market" v-else>
+    <ChangeAvatar @updateAvatar="handleAvatar" v-if="avatar" />
     <LeftPanel class="leftPanel" />
     <BottomPanel class="bottomPanel" />
     <DeleteWallet v-if="this.deleteWallet" />
     <main class="marketplace">
       <AppHeader :login="true" />
-      <RouterView @updateDeleteWallet="handleDelete" />
+      <RouterView
+        @updateDeleteWallet="handleDelete"
+        @updateAvatar="handleAvatar"
+      />
     </main>
   </div>
 </template>
@@ -284,6 +303,9 @@ button::-moz-focus-inner {
   display: none;
 }
 
+.wrapper {
+  margin-bottom: 100px;
+}
 @media (max-width: 768px) {
   .leftPanel {
     display: none;

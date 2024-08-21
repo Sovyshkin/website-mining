@@ -1,28 +1,10 @@
 <script>
 import axios from "axios";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-} from "chart.js";
-import { Line } from "vue-chartjs";
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip
-);
+import ChartLine from "./ChartLine.vue";
 
 export default {
   name: "AppDashboard",
-  components: { Line },
+  components: { ChartLine },
   data() {
     return {
       chartData: {
@@ -70,44 +52,72 @@ export default {
       },
       value_usd: 0,
       btc: 0,
+      online_count: 0,
+      offline_count: 0,
+      total_hash_rate: 0,
+      total_energy_consumption: 0,
+      expected_income: 0,
+      expected_profit: 0,
+      expected_hosting: 0,
+      electricity_cost: 0,
     };
   },
   methods: {
     async load_info() {
       try {
-        let resp = await axios.get(`/miners/balance`, {
+        let resBalance = await axios.get(`/miners/balance`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
-        this.value_usd = resp.data.value_usd || 0;
-        this.btc = resp.data.value || 0;
+        // console.log(resBalance);
+        this.value_usd = resBalance.data.value_usd || 0;
+        this.btc = resBalance.data.value || 0;
+        let resWorkers = await axios.get(`/miners/information`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        // console.log(resWorkers);
+        this.online_count = resWorkers.data.online_count;
+        this.offline_count = resWorkers.data.offline_count;
+        this.total_hash_rate = resWorkers.data.total_hash_rate;
+        this.total_energy_consumption =
+          resWorkers.data.total_energy_consumption;
+        this.expected_income = resWorkers.data.expected_income || 0;
+        this.expected_profit = resWorkers.data.expected_profit || 0;
+        this.expected_hosting = resWorkers.data.expected_hosting || 0;
+        this.electricity_cost = resWorkers.data.electricity_cost || 0;
         let response = await axios.get(`/miners/dashboards`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
         console.log(response);
-        this.dashboards = response.data.dashboards;
-        this.income = this.dashboards.income;
+        this.dashboards = response.data;
+        this.income = response.data.income;
         this.chartData.labels = Object.keys(this.income);
         this.chartData.datasets[0].data = Object.values(this.income);
         this.income_show = true;
-        this.hostingData.labels = Object.keys(response.data.dashboards.hosting);
+        this.hostingData.labels = Object.keys(response.data.hosting);
         this.hostingData.datasets[0].data = Object.values(
-          response.data.dashboards.hosting
+          response.data.hosting
         );
         this.hosting_show = true;
-        this.hashrateData.labels = Object.keys(
-          response.data.dashboards.hash_rate
-        );
+        this.hashrateData.labels = Object.keys(response.data.hash_rate);
         this.hashrateData.datasets[0].data = Object.values(
-          response.data.dashboards.hash_rate
+          response.data.hash_rate
         );
         this.hashrate_show = true;
       } catch (err) {
         console.log(err);
       }
+    },
+    roundTwo(n) {
+      if (n) {
+        return Math.round(n * 100) / 100;
+      }
+      return n;
     },
   },
   mounted() {
@@ -131,36 +141,91 @@ export default {
         <button class="btn withdraw">Вывести</button>
       </div>
     </div>
-    <div class="wrap-chart">
-      <h2>Доход</h2>
-      <Line
-        v-if="income_show"
-        class="line"
-        :data="chartData"
-        :options="options"
-        ref="chart"
-      />
+    <div class="wrap-cards">
+      <div class="card">
+        <div class="title status">
+          <div class="online"></div>
+          Online
+        </div>
+        <div class="value">{{ online_count }}</div>
+      </div>
+      <div class="card">
+        <div class="title status">
+          <div class="offline"></div>
+          Offline
+        </div>
+        <div class="value">{{ offline_count }}</div>
+      </div>
+      <div class="card">
+        <div class="title hashrate">Th/s</div>
+        <div class="value">{{ total_hash_rate }}</div>
+      </div>
+      <div class="card">
+        <div class="title electricity">KW</div>
+        <div class="value">{{ total_energy_consumption }}</div>
+      </div>
+      <div class="card">
+        <div class="title">Ожидаемая прибыль</div>
+        <div class="value profit">
+          <div class="day">
+            <span class="value">{{ expected_profit }}</span>
+            <span class="usd-day">USD/день</span>
+          </div>
+          <div class="month">
+            <span class="value">{{ roundTwo(expected_profit * 31) }}</span>
+            <span class="usd-month">USD/месяц</span>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="title">Ожидаемый доход</div>
+        <div class="value profit">
+          <div class="day">
+            <span class="value">{{ expected_income }}</span>
+            <span class="usd-day">USD/день</span>
+          </div>
+          <div class="month">
+            <span class="value">{{ roundTwo(expected_income * 31) }}</span>
+            <span class="usd-month">USD/месяц</span>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="title">Хостинг</div>
+        <div class="value profit">
+          <div class="day">
+            <span class="value">{{ expected_hosting }}</span>
+            <span class="usd-day">USD/день</span>
+          </div>
+          <div class="month">
+            <span class="value">{{ roundTwo(expected_hosting * 31) }}</span>
+            <span class="usd-month">USD/месяц</span>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="title">Электричество</div>
+        <div class="value profit">
+          <div class="day">
+            <span class="value">{{ electricity_cost }} $</span>
+            <span class="usd-day">per KW</span>
+          </div>
+        </div>
+      </div>
     </div>
+    <ChartLine v-if="income_show" :chartData="chartData" :name="'Доход'" />
 
-    <div class="wrap-chart">
-      <h2>Cтоимость хостинга</h2>
-      <Line
-        v-if="hosting_show"
-        class="line"
-        :data="hostingData"
-        :options="options"
-      />
-    </div>
+    <ChartLine
+      v-if="hosting_show"
+      :chartData="hostingData"
+      :name="'Cтоимость хостинга'"
+    />
 
-    <div class="wrap-chart">
-      <h2>Хешрейт</h2>
-      <Line
-        v-if="hashrate_show"
-        class="line"
-        :data="hashrateData"
-        :options="options"
-      />
-    </div>
+    <ChartLine
+      v-if="hashrate_show"
+      :chartData="hashrateData"
+      :name="'Хешрейт'"
+    />
   </div>
 </template>
 <style scoped>
@@ -235,17 +300,99 @@ export default {
   background-color: transparent;
 }
 
-.line {
-  max-height: 400px;
+.wrap-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
-.wrap-chart {
-  background-color: #fff;
+.card {
+  flex: 20%;
+  padding: 25px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   border-radius: 20px;
-  padding: 30px;
+  border: none;
+  cursor: auto;
+}
+
+.card:hover {
+  transform: none;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 17px;
+  line-height: 17px;
+}
+
+.online,
+.offline {
+  width: 8px;
+  height: 8px;
+  border-radius: 13px;
+}
+
+.online {
+  background-color: #45ed0b;
+}
+
+.offline {
+  background-color: #ff104a;
+}
+
+.status {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 14px;
+}
+
+.value {
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 20px;
+}
+
+.hashrate,
+.electricity {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 16px;
+}
+
+.usd-day,
+.usd-month {
+  opacity: 50%;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 14px;
+}
+
+.day,
+.month {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+.profit {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+@media (max-width: 1200px) {
+  .card {
+    flex: 25%;
+    padding: 20px;
+  }
 }
 
 @media (max-width: 940px) {
@@ -270,6 +417,20 @@ export default {
 
   .wrap_btns button {
     width: 100%;
+  }
+}
+
+@media (max-width: 575px) {
+  .card {
+    flex: 45%;
+    padding: 15px;
+  }
+}
+
+@media (max-width: 420px) {
+  .card {
+    flex: 100%;
+    padding: 20px;
   }
 }
 </style>

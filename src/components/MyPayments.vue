@@ -11,7 +11,7 @@ export default {
   },
   methods: {
     async load_info() {
-      let response = await axios.get(`/miners/payments`, {
+      let response = await axios.get(`/billings/get/all`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -23,10 +23,8 @@ export default {
     printType(type) {
       if (type == "hosting") {
         return "Плата за хостинг";
-      } else if (type == "reward") {
-        return "Награда за майнинг";
-      } else if (type == "payout") {
-        return "Вывод средств";
+      } else if (type == "buy_request") {
+        return "Покупка";
       }
       return "";
     },
@@ -50,20 +48,26 @@ export default {
 <template>
   <div class="wrapper">
     <h2>Мои платежи</h2>
-    <div class="cards" v-if="this.payments.length > 0">
-      <div class="card" v-for="card in payments" :key="card.id">
-        <div class="info">
-          <span class="name">{{ printType(card.type) }}</span>
+    <div class="mypayments" v-if="payments.length > 0">
+      <div class="mypayment-header">
+        <span class="date">Дата</span>
+        <span class="type">Тип</span>
+        <span class="sum_payment">Сумма платежа</span>
+        <span class="status">Статус</span>
+      </div>
+      <div class="payment" v-for="card in payments" :key="card.id">
+        <div class="group-payment">
           <span class="date">{{ card.date }}</span>
+          <span class="time">{{ card.time }}</span>
         </div>
-        <div class="summ_info">
-          <span class="summ plus" v-if="checkSum(card.value_usd)"
-            >+{{ card.value_usd }}$</span
-          >
-          <span class="summ minus" v-if="!checkSum(card.value_usd)"
-            >-{{ card.value_usd }}$</span
-          >
-          <img src="" alt="" />
+        <span class="type">{{ printType(card.type) }}</span>
+        <div class="group-payment">
+          <div class="payment-btc">{{ card.value }} {{ card.currency }}</div>
+          <div class="payment-hashrate">{{ card.hash_rate }}</div>
+        </div>
+        <div class="group-status">
+          <div class="online"></div>
+          <span class="status">Completed</span>
         </div>
       </div>
     </div>
@@ -128,45 +132,102 @@ export default {
   color: #272727;
 }
 
-.info {
+.mypayments {
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.name {
+.mypayment-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 30px;
+}
+
+.mypayment-header span,
+.date,
+.payment-btc,
+.status {
   font-weight: 600;
-  font-size: 16px;
-  line-height: 16px;
+  font-size: 14px;
+  line-height: 14px;
   color: #272727;
 }
 
-.date {
+.payment {
+  background-color: #fff;
+  border-radius: 20px;
+  padding: 24px 30px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.group-payment {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.time,
+.payment-hashrate {
+  opacity: 40%;
   font-weight: 500;
   font-size: 14px;
   line-height: 14px;
   color: #272727;
-  opacity: 40%;
 }
 
-.summ_info {
+.group-status {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 5px;
 }
 
-.summ {
-  font-weight: 600;
-  font-size: 18px;
-  line-height: 18px;
+.online,
+.offline {
+  width: 8px;
+  height: 8px;
+  border-radius: 13px;
 }
 
-.minus {
-  color: #ff104a;
+.online {
+  background-color: #45ed0b;
 }
 
-.plus {
-  color: #3ccc0a;
+@media (max-width: 910px) {
+  .profit {
+    flex-direction: column;
+  }
+
+  .day,
+  .month,
+  .year {
+    width: 100%;
+  }
+}
+
+@media (max-width: 520px) {
+  .time,
+  .payment-hashrate,
+  .payment-btc,
+  .date,
+  .mypayment-header span,
+  .status,
+  .type {
+    font-size: 10px;
+    line-height: 10px;
+  }
+
+  .payment,
+  .mypayment-header {
+    padding: 10px;
+    border-radius: 10px;
+  }
 }
 
 @media (max-width: 400px) {

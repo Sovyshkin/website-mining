@@ -18,6 +18,7 @@ export default {
         profile: "Профиль",
       },
       id: null,
+      avatar: "",
     };
   },
   props: {
@@ -44,11 +45,11 @@ export default {
             },
           }
         );
-        // let message = response.data.message;
+        let message = response.data.message;
         console.log(response);
-        // if (message != "ok") {
-        //   this.$router.push({ name: "home" });
-        // }
+        if (message != "ok") {
+          this.$router.push({ name: "home" });
+        }
       } catch (err) {
         console.log(err);
         let token = this.$route.query.token;
@@ -58,14 +59,28 @@ export default {
         }
       }
     },
+
+    async load_avatar() {
+      try {
+        let response = await axios.get(`/users/${localStorage.getItem("id")}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        this.avatar = response.data.user.image.url;
+      } catch (err) {
+        console.log(err);
+      }
+    },
   },
   mounted() {
-    // this.verify_token();
+    this.verify_token();
     this.id = localStorage.getItem("id") || null;
 
     window.addEventListener("storage", () => {
       this.id = localStorage.getItem("id") || null;
     });
+    this.load_avatar();
   },
 };
 </script>
@@ -121,7 +136,7 @@ export default {
         <img src="" alt="" />
       </div>
       <div class="avatar" @click="this.$router.push({ name: 'profile' })">
-        <img src="../assets/avatar.jpeg" alt="" />
+        <img v-if="avatar" :src="avatar" alt="" />
       </div>
     </div>
   </div>
@@ -136,6 +151,7 @@ export default {
   padding: 0 40px;
   justify-content: space-between;
   background-color: white;
+  margin-bottom: 0px;
 }
 
 .logo {

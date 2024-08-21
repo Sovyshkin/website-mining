@@ -8,6 +8,33 @@ export default {
     return {
       cards: [],
       summary: 0,
+      payments: [
+        {
+          id: 1,
+          name: "MasterCard & Visa",
+          img: "visa",
+          value: "visa",
+        },
+        {
+          id: 2,
+          name: "Bank Transfer",
+          img: "bank",
+          value: "bank",
+        },
+        {
+          id: 3,
+          name: "Bitcoin",
+          img: "btcpay",
+          value: "btc",
+        },
+        {
+          id: 4,
+          name: "USDT",
+          img: "usdt",
+          value: "usdt",
+        },
+      ],
+      methodPay: "visa",
     };
   },
   methods: {
@@ -62,6 +89,19 @@ export default {
         return Math.round(n * 100) / 100;
       }
     },
+
+    async goBuy() {
+      try {
+        let response = await axios.get(`/market/cart/buy?payment_type=usdt`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        console.log(response);
+      } catch (err) {
+        console.log(err);
+      }
+    },
   },
   mounted() {
     document.body.style.overflow = "auto";
@@ -109,7 +149,6 @@ export default {
             <div class="plus" @click="plus(card.id, card.count)">+</div>
           </div>
         </div>
-        <!-- <button @click="goTry" class="btn">Оформить заказ</button> -->
       </div>
     </div>
     <div class="itog">
@@ -117,8 +156,24 @@ export default {
       <span class="price">$ {{ summary }}</span>
     </div>
     <h2>Выберите способ оплаты</h2>
-    <div class="payments"></div>
-    <button class="buy">Оформить заказ</button>
+    <div class="payments">
+      <div
+        @click="methodPay = pay.value"
+        class="payment-card"
+        v-for="pay in payments"
+        :key="pay.id"
+      >
+        <div class="pay-img" :class="{ active: methodPay == pay.value }">
+          <img :src="'../assets/' + pay.img + '.svg'" alt="" />
+        </div>
+        <span
+          class="pay-name"
+          :class="{ activeName: methodPay == pay.value }"
+          >{{ pay.name }}</span
+        >
+      </div>
+    </div>
+    <button @click="goBuy()" class="buy">Оформить заказ</button>
   </div>
 </template>
 <style scoped>
@@ -310,6 +365,44 @@ export default {
   font-size: 16px;
   line-height: 16px;
   font-weight: 600;
+}
+
+.payments {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.payment-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.pay-name {
+  color: #272727;
+  opacity: 40%;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 12px;
+  text-align: center;
+}
+
+.pay-img {
+  border-radius: 15px;
+  border: 1px solid #fff;
+}
+
+.active {
+  border: 1px solid #cf0101;
+}
+
+.activeName {
+  color: #cf0101;
+  opacity: 100%;
 }
 
 @media (max-width: 765px) {

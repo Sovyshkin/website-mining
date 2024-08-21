@@ -9,6 +9,7 @@ export default {
     return {
       active: 1,
       profiletype: "",
+      image: "",
       firstname: "",
       lastname: "",
       email: "",
@@ -61,16 +62,17 @@ export default {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
-        this.email = response.data.email;
-        this.phone = response.data.phone;
-        this.firstname = response.data.firstname;
-        this.lastname = response.data.lastname;
-        this.country = response.data.country;
-        this.profiletype = response.data.profileType;
-        this.inn = response.data.inn;
-        this.address = response.data.address;
-        this.telegram = response.data.telegram;
-        this.wallet = response.data.wallet;
+        this.email = response.data.user.email;
+        this.phone = response.data.user.phone;
+        this.firstname = response.data.user.firstname;
+        this.lastname = response.data.user.lastname;
+        this.country = response.data.user.country;
+        this.profiletype = response.data.user.profileType;
+        this.inn = response.data.user.inn;
+        this.address = response.data.user.address;
+        this.telegram = response.data.user.telegram;
+        this.wallet = response.data.user.wallet;
+        this.image = response.data.user.image.url;
       } catch (err) {
         console.log(err);
       }
@@ -245,6 +247,10 @@ export default {
         this.$router.push({ name: "home" });
       }
     },
+
+    goChange(b) {
+      this.$emit("updateAvatar", b);
+    },
   },
   mounted() {
     document.body.style.overflow = "auto";
@@ -283,6 +289,12 @@ export default {
       <div class="personal">
         <h3>Личные данные</h3>
         <div class="personal_info">
+          <div class="group-avatar">
+            <img class="avatar" :src="image" alt="" />
+            <span class="change_avatar" @click="goChange(true)"
+              >Изменить фото</span
+            >
+          </div>
           <div class="group">
             <select v-model="profiletype" id="">
               <option value="id">Индивидуальный</option>
@@ -724,6 +736,31 @@ h3 {
 .exit {
   background-color: #cf0032;
   color: #fff;
+}
+
+.group-avatar {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 100%;
+  object-fit: cover;
+}
+
+.change_avatar {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 14px;
+  color: #cf0032;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 @media (max-width: 980px) {
