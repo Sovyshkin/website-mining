@@ -110,7 +110,7 @@ export default {
 };
 </script>
 <template>
-  <div class="wrap" v-if="checkRoute()">
+  <div class="wrap" style="max-width: 1440px" v-if="checkRoute()">
     <SliderImg
       v-if="slider"
       @sliderVerify="sliderVerify"
@@ -208,7 +208,6 @@ export default {
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 1440px;
   position: relative;
   margin: 0 auto;
 }
@@ -323,7 +322,7 @@ button::-moz-focus-inner {
 }
 
 .marketplace {
-  width: 75%;
+  width: 100%;
 }
 
 .bottomPanel {
