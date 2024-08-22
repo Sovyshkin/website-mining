@@ -39,6 +39,7 @@ export default {
         this.history = resBalance.data.history_usd;
         if (this.history) {
           this.chartData.labels = Object.keys(this.history);
+          this.chartData.labels.reverse();
           this.chartData.datasets[0].data = Object.values(this.history);
           this.history_show = true;
         }
@@ -141,11 +142,7 @@ export default {
   gap: 20px;
   padding: 30px;
   cursor: auto;
-}
-
-.card:hover {
-  transform: none;
-  box-shadow: none;
+  transition: all 500ms ease;
 }
 
 .btn {
@@ -273,6 +270,10 @@ export default {
   color: #cf0032;
   border: 1px solid #cf0032;
   background-color: transparent;
+}
+
+.card:hover {
+  transform: translateY(-3px);
 }
 
 @media (max-width: 940px) {

@@ -33,6 +33,7 @@ export default {
       message5: "",
       mfa_url: "",
       confirm2fa: false,
+      mfa: false,
     };
   },
   computed: {
@@ -62,6 +63,7 @@ export default {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
+        console.log(response);
         this.email = response.data.user.email;
         this.phone = response.data.user.phone;
         this.firstname = response.data.user.firstname;
@@ -73,6 +75,7 @@ export default {
         this.telegram = response.data.user.telegram;
         this.wallet = response.data.user.wallet;
         this.image = response.data.user.image.url;
+        this.mfa = response.data.user.mfa_enabled;
       } catch (err) {
         console.log(err);
       }
@@ -395,6 +398,7 @@ export default {
             {{ message }}
           </div>
         </div>
+        <button @click="exit()" class="btn exit">Выйти</button>
       </div>
       <div class="pass">
         <h3>Сменить пароль</h3>
@@ -442,7 +446,7 @@ export default {
         </div>
       </div>
     </div>
-    <div class="fa2" v-if="active == 2 && !mfa_url">
+    <div class="fa2" v-if="active == 2 && !mfa_url && !mfa">
       <div class="open" v-if="!confirm2fa">
         <h3>1. Откройте приложение Google 2Fa</h3>
         <div class="open_info">
@@ -505,12 +509,19 @@ export default {
         </div>
       </div>
     </div>
-    <div class="qr" v-if="mfa_url && !confirm2fa">
+    <div class="qr" v-if="mfa_url && !confirm2fa && !mfa">
       <span>Отсканируйте QR-code</span>
       <qrcode class="qrcode" :value="mfa_url"></qrcode>
       <a :href="mfa_url">{{ mfa_url }}</a>
       <button @click="authComfirm" type="button" class="btn">Продолжить</button>
     </div>
+    <button
+      v-if="mfa"
+      class="btn exit"
+      @click="this.$emit('updateDeleteAuth', true)"
+    >
+      Отлючить 2fa
+    </button>
     <div class="wallet" v-if="active == 3">
       <div class="current_wallet">
         <h3>Текущий кошелек</h3>
@@ -559,7 +570,6 @@ export default {
         </div>
       </div>
     </div>
-    <button @click="exit()" class="btn exit">Выйти</button>
   </div>
 </template>
 <style scoped>

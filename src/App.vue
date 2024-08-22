@@ -15,6 +15,7 @@ import ResetPassword from "./components/ResetPassword.vue";
 import LeftPanel from "./components/LeftPanel.vue";
 import BottomPanel from "./components/BottomPanel.vue";
 import DeleteWallet from "./components/DeleteWallet.vue";
+import DeleteAuth from "./components/DeleteAuth.vue";
 import { RouterView } from "vue-router";
 import SliderImg from "./components/SliderImg.vue";
 import ChangeAvatar from "./components/ChangeAvatar.vue";
@@ -41,6 +42,7 @@ export default {
     DeleteWallet,
     SliderImg,
     ChangeAvatar,
+    DeleteAuth,
   },
   data() {
     return {
@@ -51,6 +53,7 @@ export default {
       deleteWallet: false,
       slider: false,
       avatar: false,
+      deleteAuth: false,
     };
   },
   methods: {
@@ -76,8 +79,21 @@ export default {
       this.deleteWallet = deleteWallet;
     },
 
+    handleDeleteAuth(deleteAuth) {
+      this.deleteAuth = deleteAuth;
+    },
+
     handleAvatar(avatar) {
       this.avatar = avatar;
+    },
+
+    handleSlider(slider) {
+      this.slider = slider;
+    },
+
+    sliderVerify(slider) {
+      this.slider = slider;
+      this.login = true;
     },
     checkRoute() {
       if (this.$route.fullPath == "/") {
@@ -95,6 +111,11 @@ export default {
 </script>
 <template>
   <div class="wrap" v-if="checkRoute()">
+    <SliderImg
+      v-if="slider"
+      @sliderVerify="sliderVerify"
+      @updateSlider="handleSlider"
+    />
     <ResetPassword @updateReset="handleReset" v-if="reset" />
     <AppRegister @updateRegister="handleRegister" v-if="register" />
     <AppLogin
@@ -118,7 +139,6 @@ export default {
     <Business id="business" />
     <Faq id="faq" />
     <Banner_2 />
-    <SliderImg @passcallback="pass" v-if="slider" />
   </div>
   <div
     class="wrap more"
@@ -126,6 +146,11 @@ export default {
       this.$route.fullPath == '/404' || this.$route.name == 'controlreset'
     "
   >
+    <SliderImg
+      v-if="slider"
+      @sliderVerify="sliderVerify"
+      @updateSlider="handleSlider"
+    />
     <ResetPassword @updateReset="handleReset" v-if="reset" />
     <AppRegister @updateRegister="handleRegister" v-if="register" />
     <AppLogin
@@ -147,11 +172,13 @@ export default {
     <ChangeAvatar @updateAvatar="handleAvatar" v-if="avatar" />
     <LeftPanel class="leftPanel" />
     <BottomPanel class="bottomPanel" />
-    <DeleteWallet v-if="this.deleteWallet" />
+    <DeleteWallet @updateDeleteWallet="handleDelete" v-if="this.deleteWallet" />
+    <DeleteAuth @updateDeleteAuth="handleDeleteAuth" v-if="this.deleteAuth" />
     <main class="marketplace">
       <AppHeader :login="true" />
       <RouterView
         @updateDeleteWallet="handleDelete"
+        @updateDeleteAuth="handleDeleteAuth"
         @updateAvatar="handleAvatar"
       />
     </main>
@@ -305,6 +332,24 @@ button::-moz-focus-inner {
 
 .wrapper {
   margin-bottom: 100px;
+}
+
+.msg {
+  padding: 10px 13px;
+  font-size: 16px;
+  line-height: 16px;
+  color: #fff;
+  border-radius: 15px;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.success {
+  background-color: #45ed0b;
+}
+
+.error {
+  background-color: #cf0032;
 }
 @media (max-width: 768px) {
   .leftPanel {

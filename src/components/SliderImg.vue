@@ -1,11 +1,17 @@
 <template>
   <div class="wrapper">
     <div class="wrap-card">
-      <div class="cancel">
-        <span class="title"
-          >Переместите слайдером деталь, чтобы сложить пазл</span
-        >
+      <div class="wrap-cancel">
+        <img
+          @click="this.$emit('updateSlider', false)"
+          class="cancel"
+          src="../assets/close.png"
+          alt=""
+        />
       </div>
+      <span class="title"
+        >Переместите слайдером деталь, чтобы сложить пазл</span
+      >
       <div class="drag-verify-container">
         <div :style="dragVerifyImgStyle">
           <img
@@ -84,11 +90,11 @@ export default {
     },
     text: {
       type: String,
-      default: "Please hold down the slider and drag to the right",
+      default: "",
     },
     successText: {
       type: String,
-      default: "Verification passed",
+      default: "Успешно",
     },
     background: {
       type: String,
@@ -124,7 +130,7 @@ export default {
     },
     imgsrc: {
       type: String,
-      default: "../assets/slider.png",
+      default: "https://ltdfoto.ru/images/2024/08/22/slider.png",
     },
     barWidth: {
       type: Number,
@@ -148,7 +154,7 @@ export default {
     },
     failTip: {
       type: String,
-      default: "Verification failed, please try again",
+      default: "Неудачно, попробуйте еще раз",
     },
     diffWidth: {
       type: Number,
@@ -160,6 +166,8 @@ export default {
     dragEl.style.setProperty("--textColor", this.textColor);
     dragEl.style.setProperty("--width", Math.floor(this.width / 2) + "px");
     dragEl.style.setProperty("--pwidth", -Math.floor(this.width / 2) + "px");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    document.body.style.overflow = "hidden";
   },
   computed: {
     movecanvasStyle: function () {
@@ -236,39 +244,43 @@ export default {
       ctx.globalCompositeOperation = "destination-over";
     },
     checkimgLoaded: function () {
-      // Generate picture missing position
-      let barWidth = this.barWidth;
-      let imgHeight = this.$refs.checkImg.height;
-      let imgWidth = this.$refs.checkImg.width;
-      let halfWidth = Math.floor(this.width / 2);
-      let refreshHeigth = 25;
-      let tipHeight = 20;
-      let x = halfWidth + Math.ceil(Math.random() * (halfWidth - barWidth));
-      let y =
-        refreshHeigth +
-        Math.floor(
-          Math.random() * (imgHeight - barWidth - refreshHeigth - tipHeight)
-        );
-      this.$refs.maincanvas.setAttribute("width", imgWidth);
-      this.$refs.maincanvas.setAttribute("height", imgHeight);
-      this.$refs.maincanvas.style.display = "block";
-      let canvasCtx = this.$refs.maincanvas.getContext("2d");
-      this.draw(canvasCtx, x, y, "fill");
-      this.clipBarx = x;
+      try {
+        // Generate picture missing position
+        let barWidth = this.barWidth;
+        let imgHeight = this.$refs.checkImg.height;
+        let imgWidth = this.$refs.checkImg.width;
+        let halfWidth = Math.floor(this.width / 2);
+        let refreshHeigth = 25;
+        let tipHeight = 20;
+        let x = halfWidth + Math.ceil(Math.random() * (halfWidth - barWidth));
+        let y =
+          refreshHeigth +
+          Math.floor(
+            Math.random() * (imgHeight - barWidth - refreshHeigth - tipHeight)
+          );
+        this.$refs.maincanvas.setAttribute("width", imgWidth);
+        this.$refs.maincanvas.setAttribute("height", imgHeight);
+        this.$refs.maincanvas.style.display = "block";
+        let canvasCtx = this.$refs.maincanvas.getContext("2d");
+        this.draw(canvasCtx, x, y, "fill");
+        this.clipBarx = x;
 
-      let moveCanvas = this.$refs.movecanvas;
-      moveCanvas.setAttribute("width", imgWidth);
-      this.$refs.movecanvas.style.display = "block";
-      const L = barWidth + this.barRadius * 2 + 3; //Actual width
-      let moveCtx = this.$refs.movecanvas.getContext("2d");
-      moveCtx.clearRect(0, 0, imgWidth, imgHeight);
-      this.draw(moveCtx, x, y, "clip");
-      moveCtx.drawImage(this.$refs.checkImg, 0, 0, imgWidth, imgHeight);
-      y = y - this.barRadius * 2 - 1;
-      const ImageData = moveCtx.getImageData(x, y, L, L);
-      moveCanvas.setAttribute("width", L);
-      moveCanvas.setAttribute("height", imgHeight);
-      moveCtx.putImageData(ImageData, 0, y);
+        let moveCanvas = this.$refs.movecanvas;
+        moveCanvas.setAttribute("width", imgWidth);
+        this.$refs.movecanvas.style.display = "block";
+        const L = barWidth + this.barRadius * 2 + 3; //Actual width
+        let moveCtx = this.$refs.movecanvas.getContext("2d");
+        moveCtx.clearRect(0, 0, imgWidth, imgHeight);
+        this.draw(moveCtx, x, y, "clip");
+        moveCtx.drawImage(this.$refs.checkImg, 0, 0, imgWidth, imgHeight);
+        y = y - this.barRadius * 2 - 1;
+        const ImageData = moveCtx.getImageData(x, y, L, L);
+        moveCanvas.setAttribute("width", L);
+        moveCanvas.setAttribute("height", imgHeight);
+        moveCtx.putImageData(ImageData, 0, y);
+      } catch (err) {
+        console.log(err);
+      }
     },
     dragStart: function (e) {
       this.beginTime = new Date().getTime();
@@ -319,10 +331,12 @@ export default {
         this.endTime = new Date().getTime();
 
         this.successTip =
-          "Time-consuming" + (this.endTime - this.beginTime) / 1000 + "s";
+          "Ты справился за " + (this.endTime - this.beginTime) / 1000 + " сек";
         this.isPassing = true;
         this.isMoving = false;
         let handler = this.$refs.handler;
+        let dragVerify = this.$refs.dragVerify;
+        dragVerify.style.display = "none";
         handler.children[0].className = this.successIcon;
         this.$refs.progressBar.style.background = this.completedBg;
         // this.$refs.message.style["-webkit-text-fill-color"] = "unset";
@@ -338,7 +352,9 @@ export default {
             this.$refs.movecanvas.style.display = "none";
           }, 200);
         }, 100);
-        this.$emit("passcallback");
+        setTimeout(() => {
+          this.$emit("sliderVerify", false);
+        }, 2500);
       });
     },
     reset: function () {
@@ -446,6 +462,8 @@ export default {
   position: absolute;
   height: 34px;
   width: 0px;
+  background-color: #45ed0b !important;
+  text-align: center;
 }
 
 .drag_verify .dv_text {
@@ -516,8 +534,10 @@ export default {
 }
 
 .tips.success {
-  background: rgba(255, 255, 255, 0.6);
-  color: green;
+  background: #fff;
+  color: #45ed0b;
+  font-weight: 600;
+  font-size: 12px;
 }
 
 .tips.danger {
@@ -539,6 +559,19 @@ export default {
 
 img {
   border-radius: 10px;
+}
+
+.wrap-cancel {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.cancel {
+  height: 24px;
+  width: 24px;
+  cursor: pointer;
 }
 
 @-webkit-keyframes slidetounlock {

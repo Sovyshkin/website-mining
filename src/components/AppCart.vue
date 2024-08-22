@@ -142,7 +142,9 @@ export default {
             >
           </div>
           <div class="scale"></div>
-          <div class="time_profit">Время окупаемости: {{ card.payback }}</div>
+          <div class="time_profit">
+            Время окупаемости: {{ card.payback }} месяцев
+          </div>
           <div class="counter">
             <div class="minus" @click="minus(card.id, card.count)">-</div>
             <div class="count">{{ card.count }}</div>

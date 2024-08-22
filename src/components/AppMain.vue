@@ -67,6 +67,17 @@ export default {
         return s.slice(0, 6);
       }
     },
+
+    printType(type) {
+      if (type == "hosting") {
+        return "Плата за хостинг";
+      } else if (type == "reward") {
+        return "Награда за майнинг";
+      } else if (type == "payout") {
+        return "Вывод средств";
+      }
+      return "";
+    },
   },
   mounted() {
     this.load_info();
@@ -123,10 +134,12 @@ export default {
           <span class="date">{{ card.date }}</span>
           <span class="time">{{ card.time }}</span>
         </div>
-        <span class="type">{{ card.type }}</span>
+        <span class="type">{{ printType(card.type) }}</span>
         <div class="group-payment">
           <div class="payment-btc">{{ card.value }} {{ card.currency }}</div>
-          <div class="payment-hashrate">{{ card.hash_rate }}</div>
+          <div class="payment-hashrate" v-if="card.hash_rate">
+            {{ card.hash_rate }} Th/s
+          </div>
         </div>
         <div class="group-status">
           <div class="online"></div>
@@ -245,6 +258,13 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  transition: all 500ms ease;
+}
+
+.payment:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 10px 0 #00000037;
 }
 
 .group-payment {
@@ -266,6 +286,15 @@ export default {
   display: flex;
   align-items: center;
   gap: 5px;
+}
+
+.group-payment,
+.type,
+.group-status,
+.date,
+.status,
+.sum_payment {
+  flex: 22%;
 }
 
 @media (max-width: 1200px) {

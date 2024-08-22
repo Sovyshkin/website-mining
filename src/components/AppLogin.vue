@@ -268,22 +268,4 @@ input::placeholder {
   cursor: auto;
   transform: none;
 }
-
-.msg {
-  padding: 10px 13px;
-  font-size: 16px;
-  line-height: 16px;
-  color: #fff;
-  border-radius: 15px;
-  width: fit-content;
-  margin: 0 auto;
-}
-
-.success {
-  background-color: #45ed0b;
-}
-
-.error {
-  background-color: #cf0032;
-}
 </style>
