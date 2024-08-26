@@ -2,11 +2,13 @@
 import axios from "axios";
 import BlockCalculator from "./BlockCalculator.vue";
 import BannerMain from "./BannerMain.vue";
+import LoadingSpinner from "./LoadingSpinner.vue";
 export default {
   name: "AppMain",
   components: {
     BlockCalculator,
     BannerMain,
+    LoadingSpinner,
   },
   data() {
     return {
@@ -16,11 +18,13 @@ export default {
       expected_income_btc: 0,
       payments: [],
       paymentsSorted: [],
+      isLoading: false,
     };
   },
   methods: {
     async load_info() {
       try {
+        this.isLoading = true;
         let response = await axios.get(`/miners/information`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -46,6 +50,8 @@ export default {
         // reward и payout
       } catch (err) {
         console.log(err);
+      } finally {
+        this.isLoading = false;
       }
     },
     roundTwo(n) {
@@ -85,6 +91,7 @@ export default {
 };
 </script>
 <template>
+  <LoadingSpinner v-if="isLoading" />
   <div class="wrapper">
     <BannerMain />
     <h2>Общая сумма заработанных активов</h2>

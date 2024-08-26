@@ -1,10 +1,11 @@
 <script>
 import axios from "axios";
 import Qrcode from "qrcode.vue";
+import LoadingSpinner from "./LoadingSpinner.vue";
 
 export default {
   name: "AppProfile",
-  components: { Qrcode },
+  components: { Qrcode, LoadingSpinner },
   data() {
     return {
       active: 1,
@@ -34,6 +35,7 @@ export default {
       mfa_url: "",
       confirm2fa: false,
       mfa: false,
+      isLoading: false,
     };
   },
   computed: {
@@ -56,6 +58,7 @@ export default {
 
     async load_info() {
       try {
+        this.isLoading = true;
         let res = await axios.get(`/users/countries`);
         this.countries = res.data;
         let response = await axios.get(`/users/${localStorage.getItem("id")}`, {
@@ -78,6 +81,8 @@ export default {
         this.mfa = response.data.user.mfa_enabled;
       } catch (err) {
         console.log(err);
+      } finally {
+        this.isLoading = false;
       }
     },
 
@@ -263,6 +268,7 @@ export default {
 };
 </script>
 <template>
+  <LoadingSpinner v-if="isLoading" />
   <div class="wrapper">
     <h2>Профиль</h2>
     <div class="wrap_btns">

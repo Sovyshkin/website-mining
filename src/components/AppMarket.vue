@@ -1,13 +1,15 @@
 <script>
 import axios from "axios";
+import LoadingSpinner from "./LoadingSpinner.vue";
 
 export default {
   name: "AppMarket",
-  components: {},
+  components: { LoadingSpinner },
   data() {
     return {
       cards: [],
       cart: false,
+      isLoading: false,
     };
   },
   methods: {
@@ -36,11 +38,14 @@ export default {
 
     async load_info() {
       try {
+        this.isLoading = true;
         let response = await axios.get(`/market/miners`);
         console.log(response);
         this.cards = response.data.data;
       } catch (err) {
         console.log(err);
+      } finally {
+        this.isLoading = false;
       }
     },
   },
@@ -51,6 +56,7 @@ export default {
 };
 </script>
 <template>
+  <LoadingSpinner v-if="isLoading" />
   <div class="wrapper">
     <h2>Маркет</h2>
     <div class="cards">
@@ -106,7 +112,7 @@ export default {
 
 .card {
   min-height: 474px;
-  flex: 48%;
+  flex: 30%;
   border-radius: 20px;
   display: flex;
   flex-direction: column;

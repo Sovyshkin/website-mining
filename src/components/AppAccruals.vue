@@ -1,10 +1,11 @@
 <script>
 import axios from "axios";
 import ChartLine from "./ChartLine.vue";
+import LoadingSpinner from "./LoadingSpinner.vue";
 
 export default {
   name: "AppAccruals",
-  components: { ChartLine },
+  components: { ChartLine, LoadingSpinner },
   data() {
     return {
       cards: [],
@@ -23,11 +24,13 @@ export default {
         ],
       },
       history_show: false,
+      isLoading: false,
     };
   },
   methods: {
     async load_info() {
       try {
+        this.isLoading = true;
         let resBalance = await axios.get(`/miners/balance`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -41,6 +44,7 @@ export default {
           this.chartData.labels = Object.keys(this.history);
           this.chartData.labels.reverse();
           this.chartData.datasets[0].data = Object.values(this.history);
+          this.chartData.datasets[0].data.reverse();
           this.history_show = true;
         }
         let resPayments = await axios.get(`/miners/payments`, {
@@ -56,6 +60,8 @@ export default {
         // ВСЁ КРОМЕ reward
       } catch (err) {
         console.log(err);
+      } finally {
+        this.isLoading = false;
       }
     },
 
@@ -77,7 +83,9 @@ export default {
 };
 </script>
 <template>
+  <LoadingSpinner v-if="isLoading" />
   <div class="wrapper">
+    <h2>Начисления и списания</h2>
     <div class="balance">
       <div class="info">
         <span class="name">Баланс</span>
@@ -92,7 +100,7 @@ export default {
       </div>
     </div>
     <ChartLine v-if="history_show" :chartData="chartData" :name="'Баланс'" />
-    <h2>Начисления и списания</h2>
+    <h2>История операций</h2>
     <div class="cards" v-if="this.cards.length > 0">
       <div class="card" v-for="card in cards" :key="card.id">
         <div class="info">
@@ -101,7 +109,7 @@ export default {
         </div>
         <div class="summ_info">
           <!-- <span class="summ plus" v-if="card.name == 'Пополнение'"
-            >+{{ card.summ }}$</span
+            >+{{ card.summ }}$</span>
           >
           <span class="summ minus" v-if="card.name != 'Пополнение'"
             >-{{ card.summ }}$</span

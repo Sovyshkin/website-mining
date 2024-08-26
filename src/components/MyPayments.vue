@@ -1,23 +1,32 @@
 <script>
+import LoadingSpinner from "./LoadingSpinner.vue";
 import axios from "axios";
 
 export default {
   name: "MyPayments",
-  components: {},
+  components: { LoadingSpinner },
   data() {
     return {
       payments: [],
+      isLoading: false,
     };
   },
   methods: {
     async load_info() {
-      let response = await axios.get(`/billings/get/all`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      this.payments = response.data.data;
-      console.log(response);
+      try {
+        this.isLoading = true;
+        let response = await axios.get(`/billings/get/all`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        this.payments = response.data.data;
+        console.log(response);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        this.isLoading = false;
+      }
     },
 
     printType(type) {
@@ -46,6 +55,7 @@ export default {
 };
 </script>
 <template>
+  <LoadingSpinner v-if="isLoading" />
   <div class="wrapper">
     <h2>Мои платежи</h2>
     <div class="mypayments" v-if="payments.length > 0">
@@ -197,6 +207,15 @@ export default {
 
 .online {
   background-color: #45ed0b;
+}
+
+.group-payment,
+.type,
+.group-status,
+.date,
+.status,
+.sum_payment {
+  flex: 22%;
 }
 
 @media (max-width: 910px) {

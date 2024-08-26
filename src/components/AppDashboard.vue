@@ -1,10 +1,11 @@
 <script>
 import axios from "axios";
 import ChartLine from "./ChartLine.vue";
+import LoadingSpinner from "./LoadingSpinner.vue";
 
 export default {
   name: "AppDashboard",
-  components: { ChartLine },
+  components: { ChartLine, LoadingSpinner },
   data() {
     return {
       chartData: {
@@ -60,11 +61,13 @@ export default {
       expected_profit: 0,
       expected_hosting: 0,
       electricity_cost: 0,
+      isLoading: true,
     };
   },
   methods: {
     async load_info() {
       try {
+        this.isLoading = true;
         let resBalance = await axios.get(`/miners/balance`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -111,6 +114,8 @@ export default {
         this.hashrate_show = true;
       } catch (err) {
         console.log(err);
+      } finally {
+        this.isLoading = false;
       }
     },
     roundTwo(n) {
@@ -126,7 +131,8 @@ export default {
 };
 </script>
 <template>
-  <div class="wrapper">
+  <LoadingSpinner v-if="isLoading" />
+  <div class="wrapper" v-else>
     <h2>Приборная панель</h2>
     <div class="balance">
       <div class="info">

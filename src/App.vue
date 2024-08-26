@@ -113,8 +113,8 @@ export default {
   <div class="wrap" style="max-width: 1440px" v-if="checkRoute()">
     <SliderImg
       v-if="slider"
-      @sliderVerify="sliderVerify"
       @updateSlider="handleSlider"
+      @sliderVerify="sliderVerify"
     />
     <ResetPassword @updateReset="handleReset" v-if="reset" />
     <AppRegister @updateRegister="handleRegister" v-if="register" />
@@ -130,8 +130,8 @@ export default {
       @updateLogin="handleLogin"
       v-if="gotry"
     />
-    <AppHeader @updateLogin="handleLogin" />
-    <Block_1 @updateLogin="handleLogin" />
+    <AppHeader @updateSlider="handleSlider" />
+    <Block_1 @updateSlider="handleSlider" />
     <Calculator />
     <Equipment @updateGoTry="handleTry" id="equipment" />
     <Banner_1 />
@@ -165,7 +165,7 @@ export default {
       @updateLogin="handleLogin"
       v-if="gotry"
     />
-    <AppHeader @updateLogin="handleLogin" />
+    <AppHeader @updateLogin="handleLogin" @updateSlider="handleSlider" />
     <RouterView />
   </div>
   <div class="wrap market" v-else>
@@ -323,6 +323,9 @@ button::-moz-focus-inner {
 
 .marketplace {
   width: 100%;
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 .bottomPanel {

@@ -1,9 +1,10 @@
 <script>
 import axios from "axios";
+import LoadingSpinner from "./LoadingSpinner.vue";
 
 export default {
   name: "AppCart",
-  components: {},
+  components: { LoadingSpinner },
   data() {
     return {
       cards: [],
@@ -35,6 +36,7 @@ export default {
         },
       ],
       methodPay: "visa",
+      isLoading: false,
     };
   },
   methods: {
@@ -71,6 +73,7 @@ export default {
 
     async load_info() {
       try {
+        this.isLoading = true;
         let response = await axios.get(`/market/cart/get`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -81,6 +84,8 @@ export default {
         console.log(this.cards);
       } catch (err) {
         console.log(err);
+      } finally {
+        this.isLoading = false;
       }
     },
 
@@ -110,6 +115,7 @@ export default {
 };
 </script>
 <template>
+  <LoadingSpinner v-if="isLoading" />
   <div class="wrapper">
     <h2>Корзина</h2>
     <div class="cards">
