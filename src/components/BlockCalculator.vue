@@ -38,7 +38,7 @@ export default {
       let hashrate = this.invest / this.hashrate_cost;
       this.dohod =
         Math.round(
-          ((hashrate * 10 ** 12 * this.reward * this.btc_price * 84000 * days) /
+          ((hashrate * 10 ** 12 * this.reward * this.btc_price * 86400 * days) /
             (this.dif * 2 ** 32)) *
             100
         ) / 100;
@@ -77,7 +77,7 @@ export default {
       let hashrate =
         Math.round(
           ((this.dohod * this.dif * 2 ** 32) /
-            (10 ** 12 * this.reward * this.btc_price * 84000 * days)) *
+            (10 ** 12 * this.reward * this.btc_price * 86400 * days)) *
             100
         ) / 100;
       this.invest = this.hashrate_cost * hashrate;
