@@ -51,7 +51,7 @@ export default {
 </script>
 <template>
   <LoadingSpinner v-if="isLoading" />
-  <div class="wrapper">
+  <div class="wrapper" v-else>
     <h2>Мои майнеры</h2>
     <div class="cards" v-if="this.cards.length > 0">
       <div class="card" v-for="card in cards" :key="card.id">

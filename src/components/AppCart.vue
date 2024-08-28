@@ -116,7 +116,7 @@ export default {
 </script>
 <template>
   <LoadingSpinner v-if="isLoading" />
-  <div class="wrapper">
+  <div class="wrapper" v-else>
     <h2>Корзина</h2>
     <div class="cards">
       <div class="card" v-for="card in cards" :key="card.id">

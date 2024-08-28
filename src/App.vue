@@ -19,6 +19,7 @@ import DeleteAuth from "./components/DeleteAuth.vue";
 import { RouterView } from "vue-router";
 import SliderImg from "./components/SliderImg.vue";
 import ChangeAvatar from "./components/ChangeAvatar.vue";
+import FormFeedback from "./components/FormFeedback.vue";
 
 export default {
   name: "App",
@@ -43,6 +44,7 @@ export default {
     SliderImg,
     ChangeAvatar,
     DeleteAuth,
+    FormFeedback,
   },
   data() {
     return {
@@ -54,6 +56,7 @@ export default {
       slider: false,
       avatar: false,
       deleteAuth: false,
+      formFeedback: false,
     };
   },
   methods: {
@@ -90,6 +93,9 @@ export default {
     handleSlider(slider) {
       this.slider = slider;
     },
+    handleFormFeedback(form) {
+      this.formFeedback = form;
+    },
 
     sliderVerify(slider) {
       this.slider = slider;
@@ -111,6 +117,10 @@ export default {
 </script>
 <template>
   <div class="wrap" style="max-width: 1440px" v-if="checkRoute()">
+    <FormFeedback
+      v-if="formFeedback"
+      @updateFormFeedback="handleFormFeedback"
+    />
     <SliderImg
       v-if="slider"
       @updateSlider="handleSlider"
@@ -131,7 +141,10 @@ export default {
       v-if="gotry"
     />
     <AppHeader @updateSlider="handleSlider" />
-    <Block_1 @updateSlider="handleSlider" />
+    <Block_1
+      @updateSlider="handleSlider"
+      @updateFormFeedback="handleFormFeedback"
+    />
     <Calculator />
     <Equipment @updateGoTry="handleTry" id="equipment" />
     <Banner_1 />

@@ -56,7 +56,7 @@ export default {
 </script>
 <template>
   <LoadingSpinner v-if="isLoading" />
-  <div class="wrapper">
+  <div class="wrapper" v-else>
     <h2>Мои платежи</h2>
     <div class="mypayments" v-if="payments.length > 0">
       <div class="mypayment-header">

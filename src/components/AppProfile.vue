@@ -269,7 +269,7 @@ export default {
 </script>
 <template>
   <LoadingSpinner v-if="isLoading" />
-  <div class="wrapper">
+  <div class="wrapper" v-else>
     <h2>Профиль</h2>
     <div class="wrap_btns">
       <button

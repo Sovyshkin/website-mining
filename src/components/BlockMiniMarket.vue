@@ -1,15 +1,13 @@
 <script>
 import axios from "axios";
-import LoadingSpinner from "./LoadingSpinner.vue";
 
 export default {
   name: "AppMarket",
-  components: { LoadingSpinner },
+  components: {},
   data() {
     return {
       cards: [],
       cart: false,
-      isLoading: false,
     };
   },
   methods: {
@@ -38,14 +36,11 @@ export default {
 
     async load_info() {
       try {
-        this.isLoading = true;
         let response = await axios.get(`/market/miners`);
         console.log(response);
-        this.cards = response.data.data;
+        this.cards = response.data.miners_items;
       } catch (err) {
         console.log(err);
-      } finally {
-        this.isLoading = false;
       }
     },
   },
@@ -56,9 +51,7 @@ export default {
 };
 </script>
 <template>
-  <LoadingSpinner v-if="isLoading" />
-  <div class="wrapper" v-else>
-    <h2>Маркет</h2>
+  <div class="wrapper">
     <div class="cards">
       <div class="card" v-for="card in cards" :key="card.id">
         <img class="asic" v-if="card.image" :src="card.image.url" alt="" />
@@ -95,13 +88,10 @@ export default {
 </template>
 <style scoped>
 .wrapper {
-  margin-top: 40px;
-  padding: 0 40px;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  overflow-x: hidden;
-  overflow-y: scroll;
+  margin-bottom: 0px;
 }
 .cards {
   display: flex;
@@ -112,7 +102,7 @@ export default {
 
 .card {
   min-height: 474px;
-  flex: 30%;
+  flex: 20%;
   border-radius: 20px;
   display: flex;
   flex-direction: column;

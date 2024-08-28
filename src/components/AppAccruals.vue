@@ -84,7 +84,7 @@ export default {
 </script>
 <template>
   <LoadingSpinner v-if="isLoading" />
-  <div class="wrapper">
+  <div class="wrapper" v-else>
     <h2>Начисления и списания</h2>
     <div class="balance">
       <div class="info">

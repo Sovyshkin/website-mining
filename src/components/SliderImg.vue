@@ -3,7 +3,7 @@
     <div class="wrap-card">
       <div class="wrap-cancel">
         <img
-          @click="this.$emit('updateSlider', false)"
+          @click="cancel()"
           class="cancel"
           src="../assets/close.png"
           alt=""
@@ -223,6 +223,11 @@ export default {
     };
   },
   methods: {
+    cancel() {
+      document.body.style.overflow = "auto";
+      this.$emit("updateSlider", false);
+    },
+
     draw: function (ctx, x, y, operation) {
       let l = this.barWidth;
       let r = this.barRadius;

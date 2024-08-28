@@ -3,12 +3,14 @@ import axios from "axios";
 import BlockCalculator from "./BlockCalculator.vue";
 import BannerMain from "./BannerMain.vue";
 import LoadingSpinner from "./LoadingSpinner.vue";
+import BlockMiniMarket from "./BlockMiniMarket.vue";
 export default {
   name: "AppMain",
   components: {
     BlockCalculator,
     BannerMain,
     LoadingSpinner,
+    BlockMiniMarket,
   },
   data() {
     return {
@@ -92,7 +94,7 @@ export default {
 </script>
 <template>
   <LoadingSpinner v-if="isLoading" />
-  <div class="wrapper">
+  <div class="wrapper" v-else>
     <BannerMain />
     <h2>Общая сумма заработанных активов</h2>
     <div class="total">
@@ -128,6 +130,7 @@ export default {
       </div>
     </div>
     <BlockCalculator :white="true" />
+    <BlockMiniMarket />
     <h2>Мои платежи</h2>
     <div class="mypayments">
       <div class="mypayment-header">

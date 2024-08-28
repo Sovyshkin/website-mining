@@ -1,9 +1,32 @@
 <script>
+import axios from "axios";
+
 export default {
   name: "Block_1",
   components: {},
   data() {
-    return {};
+    return {
+      src: "",
+    };
+  },
+  methods: {
+    async load_info() {
+      try {
+        let response = await axios.get(
+          `/settings/get?key=home_page_youtube_link`
+        );
+        this.src = response.data.value;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
+    openYoutube() {
+      window.open(this.src, "_blank");
+    },
+  },
+  mounted() {
+    this.load_info();
   },
 };
 </script>
@@ -19,11 +42,16 @@ export default {
         по цене 31$ и сделайте правильный выбор
       </p>
       <div class="wrap-btns">
-        <button class="btn learn">Ознакомиться</button>
+        <button
+          @click="this.$emit('updateFormFeedback', true)"
+          class="btn learn"
+        >
+          Ознакомиться
+        </button>
         <button @click="this.$emit('updateSlider', true)" class="btn logsys">
           Войти в систему
         </button>
-        <button class="btn youtube">
+        <button @click="openYoutube()" class="btn youtube">
           Смотреть на Youtube
           <img src="../assets/youtube.png" alt="" />
         </button>
