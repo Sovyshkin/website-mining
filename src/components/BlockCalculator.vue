@@ -18,6 +18,7 @@ export default {
       hashrate_cost: 19,
       btc: 0,
       procent: 0,
+      dayCalc: "1",
     };
   },
   props: {
@@ -64,13 +65,13 @@ export default {
 
     twoCalc() {
       let days = 1;
-      if (this.active == 1) {
+      if (this.dayCalc == "1") {
         days = 1;
       }
-      if (this.active == 2) {
-        days = 30;
+      if (this.dayCalc == "31") {
+        days = 31;
       }
-      if (this.active == 3) {
+      if (this.dayCalc == "365") {
         days = 365;
       }
 
@@ -80,7 +81,7 @@ export default {
             (10 ** 12 * this.reward * this.btc_price * 86400 * days)) *
             100
         ) / 100;
-      this.invest = this.hashrate_cost * hashrate;
+      this.invest = Math.round(this.hashrate_cost * hashrate * 100) / 100;
       this.electricity =
         Math.round(
           ((hashrate * this.hash_rate_electricity_consumption * 24) / 1000) *
@@ -90,7 +91,7 @@ export default {
       this.rashod =
         Math.round(this.electricity_cost * this.electricity * 100) / 100;
       this.profit = Math.round((this.dohod - this.rashod) * 100) / 100;
-      this.procent = (this.profit / this.invest) * 100;
+      this.procent = (this.profit / this.invest) * 100 || 0;
       this.btc = this.profit / this.btc_price;
       if (this.btc) {
         this.btc = String(this.btc).slice(0, 8);
@@ -202,10 +203,16 @@ export default {
             v-model="dohod"
             placeholder="Укажите желаемый доход"
           />
-          <select class="time" name="" id="">
-            <option value="day">В день</option>
-            <option value="month">В месяц</option>
-            <option value="year">В год</option>
+          <select
+            v-model="dayCalc"
+            @change="twoCalc"
+            class="time"
+            name=""
+            id=""
+          >
+            <option value="1">В день</option>
+            <option value="31">В месяц</option>
+            <option value="365">В год</option>
           </select>
         </div>
         <div class="info">
@@ -229,6 +236,16 @@ export default {
             <span class="group-name">Bitcoin:</span>
             <span class="group-value">{{ btc_price }} USD</span>
           </div>
+
+          <p class="detailInfo">
+            Данные рассчитываются в автоматическом режиме через платформу
+            <a
+              href="https://whattomine.com/coins/193-bch-sha-256"
+              target="_blank"
+              >whattomine.com</a
+            >
+            с учетом стоимости электроэнергии 0.06$ за кВт⋅ч и цены биткоина.
+          </p>
         </div>
       </div>
       <div class="right" :class="{ white: this.white }">
@@ -239,9 +256,9 @@ export default {
           <span class="procent">({{ procent }}%)</span>
           <span class="procent">Возврат инвестиций</span>
         </div>
-        <div class="earn-time" v-if="active == 1">За день</div>
-        <div class="earn-time" v-if="active == 2">За месяц</div>
-        <div class="earn-time" v-if="active == 3">За год</div>
+        <div class="earn-time" v-if="dayCalc == '1'">За день</div>
+        <div class="earn-time" v-if="dayCalc == '31'">За месяц</div>
+        <div class="earn-time" v-if="dayCalc == '365'">За год</div>
       </div>
     </div>
   </div>
@@ -411,9 +428,32 @@ export default {
   accent-color: #cf0132;
   border: none !important;
   outline: none !important;
+  background: #cf0032;
+  background-color: #cf0032;
+  color: #cf0032;
   cursor: pointer;
   width: 100%;
   height: 7px;
+}
+
+/* Для Chrome и Safari */
+.range::-webkit-slider-thumb {
+  background-color: #cf0132;
+}
+
+/* Для Firefox */
+.range::-moz-range-thumb {
+  background-color: #cf0132;
+}
+
+/* Для Edge */
+.range::-ms-thumb {
+  background-color: #cf0132;
+}
+
+/* Для IE */
+.range::-o-range-thumb {
+  background-color: #cf0132;
 }
 
 .inputs_range {
@@ -453,6 +493,13 @@ span {
   word-break: break-all;
 }
 
+.detailInfo {
+  font-size: 8px;
+  line-height: 10px;
+  color: #242628;
+  opacity: 50%;
+}
+
 /* input[type="range"] {
   overflow-x: hidden;
   width: 100%;
@@ -490,6 +537,20 @@ input[type="range"]::-ms-fill-lower {
 input[type="range"]::-ms-fill-upper {
   background-color: #f5f5f8;
 } */
+
+input[type="range"]::-webkit-slider-thumb:after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  left: -285px;
+  top: -28px;
+  width: 300px;
+  height: 140px;
+  background: #9fe472;
+  transform: rotateX(90deg);
+  transform-origin: 0 0px 0;
+  transform: rotateX(90deg) translateY(-140px) translateZ(-18px);
+}
 
 @media (max-width: 880px) {
   .left,

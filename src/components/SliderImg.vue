@@ -130,7 +130,7 @@ export default {
     },
     imgsrc: {
       type: String,
-      default: "https://ltdfoto.ru/images/2024/08/22/slider.png",
+      default: "https://i.imgur.com/PJYgAr0.png",
     },
     barWidth: {
       type: Number,
