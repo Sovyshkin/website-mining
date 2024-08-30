@@ -3,38 +3,12 @@ import axios from "axios";
 import LoadingSpinner from "./LoadingSpinner.vue";
 
 export default {
-  name: "AppCart",
+  name: "AppProduct",
   components: { LoadingSpinner },
   data() {
     return {
-      cards: [],
+      card: {},
       summary: 0,
-      payments: [
-        {
-          id: 1,
-          name: "MasterCard & Visa",
-          img: "visa",
-          value: "visa",
-        },
-        {
-          id: 2,
-          name: "Bank Transfer",
-          img: "bank",
-          value: "bank",
-        },
-        {
-          id: 3,
-          name: "Bitcoin",
-          img: "btcpay",
-          value: "btc",
-        },
-        {
-          id: 4,
-          name: "USDT",
-          img: "usdt",
-          value: "usdt",
-        },
-      ],
       methodPay: "visa",
       isLoading: false,
     };
@@ -44,44 +18,17 @@ export default {
       this.$emit("updateGoTry", true);
     },
 
-    async minus(id, count) {
-      count -= 1;
-      let response = await axios.get(
-        `/market/cart/set?miner_item_id=${id}&count=${count}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      this.cards = response.data.data;
-      this.summary = response.data.summary;
-    },
-    async plus(id, count) {
-      count += 1;
-      let response = await axios.get(
-        `/market/cart/set?miner_item_id=${id}&count=${count}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      this.cards = response.data.data;
-      this.summary = response.data.summary;
-    },
-
     async load_info() {
       try {
         this.isLoading = true;
-        let response = await axios.get(`/market/cart/get`, {
+        this.id = this.$route.query.id;
+        let response = await axios.get(`/miners/get?id=${this.id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
-        this.cards = response.data.data;
-        this.summary = response.data.summary;
-        console.log(this.cards);
+        console.log(response);
+        this.card = response.data.miner_item;
       } catch (err) {
         console.log(err);
       } finally {
@@ -95,16 +42,29 @@ export default {
       }
     },
 
-    async goBuy() {
+    async addCart() {
       try {
-        let response = await axios.get(`/market/cart/buy?payment_type=usdt`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-        console.log(response);
+        if (!localStorage.getItem("token")) {
+          this.$emit("updateGoTry", true);
+        } else {
+          let response = await axios.get(
+            `/market/cart/set?miner_item_id=${this.id}&count=1`,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }
+          );
+          if (response.data.status == "ok") {
+            this.cart = true;
+            setTimeout(() => {
+              this.cart = false;
+            }, 3000);
+          }
+        }
       } catch (err) {
         console.log(err);
+        this.cart = "Ошибка";
       }
     },
   },
@@ -117,71 +77,42 @@ export default {
 <template>
   <LoadingSpinner v-if="isLoading" />
   <div class="wrapper" v-else>
-    <h2>Корзина</h2>
-    <div class="cards">
-      <div class="card" v-for="card in cards" :key="card.id">
-        <img class="asic" v-if="card.image" :src="card.image.url" alt="" />
-        <div class="info">
-          <span class="name">{{ card.name }}</span>
-          <div class="group">
-            <span class="group-name">Хостинг:</span>
-            <span class="group-value"
-              >${{ roundTwo(card.hosting * 31) }} / месяц</span
-            >
-          </div>
-          <div class="group">
-            <span class="group-name">Доход:</span>
-            <span class="group-value"
-              >${{ roundTwo(card.income * 31) }} / месяц</span
-            >
-          </div>
-          <div class="group">
-            <span class="group-name">Расход:</span>
-            <span class="group-value"
-              >{{ roundTwo(card.energy_consumption * 31) }} Вт / месяц</span
-            >
-          </div>
-          <div class="group">
-            <span class="group-name">Прибыль:</span>
-            <span class="group-value"
-              >${{ roundTwo(card.profit * 31) }} / месяц</span
-            >
-          </div>
-          <div class="scale"></div>
-          <div class="time_profit">
-            Время окупаемости: {{ card.payback }} месяцев
-          </div>
-          <div class="counter">
-            <div class="minus" @click="minus(card.id, card.count)">-</div>
-            <div class="count">{{ card.count }}</div>
-            <div class="plus" @click="plus(card.id, card.count)">+</div>
-          </div>
+    <h2>{{ card.name }}</h2>
+    <div class="card">
+      <img class="asic" v-if="card.image" :src="card.image.url" alt="" />
+      <div class="info">
+        <span class="name">{{ card.name }}</span>
+        <div class="group">
+          <span class="group-name">Хостинг:</span>
+          <span class="group-value"
+            >${{ roundTwo(card.hosting * 31) }} / месяц</span
+          >
+        </div>
+        <div class="group">
+          <span class="group-name">Доход:</span>
+          <span class="group-value"
+            >${{ roundTwo(card.income * 31) }} / месяц</span
+          >
+        </div>
+        <div class="group">
+          <span class="group-name">Расход:</span>
+          <span class="group-value"
+            >{{ roundTwo(card.energy_consumption * 31) }} Вт / месяц</span
+          >
+        </div>
+        <div class="group">
+          <span class="group-name">Прибыль:</span>
+          <span class="group-value"
+            >${{ roundTwo(card.profit * 31) }} / месяц</span
+          >
+        </div>
+        <div class="scale"></div>
+        <div class="time_profit">
+          Время окупаемости: {{ card.payback }} месяцев
         </div>
       </div>
     </div>
-    <div class="itog">
-      <span class="result">Итого:</span>
-      <span class="price">$ {{ summary }}</span>
-    </div>
-    <h2>Выберите способ оплаты</h2>
-    <div class="payments">
-      <div
-        @click="methodPay = pay.value"
-        class="payment-card"
-        v-for="pay in payments"
-        :key="pay.id"
-      >
-        <div class="pay-img" :class="{ active: methodPay == pay.value }">
-          <img :src="'../assets/' + pay.img + '.svg'" alt="" />
-        </div>
-        <span
-          class="pay-name"
-          :class="{ activeName: methodPay == pay.value }"
-          >{{ pay.name }}</span
-        >
-      </div>
-    </div>
-    <button @click="goBuy()" class="buy">Оформить заказ</button>
+    <button @click="addCart()" class="buy">Добавить в корзину</button>
   </div>
 </template>
 <style scoped>
@@ -373,6 +304,7 @@ export default {
   font-size: 16px;
   line-height: 16px;
   font-weight: 600;
+  transition: all 500ms ease;
 }
 
 .payments {
@@ -411,6 +343,10 @@ export default {
 .activeName {
   color: #cf0101;
   opacity: 100%;
+}
+
+.buy:hover {
+  transform: translateY(-3px);
 }
 
 @media (max-width: 765px) {

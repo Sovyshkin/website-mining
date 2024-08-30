@@ -10,47 +10,77 @@ export default {
       cards: [],
       cart: false,
       isLoading: false,
+      categories: [],
+      category_id: 1,
     };
   },
   methods: {
     async goTry(id) {
       try {
-        this.$emit("updateGoTry", true);
-        let response = await axios.get(
-          `/market/cart/set?miner_item_id=${id}&count=1`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
+        if (!localStorage.getItem("token")) {
+          this.$emit("updateGoTry", true);
+        } else {
+          let response = await axios.get(
+            `/market/cart/set?miner_item_id=${id}&count=1`,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }
+          );
+          if (response.data.status == "ok") {
+            this.cart = true;
+            setTimeout(() => {
+              this.cart = false;
+            }, 3000);
           }
-        );
-        if (response.data.status == "ok") {
-          this.cart = true;
-          setTimeout(() => {
-            this.cart = false;
-          }, 3000);
         }
       } catch (err) {
         console.log(err);
         this.cart = "Ошибка";
       }
     },
-
-    async load_info() {
+    async load_categories() {
       try {
         this.isLoading = true;
-        let response = await axios.get(`/market/miners`);
-        console.log(response);
-        this.cards = response.data.data;
+        let resCategories = await axios.get(`/miners/categories/get/all`);
+        console.log(resCategories);
+        this.categories = resCategories.data.miners_items_categories;
+        this.category_id = this.categories[0].id;
       } catch (err) {
         console.log(err);
       } finally {
         this.isLoading = false;
       }
     },
+
+    async load_info() {
+      try {
+        this.isLoading = true;
+        let response = await axios.get(
+          `/miners/get/all?category_id=${this.category_id}`
+        );
+        console.log(response);
+        this.cards = response.data.miners_items;
+      } catch (err) {
+        console.log(err);
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    open(id) {
+      this.$router.push({ name: "product", query: { id: id } });
+    },
+
+    async categoryClick(id) {
+      this.category_id = id;
+      this.load_info();
+    },
   },
   mounted() {
     document.body.style.overflow = "auto";
+    this.load_categories();
     this.load_info();
   },
 };
@@ -59,8 +89,24 @@ export default {
   <LoadingSpinner v-if="isLoading" />
   <div class="wrapper" v-else>
     <h2>Маркет</h2>
+    <div class="wrap-categories">
+      <div
+        class="category"
+        :class="{ category_active: category.id == category_id }"
+        v-for="category in categories"
+        :key="category.id"
+        @click="categoryClick(category.id)"
+      >
+        {{ category.name }}
+      </div>
+    </div>
     <div class="cards">
-      <div class="card" v-for="card in cards" :key="card.id">
+      <div
+        class="card"
+        v-for="card in cards"
+        :key="card.id"
+        @click="open(card.id)"
+      >
         <img class="asic" v-if="card.image" :src="card.image.url" alt="" />
         <div class="scale"></div>
         <div class="time_profit">Время окупаемости: {{ card.payback }}</div>
@@ -120,6 +166,7 @@ export default {
   justify-content: space-between;
   gap: 20px;
   padding: 20px;
+  max-width: 377px;
 }
 
 .card:hover {
@@ -230,6 +277,37 @@ export default {
 
 .cart_error {
   background-color: #cf0032;
+}
+
+.wrap-categories {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.category {
+  width: 20%;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 16px;
+  background-color: #fff;
+  color: #cf0032;
+  text-align: center;
+  padding: 12px 17px;
+  border-radius: 15px;
+  cursor: pointer;
+  box-shadow: 0 0 10px 0 #00000037;
+  transition: all 500ms ease;
+}
+
+.category:hover {
+  transform: translateY(-3px);
+}
+
+.category_active {
+  background-color: #cf0032;
+  color: #fff;
 }
 
 @media (max-width: 1060px) {

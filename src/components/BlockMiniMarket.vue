@@ -43,6 +43,10 @@ export default {
         console.log(err);
       }
     },
+
+    open(id) {
+      this.$router.push({ name: "product", query: { id: id } });
+    },
   },
   mounted() {
     document.body.style.overflow = "auto";
@@ -53,7 +57,12 @@ export default {
 <template>
   <div class="wrapper">
     <div class="cards">
-      <div class="card" v-for="card in cards" :key="card.id">
+      <div
+        class="card"
+        v-for="card in cards"
+        :key="card.id"
+        @click="open(card.id)"
+      >
         <img class="asic" v-if="card.image" :src="card.image.url" alt="" />
         <div class="scale"></div>
         <div class="time_profit">Время окупаемости: {{ card.payback }}</div>

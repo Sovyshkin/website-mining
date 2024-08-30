@@ -11,6 +11,7 @@ import ControlReset from "../components/СontrolReset.vue";
 import MyPayments from "@/components/MyPayments.vue";
 import AppAccruals from "@/components/AppAccruals.vue";
 import AppDashboard from "@/components/AppDashboard.vue";
+import AppProduct from "../components/AppProduct.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -74,6 +75,11 @@ const router = createRouter({
       path: "/dashboard",
       name: "dashboard",
       component: AppDashboard,
+    },
+    {
+      path: "/product",
+      name: "product",
+      component: AppProduct,
     },
   ],
 });
