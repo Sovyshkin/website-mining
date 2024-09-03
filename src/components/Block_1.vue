@@ -48,7 +48,7 @@ export default {
         >
           Ознакомиться
         </button>
-        <button @click="this.$emit('updateSlider', true)" class="btn logsys">
+        <button @click="this.$emit('updateLogin', true)" class="btn logsys">
           Войти в систему
         </button>
         <button @click="openYoutube()" class="btn youtube">

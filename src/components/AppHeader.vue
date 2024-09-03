@@ -114,7 +114,7 @@ export default {
       <span>{{ lang }}</span>
       <img src="" alt="" />
     </div>
-    <button @click="this.$emit('updateSlider', true)" class="btn login">
+    <button @click="this.$emit('updateLogin', true)" class="btn login">
       Войти
     </button>
   </div>

@@ -359,6 +359,7 @@ export default {
         }, 100);
         setTimeout(() => {
           this.$emit("sliderVerify", false);
+          location.reload();
         }, 2500);
       });
     },
@@ -450,6 +451,7 @@ export default {
   top: 0px;
   left: 0px;
   cursor: move;
+  background-color: #cf0032 !important;
 }
 
 .drag_verify .dv_handler i {

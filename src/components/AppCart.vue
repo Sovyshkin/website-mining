@@ -74,7 +74,7 @@ export default {
     async load_info() {
       try {
         this.isLoading = true;
-        let response = await axios.get(`/market/cart/get`, {
+        let response = await axios.get(`/market/cart/get/all`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },

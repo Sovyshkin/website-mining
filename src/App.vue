@@ -98,8 +98,8 @@ export default {
     },
 
     sliderVerify(slider) {
-      this.slider = slider;
-      this.login = true;
+      this.login = slider;
+      this.slider = true;
     },
     checkRoute() {
       if (this.$route.fullPath == "/") {
@@ -132,6 +132,7 @@ export default {
       @updateLogin="handleLogin"
       @updateRegister="handleRegister"
       @updateReset="handleReset"
+      @sliderVerify="sliderVerify"
       v-if="login"
     />
     <GoTry
@@ -140,9 +141,9 @@ export default {
       @updateLogin="handleLogin"
       v-if="gotry"
     />
-    <AppHeader @updateSlider="handleSlider" />
+    <AppHeader @updateLogin="handleLogin" />
     <Block_1
-      @updateSlider="handleSlider"
+      @updateLogin="handleLogin"
       @updateFormFeedback="handleFormFeedback"
     />
     <Calculator />
@@ -170,6 +171,7 @@ export default {
       @updateLogin="handleLogin"
       @updateRegister="handleRegister"
       @updateReset="handleReset"
+      @sliderVerify="sliderVerify"
       v-if="login"
     />
     <GoTry

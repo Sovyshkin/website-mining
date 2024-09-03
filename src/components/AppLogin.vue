@@ -54,8 +54,7 @@ export default {
             this.message = "Успешно";
             setTimeout(() => {
               this.message = "";
-              this.$emit("updateLogin", false);
-              location.reload();
+              this.$emit("sliderVerify", false);
             }, 3000);
           } else {
             console.log(response);
