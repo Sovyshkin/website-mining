@@ -494,7 +494,7 @@ span {
 }
 
 .detailInfo {
-  font-size: 8px;
+  font-size: 10px;
   line-height: 10px;
   color: #242628;
   opacity: 50%;

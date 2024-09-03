@@ -97,11 +97,14 @@ export default {
 
     async goBuy() {
       try {
-        let response = await axios.get(`/market/cart/buy?payment_type=usdt`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
+        let response = await axios.get(
+          `/market/cart/buy?payment_type=${this.methodPay}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
         console.log(response);
       } catch (err) {
         console.log(err);

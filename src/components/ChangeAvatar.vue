@@ -2,7 +2,7 @@
 import axios from "axios";
 
 export default {
-  name: "ResetPassword",
+  name: "ChangeAvatar",
   data() {
     return {
       email: "",
@@ -34,6 +34,7 @@ export default {
         });
         let status = response.data.status;
         if (status == "ok") {
+          location.reload();
           this.$emit("updateAvatar", false);
         }
       } catch (err) {
