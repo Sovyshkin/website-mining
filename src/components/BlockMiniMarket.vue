@@ -36,7 +36,7 @@ export default {
 
     async load_info() {
       try {
-        let response = await axios.get(`/market/miners`);
+        let response = await axios.get(`/miners/get/all`);
         console.log(response);
         this.cards = response.data.miners_items;
       } catch (err) {
@@ -103,10 +103,12 @@ export default {
   margin-bottom: 0px;
 }
 .cards {
+  padding: 20px 0;
   display: flex;
   align-items: stretch;
-  flex-wrap: wrap;
   gap: 20px;
+  overflow-y: hidden;
+  overflow-x: scroll;
 }
 
 .card {

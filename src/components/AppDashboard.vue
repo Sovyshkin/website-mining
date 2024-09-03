@@ -134,7 +134,7 @@ export default {
   <LoadingSpinner v-if="isLoading" />
   <div class="wrapper" v-else>
     <h2>Приборная панель</h2>
-    <div class="balance">
+    <div class="balance bx">
       <div class="info">
         <span class="name">Баланс</span>
         <div class="group">

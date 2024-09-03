@@ -368,6 +368,16 @@ button::-moz-focus-inner {
 .error {
   background-color: #cf0032;
 }
+
+.bx,
+.btn {
+  transition: all 500ms ease;
+}
+
+.bx:hover,
+.btn:hover {
+  box-shadow: 0 0 10px 0 #00000037;
+}
 @media (max-width: 768px) {
   .leftPanel {
     display: none;

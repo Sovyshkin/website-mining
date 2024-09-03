@@ -86,7 +86,7 @@ export default {
   <LoadingSpinner v-if="isLoading" />
   <div class="wrapper" v-else>
     <h2>Начисления и списания</h2>
-    <div class="balance">
+    <div class="balance bx">
       <div class="info">
         <span class="name">Баланс</span>
         <div class="group">
@@ -102,7 +102,7 @@ export default {
     <ChartLine v-if="history_show" :chartData="chartData" :name="'Баланс'" />
     <h2>История операций</h2>
     <div class="cards" v-if="this.cards.length > 0">
-      <div class="card" v-for="card in cards" :key="card.id">
+      <div class="card bx" v-for="card in cards" :key="card.id">
         <div class="info">
           <span class="card-name">{{ printType(card.type) }}</span>
           <span class="date">{{ card.date }}</span>

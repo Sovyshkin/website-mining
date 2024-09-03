@@ -15,6 +15,7 @@ import support from "../assets/support.svg";
 import support_active from "../assets/support_active.svg";
 import myminers from "../assets/myminers.svg";
 import myminers_active from "../assets/myminers_active.svg";
+import axios from "axios";
 export default {
   name: "LeftPanel",
   data() {
@@ -77,6 +78,7 @@ export default {
           route: "support",
         },
       ],
+      count: 0,
     };
   },
   methods: {
@@ -112,9 +114,26 @@ export default {
         }
       }
     },
+
+    async loadCart() {
+      try {
+        let response = await axios.get(`/market/cart/get/all`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        this.count = response.data.count;
+      } catch (err) {
+        console.log(err);
+      }
+    },
   },
   mounted() {
     this.checkRoute();
+    this.loadCart();
+    setInterval(() => {
+      this.loadCart();
+    }, 2500);
   },
 };
 </script>
@@ -133,6 +152,7 @@ export default {
         <img v-if="item.active" :src="item.img_active" alt="" />
         <img v-if="!item.active" :src="item.img" alt="" />
         <span :class="{ red: item.active }">{{ item.name }}</span>
+        <span class="count" v-if="item.route == 'cart'">{{ count }}</span>
       </li>
     </nav>
     <div class="footer">
@@ -312,5 +332,14 @@ export default {
   .logo {
     display: none;
   }
+}
+
+.count {
+  background-color: #cf0032;
+  color: #fff !important;
+  border-radius: 5px;
+  padding: 4px;
+  font-weight: 600;
+  font-size: 14px;
 }
 </style>

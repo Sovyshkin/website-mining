@@ -65,7 +65,7 @@ export default {
         <span class="sum_payment">Сумма платежа</span>
         <span class="status">Статус</span>
       </div>
-      <div class="payment" v-for="card in payments" :key="card.id">
+      <div class="payment bx" v-for="card in payments" :key="card.id">
         <div class="group-payment">
           <span class="date">{{ card.date }}</span>
           <span class="time">{{ card.time }}</span>

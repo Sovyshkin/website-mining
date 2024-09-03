@@ -97,20 +97,20 @@ export default {
   <div class="wrapper" v-else>
     <BannerMain />
     <h2>Общая сумма заработанных активов</h2>
-    <div class="total">
+    <div class="total bx">
       <img src="../assets/btc.svg" alt="" />
       <span class="usd">{{ total_earn_value_usd }} $</span>
       <span class="btc">(~{{ roundFour(total_earn_value) }} BTC)</span>
     </div>
     <div class="profit">
-      <div class="day">
+      <div class="day bx">
         <span class="title">Ежедневный доход:</span>
         <div class="group">
           <span class="usd">{{ expected_income }} $</span>
           <div class="btc">(~{{ roundSix(expected_income_btc) }} BTC)</div>
         </div>
       </div>
-      <div class="month">
+      <div class="month bx">
         <div class="title">Ежемесячный доход:</div>
         <div class="group">
           <span class="usd">{{ roundTwo(expected_income * 31) }} $</span>
@@ -119,7 +119,7 @@ export default {
           >
         </div>
       </div>
-      <div class="year">
+      <div class="year bx">
         <div class="title">Ежегодный доход:</div>
         <div class="group">
           <span class="usd">{{ roundTwo(expected_income * 365) }} $</span>

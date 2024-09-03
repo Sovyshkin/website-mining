@@ -10,17 +10,17 @@ export default {
       cards: [],
       summary: 0,
       payments: [
-        {
-          id: 1,
-          name: "MasterCard & Visa",
-          img: "visa",
-          value: "visa",
-        },
+        // {
+        //   id: 1,
+        //   name: "MasterCard & Visa",
+        //   img: "visa",
+        //   value: "visa",
+        // },
         {
           id: 2,
           name: "Bank Transfer",
           img: "bank",
-          value: "bank",
+          value: "rus_card",
         },
         {
           id: 3,
@@ -37,6 +37,8 @@ export default {
       ],
       methodPay: "visa",
       isLoading: false,
+      status: "",
+      message: "",
     };
   },
   methods: {
@@ -105,7 +107,17 @@ export default {
             },
           }
         );
-        console.log(response);
+        this.status = response.status;
+        if (this.status == 200) {
+          this.message = "Успешно";
+          setTimeout(() => {
+            this.message = "";
+            this.cards = [];
+            this.summary = 0;
+          }, 3500);
+        } else {
+          this.message = "Ошибка";
+        }
       } catch (err) {
         console.log(err);
       }
@@ -122,7 +134,7 @@ export default {
   <div class="wrapper" v-else>
     <h2>Корзина</h2>
     <div class="cards">
-      <div class="card" v-for="card in cards" :key="card.id">
+      <div class="card bx" v-for="card in cards" :key="card.id">
         <img class="asic" v-if="card.image" :src="card.image.url" alt="" />
         <div class="info">
           <span class="name">{{ card.name }}</span>
@@ -162,7 +174,7 @@ export default {
         </div>
       </div>
     </div>
-    <div class="itog">
+    <div class="itog bx">
       <span class="result">Итого:</span>
       <span class="price">$ {{ summary }}</span>
     </div>
@@ -184,7 +196,19 @@ export default {
         >
       </div>
     </div>
-    <button @click="goBuy()" class="buy">Оформить заказ</button>
+    <button v-if="!message" @click="goBuy()" class="buy bx">
+      Оформить заказ
+    </button>
+    <div
+      class="msg"
+      :class="{
+        success: this.message == 'Успешно',
+        error: this.message != 'Успешно',
+      }"
+      v-if="message"
+    >
+      {{ message }}
+    </div>
   </div>
 </template>
 <style scoped>
@@ -231,7 +255,6 @@ export default {
 
 .card:hover {
   transform: none;
-  box-shadow: none;
 }
 
 .main-card {

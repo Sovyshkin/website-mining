@@ -137,6 +137,7 @@ export default {
       </div>
       <div class="avatar" @click="this.$router.push({ name: 'profile' })">
         <img v-if="avatar" :src="avatar" alt="" />
+        <img v-else src="../assets/profile.png" alt="" />
       </div>
     </div>
   </div>
