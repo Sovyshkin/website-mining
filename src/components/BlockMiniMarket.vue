@@ -199,7 +199,8 @@ export default {
 }
 
 .asic {
-  width: 75%;
+  height: 200px;
+  width: auto;
 }
 
 .info {
