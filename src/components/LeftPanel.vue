@@ -152,7 +152,9 @@ export default {
         <img v-if="item.active" :src="item.img_active" alt="" />
         <img v-if="!item.active" :src="item.img" alt="" />
         <span :class="{ red: item.active }">{{ item.name }}</span>
-        <span class="count" v-if="item.route == 'cart'">{{ count }}</span>
+        <span class="count" v-if="item.route == 'cart' && count > 0">{{
+          count
+        }}</span>
       </li>
     </nav>
     <div class="footer">

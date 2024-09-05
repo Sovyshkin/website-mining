@@ -112,14 +112,14 @@ export default {
 }
 
 .card {
-  min-height: 474px;
+  max-height: 500px;
   flex: 20%;
   border-radius: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
+  gap: 10px;
   padding: 20px;
 }
 
