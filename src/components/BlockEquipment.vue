@@ -1,78 +1,94 @@
 <script>
+import axios from "axios";
 export default {
   name: "BlockEquipment",
   components: {},
   data() {
     return {
-      cards: [
-        {
-          price: "2600",
-          name: "ANTMINER S19K PRO 120TH",
-          hashrate: "120",
-          profit: "460",
-          power: 2760,
-          time_profit: "5 месяцев",
-          img: "asic",
-        },
-        {
-          price: "2600",
-          name: "ANTMINER S19K PRO 120TH",
-          hashrate: "120",
-          profit: "460",
-          power: 2760,
-          time_profit: "5 месяцев",
-          img: "asic",
-        },
-        {
-          price: "2600",
-          name: "ANTMINER S19K PRO 120TH",
-          hashrate: "120",
-          profit: "460",
-          power: 2760,
-          time_profit: "5 месяцев",
-          img: "asic",
-        },
-      ],
+      cards: [],
+      token: "",
     };
   },
   methods: {
-    goTry() {
-      this.$emit("updateGoTry", true);
+    goTry(id) {
+      if (this.token) {
+        this.$router.push({ name: "product", query: { id: id } });
+      } else {
+        this.$emit("updateGoTry", true);
+      }
     },
+
+    goMarket() {
+      if (this.token) {
+        this.$router.push({ name: "marketplace" });
+      } else {
+        this.$emit("updateGoTry", true);
+      }
+    },
+
+    async load_info() {
+      try {
+        let response = await axios.get(`/miners/get/all`);
+        console.log(response);
+        this.cards = response.data.miners_items;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+  },
+  mounted() {
+    this.load_info();
+    this.token = localStorage.getItem("token");
   },
 };
 </script>
 <template>
   <div class="wrapper">
-    <h2>Оборудование</h2>
+    <h2>{{ $t("equipment") }}</h2>
     <div class="cards">
       <div class="main-card card">
         <div class="background"></div>
-        <div class="title">7-ми дневный пробный период с Antiminer T21</div>
+        <div class="title">{{ $t("testPeriod") }}</div>
         <img class="asic" src="../assets/asic.png" alt="" />
-        <button @click="goTry" class="btn">Попробовать</button>
+        <button @click="goMarket" class="btn">{{ $t("try") }}</button>
       </div>
-      <div class="card" v-for="card in cards" :key="card.id">
-        <img class="asic" src="../assets/asic.png" alt="" />
-        <div class="scale"></div>
-        <div class="time_profit">Время окупаемости: {{ card.time_profit }}</div>
+      <div
+        class="card"
+        v-for="card in cards"
+        :key="card.id"
+        @click="goTry(card.id)"
+      >
+        <img class="asic" v-if="card.image" :src="card.image.url" alt="" />
+        <div class="wrap-scale">
+          <div
+            class="scale"
+            :style="'width: ' + (100 - card.payback_percent) + '%'"
+          ></div>
+        </div>
+        <div class="time_profit">
+          {{ $t("timeProfit") }}: {{ card.payback }} {{ $t("months") }}
+        </div>
         <div class="info">
           <span class="price">${{ card.price }}</span>
           <span class="name">{{ card.name }}</span>
           <div class="group">
-            <span class="group-name">Хешрейт:</span>
-            <span class="group-value">{{ card.hashrate }} TH/s</span>
+            <span class="group-name">{{ $t("hash") }}:</span>
+            <span class="group-value">{{ card.hash_rate_str }}</span>
           </div>
           <div class="group">
-            <span class="group-name">Доход:</span>
-            <span class="group-value">${{ card.profit }}/месяц</span>
+            <span class="group-name">{{ $t("dohod") }}:</span>
+            <span class="group-value"
+              >${{ card.income }}/{{ $t("monthOne") }}</span
+            >
           </div>
           <div class="group">
-            <span class="group-name">Расход:</span>
-            <span class="group-value">{{ card.power }} Вт</span>
+            <span class="group-name">{{ $t("rashod") }}:</span>
+            <span class="group-value"
+              >{{ card.energy_consumption }} {{ $t("wt") }}</span
+            >
           </div>
         </div>
-        <button @click="goTry" class="btn">Заказать</button>
+        <button @click="goTry(card.id)" class="btn">{{ $t("order") }}</button>
       </div>
     </div>
   </div>
@@ -86,20 +102,26 @@ export default {
   gap: 20px;
 }
 .cards {
+  width: 100%;
   display: flex;
   align-items: stretch;
   gap: 20px;
+  overflow-y: hidden;
+  overflow-x: scroll;
+  padding: 20px 15px;
+  scrollbar-width: none; /* Убирает полосу прокрутки */
+  -ms-overflow-style: none; /* Для Internet Explorer */
 }
 
 .card {
-  min-height: 474px;
-  flex: 25%;
+  max-height: 500px;
+  flex: 20%;
   border-radius: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
+  gap: 10px;
   padding: 20px;
 }
 
@@ -179,7 +201,8 @@ export default {
 }
 
 .asic {
-  width: 75%;
+  height: 200px;
+  width: auto;
 }
 
 .info {
@@ -188,10 +211,20 @@ export default {
   gap: 10px;
 }
 
-.scale {
-  height: 6px;
+.wrap-scale {
+  position: relative;
   width: 70%;
+  border-radius: 10px;
+  height: 6px;
   background: linear-gradient(to right, #e11111 0%, #ecf02b 50%, #2ee111 100%);
+  overflow: hidden;
+}
+
+.scale {
+  position: absolute;
+  right: 0;
+  height: 6px;
+  background-color: #a9a9a9;
 }
 
 @media (max-width: 1060px) {

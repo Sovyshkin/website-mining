@@ -19,6 +19,8 @@ export default {
       },
       id: null,
       avatar: "",
+      countries: ["RU", "EN", "HE"],
+      active: false,
     };
   },
   props: {
@@ -67,7 +69,32 @@ export default {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
+        this.lang = response.data.user.lang;
+        this.$i18n.locale = this.lang;
         this.avatar = response.data.user.image.url;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
+    async changeLang(lang) {
+      try {
+        this.lang = lang;
+        let response = await axios.post(
+          `/users/update/lang`,
+          {
+            lang: lang,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        console.log(response);
+        if (response.data.status == "ok") {
+          this.$i18n.locale = lang;
+        }
       } catch (err) {
         console.log(err);
       }
@@ -85,7 +112,7 @@ export default {
 };
 </script>
 <template>
-  <div class="wrapper" v-if="!id">
+  <div class="wrapper" v-if="$route.path == '/'">
     <img
       @click="this.$router.push({ name: 'main' })"
       class="logo"
@@ -105,18 +132,57 @@ export default {
       <li @click="scrollToBottom('test')" class="item-nav">{{ $t("test") }}</li>
     </nav>
     <div class="contacts">
-      <img src="../assets/WhatsApp.svg" alt="" />
-      <img src="../assets/Telegram.svg" alt="" />
-      <span class="number">+7 900 000 00 00</span>
+      <a href="https://wa.me/+972508981614" target="_blank"
+        ><img src="../assets/WhatsApp.svg" alt="WhatAapp"
+      /></a>
+      <a href="https://t.me/@Totalminers" target="_blank"
+        ><img src="../assets/Telegram.svg" alt="Telegram"
+      /></a>
+      <span class="number">+972 50-8981614</span>
     </div>
-    <div class="lan">
-      <img class="flag" :src="'../assets/' + lang + '.png'" alt="" />
-      <span>{{ lang }}</span>
-      <img src="" alt="" />
+    <div class="info" v-if="!id">
+      <div class="lan" @click="active = !active">
+        <img class="flag" :src="'../assets/' + lang + '.png'" alt="" />
+        <span>{{ lang }}</span>
+        <img class="arrow" src="../assets/arrow-down.png" alt="" />
+        <div class="all_flags" v-if="active">
+          <div
+            class="group-country"
+            @click="changeLang(item)"
+            v-for="item in countries"
+            :key="item"
+          >
+            <img class="flag" :src="'../assets/' + item + '.png'" alt="" />
+            <span class="group-value">{{ item }}</span>
+          </div>
+        </div>
+      </div>
+      <button @click="this.$emit('updateLogin', true)" class="btn login">
+        {{ $t("login") }}
+      </button>
     </div>
-    <button @click="this.$emit('updateLogin', true)" class="btn login">
-      Войти
-    </button>
+    <div class="info" v-else>
+      <div class="lan" @click="active = !active">
+        <img class="flag" :src="'../assets/' + lang + '.png'" alt="" />
+        <span>{{ lang }}</span>
+        <img class="arrow" src="../assets/arrow-down.png" alt="" />
+        <div class="all_flags" v-if="active">
+          <div
+            class="group-country"
+            @click="changeLang(item)"
+            v-for="item in countries"
+            :key="item"
+          >
+            <img class="flag" :src="'../assets/' + item + '.png'" alt="" />
+            <span class="group-value">{{ item }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="avatar" @click="this.$router.push({ name: 'profile' })">
+        <img v-if="avatar" :src="avatar" alt="" />
+        <img v-else src="../assets/profile.png" alt="" />
+      </div>
+    </div>
   </div>
   <div class="wrapper" v-else>
     <img
@@ -126,14 +192,25 @@ export default {
       alt=""
     />
     <span class="main mainAdap"
-      ><span>Главная</span><span>/</span>
-      {{ this.names[this.$route.name] }}</span
+      ><span>{{ $t("main") }}</span
+      ><span>/</span> {{ this.names[this.$route.name] }}</span
     >
     <div class="info">
-      <div class="lan">
+      <div class="lan" @click="active = !active">
         <img class="flag" :src="'../assets/' + lang + '.png'" alt="" />
         <span>{{ lang }}</span>
-        <img src="" alt="" />
+        <img class="arrow" src="../assets/arrow-down.png" alt="" />
+        <div class="all_flags" v-if="active">
+          <div
+            class="group-country"
+            @click="changeLang(item)"
+            v-for="item in countries"
+            :key="item"
+          >
+            <img class="flag" :src="'../assets/' + item + '.png'" alt="" />
+            <span class="group-value">{{ item }}</span>
+          </div>
+        </div>
       </div>
       <div class="avatar" @click="this.$router.push({ name: 'profile' })">
         <img v-if="avatar" :src="avatar" alt="" />
@@ -194,6 +271,24 @@ export default {
   display: flex;
   align-items: center;
   gap: 6px;
+  position: relative;
+  cursor: pointer;
+}
+
+.all_flags {
+  position: absolute;
+  padding: 3px 7px;
+  transform: translateY(70px);
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 0 0 10px 0 #00000037;
+  z-index: 3;
+}
+
+.group-country {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .login {
@@ -201,6 +296,11 @@ export default {
   padding: 14px 24px;
   border-radius: 5px;
   color: #fff;
+}
+
+.arrow {
+  height: 20px;
+  width: 20px;
 }
 
 .item-nav::after {

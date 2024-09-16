@@ -85,6 +85,7 @@ export default {
 </template>
 <style scoped>
 .wrapper {
+  width: 100%;
   margin-top: 40px;
   padding: 0 40px;
   display: flex;

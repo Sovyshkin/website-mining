@@ -7,6 +7,12 @@ import payments from "../assets/payments.svg";
 import payments_active from "../assets/payments_active.svg";
 import marketplace from "../assets/marketplace.svg";
 import marketplace_active from "../assets/marketplace_active.svg";
+import accruals from "../assets/accruals.svg";
+import accruals_active from "../assets/accruals_active.svg";
+import cart from "../assets/cart.svg";
+import cart_active from "../assets/cart_active.svg";
+import support from "../assets/support.svg";
+import support_active from "../assets/support_active.svg";
 import myminers from "../assets/myminers.svg";
 import myminers_active from "../assets/myminers_active.svg";
 export default {
@@ -50,6 +56,65 @@ export default {
           route: "marketplace",
         },
       ],
+      moreCards: [
+        {
+          img: main,
+          img_active: main_active,
+          name: this.$t("main"),
+          active: false,
+          route: "main",
+        },
+        {
+          img: dashboard,
+          img_active: dashboard_active,
+          name: this.$t("dashboard"),
+          active: false,
+          route: "dashboard",
+        },
+        {
+          img: myminers,
+          img_active: myminers_active,
+          name: this.$t("myMiners"),
+          active: false,
+          route: "myminers",
+        },
+        {
+          img: payments,
+          img_active: payments_active,
+          name: this.$t("myPayments"),
+          active: false,
+          route: "mypayments",
+        },
+        {
+          img: marketplace,
+          img_active: marketplace_active,
+          name: "Маркет",
+          active: false,
+          route: "marketplace",
+        },
+        {
+          img: accruals,
+          img_active: accruals_active,
+          name: "Начисления и списания",
+          active: false,
+          route: "accruals",
+        },
+        {
+          img: cart,
+          img_active: cart_active,
+          name: "Корзина",
+          active: false,
+          route: "cart",
+        },
+        {
+          img: support,
+          img_active: support_active,
+          name: "Центр помощи",
+          active: false,
+          route: "support",
+        },
+      ],
+      active: false,
     };
   },
   methods: {
@@ -69,6 +134,26 @@ export default {
             item.active = false;
           }
           this.cards[i] = item;
+          this.moreCards[i] = item;
+          this.active = false;
+        }
+      } catch (err) {
+        this.$router.push({ name: "404" });
+      }
+    },
+
+    navClickMore(name) {
+      try {
+        for (let i = 0; i < this.moreCards.length; i++) {
+          let item = this.moreCards[i];
+          if (item.name == name) {
+            item.active = true;
+            this.$router.push({ name: item.route });
+          } else {
+            item.active = false;
+          }
+          this.moreCards[i] = item;
+          this.active = false;
         }
       } catch (err) {
         this.$router.push({ name: "404" });
@@ -79,7 +164,7 @@ export default {
 };
 </script>
 <template>
-  <div class="panel">
+  <div class="panel" v-if="!active">
     <nav class="group-nav">
       <li
         class="nav-item"
@@ -90,6 +175,30 @@ export default {
         <img v-if="item.active" :src="item.img_active" alt="" />
         <img v-if="!item.active" :src="item.img" alt="" />
         <span :class="{ red: item.active }">{{ item.name }}</span>
+      </li>
+      <li class="nav-item" @click="active = !active">
+        <img v-if="!active" src="../assets/others.png" alt="" />
+        <img v-if="active" src="../assets/others_active.png" alt="" />
+        <span :class="{ red: active }">Другое</span>
+      </li>
+    </nav>
+  </div>
+  <div class="panel" v-else>
+    <nav class="group-nav more">
+      <li
+        class="nav-item"
+        @click="navClickMore(item.name)"
+        v-for="item in moreCards"
+        :key="item"
+      >
+        <img v-if="item.active" :src="item.img_active" alt="" />
+        <img v-if="!item.active" :src="item.img" alt="" />
+        <span :class="{ red: item.active }">{{ item.name }}</span>
+      </li>
+      <li class="nav-item" @click="active = !active">
+        <img v-if="!active" src="../assets/others.png" alt="" />
+        <img v-if="active" src="../assets/others_active.png" alt="" />
+        <span :class="{ red: active }">Другое</span>
       </li>
     </nav>
   </div>
@@ -103,6 +212,10 @@ export default {
   z-index: 3;
   min-height: 70px;
   padding: 12px 16px;
+}
+
+.more {
+  flex-wrap: wrap;
 }
 
 .logo {
@@ -166,12 +279,6 @@ export default {
   background-size: cover;
   z-index: 1;
   border-radius: 20px;
-}
-
-.scale {
-  height: 6px;
-  width: 70%;
-  background: linear-gradient(to right, #e11111 0%, #ecf02b 50%, #2ee111 100%);
 }
 
 .asic {

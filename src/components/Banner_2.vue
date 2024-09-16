@@ -3,18 +3,29 @@ export default {
   name: "Banner_2",
   components: {},
   data() {
-    return {};
+    return {
+      token: localStorage.getItem("token"),
+    };
+  },
+  methods: {
+    goLog() {
+      if (this.token) {
+        this.$router.push({ name: "profile" });
+      } else {
+        this.$emit("updateLogin", true);
+      }
+    },
   },
 };
 </script>
 <template>
   <div class="wrapper">
-    <div class="banner">
+    <div class="banner bx" @click="goLog">
       <div class="background"></div>
       <img class="asic ks5" src="../assets/ks5.png" alt="" />
       <div class="title">
-        <span class="text">Начни майнить уже сегодня</span>
-        <button class="btn">Начать</button>
+        <span class="text">{{ $t("beginToday") }}</span>
+        <button class="btn">{{ $t("begin") }}</button>
       </div>
       <img class="asic" src="../assets/asic.png" alt="" />
     </div>
@@ -22,6 +33,7 @@ export default {
 </template>
 <style scoped>
 .wrapper {
+  width: 100%;
   margin-top: 40px;
   padding: 0 40px;
   margin-bottom: 20px;
@@ -37,6 +49,12 @@ export default {
   gap: 30px;
   max-height: 280px;
   overflow: hidden;
+  transition: all 500ms ease;
+  cursor: pointer;
+}
+
+.banner:hover {
+  transform: scale(1.02);
 }
 
 .background {

@@ -40,7 +40,7 @@ export default {
   <div class="wrapper">
     <div class="card">
       <div class="cancel">
-        <span class="title">Сбросить пароль</span>
+        <span class="title">{{ $t("resetPass") }}</span>
         <img @click="cancel" src="../assets/close.png" alt="" />
       </div>
       <div class="group" v-if="!send">
@@ -49,18 +49,19 @@ export default {
           name="email"
           id="email"
           v-model="email"
-          placeholder="Введите свою почту"
+          :placeholder="$t('enterEmail')"
         />
         <span class="group-value">Email</span>
       </div>
       <div class="desc" v-if="send">
-        Ссылка для сброса пароля отправлена по адресу:
-        <span class="red">{{ email }}</span
-        >. Пожалуйста, нажмите на ссылку в письме, чтобы продолжить.
+        {{ $t("linkReset") }}: <span class="red">{{ email }}</span
+        >. {{ $t("clickReset") }}
       </div>
-      <button v-if="!send" @click="reset" class="btn">Сбросить пароль</button>
+      <button v-if="!send" @click="reset" class="btn">
+        {{ $t("resetPass") }}
+      </button>
       <button v-if="send" @click="this.$emit('updateReset', false)" class="btn">
-        Понятно
+        {{ $t("ok") }}
       </button>
     </div>
   </div>

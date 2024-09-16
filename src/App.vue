@@ -20,6 +20,7 @@ import { RouterView } from "vue-router";
 import SliderImg from "./components/SliderImg.vue";
 import ChangeAvatar from "./components/ChangeAvatar.vue";
 import FormFeedback from "./components/FormFeedback.vue";
+import AppFooter from "./components/AppFooter.vue";
 
 export default {
   name: "App",
@@ -45,6 +46,7 @@ export default {
     ChangeAvatar,
     DeleteAuth,
     FormFeedback,
+    AppFooter,
   },
   data() {
     return {
@@ -112,11 +114,13 @@ export default {
       console.log("Тут");
     },
   },
-  mounted() {},
+  mounted() {
+    console.log(this.$i18n.messages);
+  },
 };
 </script>
 <template>
-  <div class="wrap" style="max-width: 1440px" v-if="checkRoute()">
+  <div class="wrap" v-if="checkRoute()" style="align-items: center">
     <FormFeedback
       v-if="formFeedback"
       @updateFormFeedback="handleFormFeedback"
@@ -145,14 +149,23 @@ export default {
     <Block_1
       @updateLogin="handleLogin"
       @updateFormFeedback="handleFormFeedback"
+      style="max-width: 1440px"
     />
-    <Calculator />
-    <Equipment @updateGoTry="handleTry" id="equipment" />
-    <Banner_1 />
-    <Advantages />
-    <Business id="business" />
-    <Faq id="faq" />
-    <Banner_2 />
+    <Calculator style="max-width: 1440px" />
+    <Equipment
+      style="max-width: 1440px"
+      @updateGoTry="handleTry"
+      id="equipment"
+    />
+    <Banner_1
+      style="max-width: 1440px"
+      @updateFormFeedback="handleFormFeedback"
+    />
+    <Advantages style="max-width: 1440px" />
+    <Business style="max-width: 1440px" id="business" />
+    <Faq style="max-width: 1440px" id="faq" />
+    <Banner_2 style="max-width: 1440px" />
+    <AppFooter />
   </div>
   <div
     class="wrap more"
@@ -182,6 +195,7 @@ export default {
     />
     <AppHeader @updateLogin="handleLogin" @updateSlider="handleSlider" />
     <RouterView />
+    <AppFooter />
   </div>
   <div class="wrap market" v-else>
     <ChangeAvatar @updateAvatar="handleAvatar" v-if="avatar" />
@@ -196,6 +210,7 @@ export default {
         @updateDeleteAuth="handleDeleteAuth"
         @updateAvatar="handleAvatar"
       />
+      <AppFooter />
     </main>
   </div>
 </template>
@@ -211,6 +226,7 @@ export default {
   border: none;
   font-weight: 400;
   font-style: normal;
+  scroll-behavior: smooth;
 }
 
 *,
@@ -347,10 +363,6 @@ button::-moz-focus-inner {
   display: none;
 }
 
-.wrapper {
-  margin-bottom: 100px;
-}
-
 .msg {
   padding: 10px 13px;
   font-size: 16px;
@@ -389,6 +401,7 @@ button::-moz-focus-inner {
 
   .marketplace {
     width: 100%;
+    padding-bottom: 80px;
   }
 }
 

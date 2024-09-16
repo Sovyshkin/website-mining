@@ -18,7 +18,9 @@ export default {
           перезвонит вам в удобное время.</span
         >
       </div>
-      <button class="btn">Обратная связь</button>
+      <button @click="this.$emit('updateFormFeedback', true)" class="btn">
+        Обратная связь
+      </button>
     </div>
   </div>
 </template>
@@ -38,6 +40,7 @@ export default {
   align-items: center;
   gap: 30px;
   background: transparent;
+  transition: all 500ms ease;
 }
 
 .background {
@@ -75,6 +78,17 @@ export default {
   background-color: #cf0032;
   color: #fff;
   width: fit-content;
+  transition: all 500ms ease;
+}
+
+.btn:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 10px 0 #00000037;
+}
+
+.banner:hover {
+  transform: scale(1.005);
+  box-shadow: 0 0 10px 0 #00000037;
 }
 
 .btn,

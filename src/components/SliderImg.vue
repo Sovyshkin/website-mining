@@ -9,9 +9,7 @@
           alt=""
         />
       </div>
-      <span class="title"
-        >Переместите слайдером деталь, чтобы сложить пазл</span
-      >
+      <span class="title">{{ $t("moveSlider") }}</span>
       <div class="drag-verify-container">
         <div :style="dragVerifyImgStyle">
           <img
@@ -336,7 +334,11 @@ export default {
         this.endTime = new Date().getTime();
 
         this.successTip =
-          "Ты справился за " + (this.endTime - this.beginTime) / 1000 + " сек";
+          "Ты справился за" +
+          " " +
+          (this.endTime - this.beginTime) / 1000 +
+          " " +
+          "сек";
         this.isPassing = true;
         this.isMoving = false;
         let handler = this.$refs.handler;

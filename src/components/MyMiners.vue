@@ -52,7 +52,7 @@ export default {
 <template>
   <LoadingSpinner v-if="isLoading" />
   <div class="wrapper" v-else>
-    <h2>Мои майнеры</h2>
+    <h2>{{ $t("myMiners") }}</h2>
     <div class="cards" v-if="this.cards.length > 0">
       <div class="card" v-for="card in cards" :key="card.id">
         <img class="asic" src="../assets/asic.png" alt="" />
@@ -69,14 +69,22 @@ export default {
             </div>
           </div>
           <div class="group">
-            <span class="group-name">Хостинг:</span>
-            <span class="group-value">${{ card.hosting }} / месяц</span>
-            <span class="group-name">Доход:</span>
-            <span class="group-value">${{ card.profit }} / месяц</span>
-            <span class="group-name">Расход:</span>
-            <span class="group-value">{{ card.power }} Вт / месяц</span>
-            <span class="group-name">Прибыль:</span>
-            <span class="group-value">${{ card.power }} / месяц</span>
+            <span class="group-name">{{ $t("hosting") }}:</span>
+            <span class="group-value"
+              >${{ card.hosting }} / {{ $t("monthOne") }}</span
+            >
+            <span class="group-name">{{ $t("dohod") }}:</span>
+            <span class="group-value"
+              >${{ card.profit }} / {{ $t("monthOne") }}</span
+            >
+            <span class="group-name">{{ $t("rashod") }}:</span>
+            <span class="group-value"
+              >{{ card.power }} {{ $t("wt") }} / {{ $t("monthOne") }}</span
+            >
+            <span class="group-name">{{ $t("income") }}:</span>
+            <span class="group-value"
+              >${{ card.power }} / {{ $t("monthOne") }}</span
+            >
           </div>
         </div>
         <!-- <button @click="goTry" class="btn">Оформить заказ</button> -->
@@ -84,7 +92,7 @@ export default {
     </div>
     <div class="not_found" v-else>
       <img src="../assets/myminers.svg" alt="" />
-      <span>У вас нет активных майнеров</span>
+      <span>{{ $t("not_foundMiners") }}</span>
     </div>
   </div>
 </template>
@@ -211,10 +219,20 @@ export default {
   gap: 20px;
 }
 
-.scale {
-  height: 6px;
+.wrap-scale {
+  position: relative;
   width: 70%;
+  border-radius: 10px;
+  height: 6px;
   background: linear-gradient(to right, #e11111 0%, #ecf02b 50%, #2ee111 100%);
+  overflow: hidden;
+}
+
+.scale {
+  position: absolute;
+  right: 0;
+  height: 6px;
+  background-color: #a9a9a9;
 }
 
 .result {

@@ -299,7 +299,8 @@ export default {
         <h3>Личные данные</h3>
         <div class="personal_info">
           <div class="group-avatar">
-            <img class="avatar" :src="image" alt="" />
+            <img class="avatar" v-if="image" :src="image" alt="" />
+            <img class="avatar" v-else src="../assets/profile.png" alt="" />
             <span class="change_avatar" @click="goChange(true)"
               >Изменить фото</span
             >

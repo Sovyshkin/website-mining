@@ -7,11 +7,13 @@ export default {
   data() {
     return {
       src: "",
+      token: "",
     };
   },
   methods: {
     async load_info() {
       try {
+        this.token = localStorage.getItem("token");
         let response = await axios.get(
           `/settings/get?key=home_page_youtube_link`
         );
@@ -24,6 +26,14 @@ export default {
     openYoutube() {
       window.open(this.src, "_blank");
     },
+
+    logIn() {
+      if (this.token) {
+        this.$router.push({ name: "profile" });
+      } else {
+        this.$emit("updateLogin", true);
+      }
+    },
   },
   mounted() {
     this.load_info();
@@ -35,24 +45,23 @@ export default {
     <div class="background"></div>
     <div class="left">
       <h2>
-        Погрузитесь в мир майнинга Биткойна уже сегодня. Это проще чем кажется
+        {{ $t("block1_1") }}
       </h2>
       <p>
-        Ознакомтесь с нашей системой майнинга биткойна получите пробный период
-        по цене 31$ и сделайте правильный выбор
+        {{ $t("block1_2") }}
       </p>
       <div class="wrap-btns">
         <button
           @click="this.$emit('updateFormFeedback', true)"
           class="btn learn"
         >
-          Ознакомиться
+          {{ $t("learn") }}
         </button>
-        <button @click="this.$emit('updateLogin', true)" class="btn logsys">
-          Войти в систему
+        <button @click="logIn" class="btn logsys">
+          {{ $t("log_system") }}
         </button>
         <button @click="openYoutube()" class="btn youtube">
-          Смотреть на Youtube
+          {{ $t("watch") }} Youtube
           <img src="../assets/youtube.png" alt="" />
         </button>
       </div>
@@ -158,6 +167,10 @@ video {
   width: 100%;
   border-radius: 15px;
   pointer-events: none;
+}
+
+.btn:hover {
+  transform: scale(1.02);
 }
 
 @media (max-width: 780px) {

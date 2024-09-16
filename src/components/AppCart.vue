@@ -162,7 +162,12 @@ export default {
               >${{ roundTwo(card.profit * 31) }} / месяц</span
             >
           </div>
-          <div class="scale"></div>
+          <div class="wrap-scale">
+            <div
+              class="scale"
+              :style="'width: ' + (100 - card.payback_percent) + '%'"
+            ></div>
+          </div>
           <div class="time_profit">
             Время окупаемости: {{ card.payback }} месяцев
           </div>
@@ -334,10 +339,20 @@ export default {
   gap: 10px;
 }
 
-.scale {
-  height: 6px;
+.wrap-scale {
+  position: relative;
   width: 70%;
+  border-radius: 10px;
+  height: 6px;
   background: linear-gradient(to right, #e11111 0%, #ecf02b 50%, #2ee111 100%);
+  overflow: hidden;
+}
+
+.scale {
+  position: absolute;
+  right: 0;
+  height: 6px;
+  background-color: #a9a9a9;
 }
 
 .result {

@@ -12,6 +12,7 @@ import MyPayments from "@/components/MyPayments.vue";
 import AppAccruals from "@/components/AppAccruals.vue";
 import AppDashboard from "@/components/AppDashboard.vue";
 import AppProduct from "../components/AppProduct.vue";
+import AppPayment from "../components/AppPayment.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -80,6 +81,11 @@ const router = createRouter({
       path: "/product",
       name: "product",
       component: AppProduct,
+    },
+    {
+      path: "/payment",
+      name: "payment",
+      component: AppPayment,
     },
   ],
 });

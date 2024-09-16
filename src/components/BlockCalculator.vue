@@ -138,28 +138,28 @@ export default {
         class="btn"
         :class="{ active: this.active == 1 }"
       >
-        За день
+        {{ $t("day") }}
       </button>
       <button
         @click="updateActive(2)"
         class="btn"
         :class="{ active: this.active == 2 }"
       >
-        За месяц
+        {{ $t("month") }}
       </button>
       <button
         @click="updateActive(3)"
         class="btn"
         :class="{ active: this.active == 3 }"
       >
-        За год
+        {{ $t("year") }}
       </button>
       <button
         @click="updateActive(4)"
         class="btn"
         :class="{ active: this.active == 4 }"
       >
-        Желаемый доход
+        {{ $t("desired_income") }}
       </button>
     </div>
     <div class="main">
@@ -210,9 +210,9 @@ export default {
             name=""
             id=""
           >
-            <option value="1">В день</option>
-            <option value="31">В месяц</option>
-            <option value="365">В год</option>
+            <option value="1">{{ $t("day") }}</option>
+            <option value="31">{{ $t("month") }}</option>
+            <option value="365">{{ $t("year") }}</option>
           </select>
         </div>
         <div class="info">
@@ -256,15 +256,16 @@ export default {
           <span class="procent">({{ procent }}%)</span>
           <span class="procent">Возврат инвестиций</span>
         </div>
-        <div class="earn-time" v-if="dayCalc == '1'">За день</div>
-        <div class="earn-time" v-if="dayCalc == '31'">За месяц</div>
-        <div class="earn-time" v-if="dayCalc == '365'">За год</div>
+        <div class="earn-time" v-if="dayCalc == '1'">{{ $t("day") }}</div>
+        <div class="earn-time" v-if="dayCalc == '31'">{{ $t("month") }}</div>
+        <div class="earn-time" v-if="dayCalc == '365'">{{ $t("year") }}</div>
       </div>
     </div>
   </div>
 </template>
 <style scoped>
 .wrapper {
+  width: 100%;
   margin-top: 40px;
   padding: 0 40px;
   display: flex;
@@ -550,6 +551,16 @@ input[type="range"]::-webkit-slider-thumb:after {
   transform: rotateX(90deg);
   transform-origin: 0 0px 0;
   transform: rotateX(90deg) translateY(-140px) translateZ(-18px);
+}
+
+.left,
+.right {
+  transition: all 500ms ease;
+}
+
+.left:hover,
+.right:hover {
+  box-shadow: 0 0 10px 0 #00000037;
 }
 
 @media (max-width: 880px) {

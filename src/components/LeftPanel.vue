@@ -24,28 +24,28 @@ export default {
         {
           img: main,
           img_active: main_active,
-          name: "Главная",
+          name: this.$t("main"),
           active: false,
           route: "main",
         },
         {
           img: dashboard,
           img_active: dashboard_active,
-          name: "Дашборд",
+          name: this.$t("dashboard"),
           active: false,
           route: "dashboard",
         },
         {
           img: myminers,
           img_active: myminers_active,
-          name: "Мои майнеры",
+          name: this.$t("myMiners"),
           active: false,
           route: "myminers",
         },
         {
           img: payments,
           img_active: payments_active,
-          name: "Мои платежи",
+          name: this.$t("myPayments"),
           active: false,
           route: "mypayments",
         },
@@ -161,7 +161,6 @@ export default {
       <div class="banner">
         <div class="background"></div>
         <div class="title">ТЕСТОВЫЙ ПЕРИОД 7 ДНЕЙ</div>
-        <div class="scale"></div>
         <img class="asic" src="../assets/asic.png" alt="" />
       </div>
       <div @click="navClick(this.cards.slice(-1)[0].name)" class="nav-item">
@@ -244,10 +243,20 @@ export default {
   border-radius: 20px;
 }
 
-.scale {
-  height: 6px;
+.wrap-scale {
+  position: relative;
   width: 70%;
+  border-radius: 10px;
+  height: 6px;
   background: linear-gradient(to right, #e11111 0%, #ecf02b 50%, #2ee111 100%);
+  overflow: hidden;
+}
+
+.scale {
+  position: absolute;
+  right: 0;
+  height: 6px;
+  background-color: #a9a9a9;
 }
 
 .asic {
