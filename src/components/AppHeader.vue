@@ -97,6 +97,7 @@ export default {
         console.log(response);
         if (response.data.status == "ok") {
           this.$i18n.locale = lang;
+          location.reload();
         }
       } catch (err) {
         console.log(err);
