@@ -23,35 +23,35 @@ export default {
         {
           img: main,
           img_active: main_active,
-          name: "Главная",
+          name: this.$t("main"),
           active: false,
           route: "main",
         },
         {
           img: dashboard,
           img_active: dashboard_active,
-          name: "Дашборд",
+          name: this.$t("dashboard"),
           active: false,
           route: "dashboard",
         },
         {
           img: myminers,
           img_active: myminers_active,
-          name: "Майнеры",
+          name: this.$t("myMiners"),
           active: false,
           route: "myminers",
         },
         {
           img: payments,
           img_active: payments_active,
-          name: "Платежи",
+          name: this.$t("myPayments"),
           active: false,
           route: "mypayments",
         },
         {
           img: marketplace,
           img_active: marketplace_active,
-          name: "Маркет",
+          name: this.$t("market"),
           active: false,
           route: "marketplace",
         },
@@ -88,28 +88,28 @@ export default {
         {
           img: marketplace,
           img_active: marketplace_active,
-          name: "Маркет",
+          name: this.$t("market"),
           active: false,
           route: "marketplace",
         },
         {
           img: accruals,
           img_active: accruals_active,
-          name: "Начисления и списания",
+          name: this.$t("accruals"),
           active: false,
           route: "accruals",
         },
         {
           img: cart,
           img_active: cart_active,
-          name: "Корзина",
+          name: this.$t("cart"),
           active: false,
           route: "cart",
         },
         {
           img: support,
           img_active: support_active,
-          name: "Центр помощи",
+          name: this.$t("centerHelp"),
           active: false,
           route: "support",
         },
@@ -179,7 +179,7 @@ export default {
       <li class="nav-item" @click="active = !active">
         <img v-if="!active" src="../assets/others.png" alt="" />
         <img v-if="active" src="../assets/others_active.png" alt="" />
-        <span :class="{ red: active }">Другое</span>
+        <span :class="{ red: active }">{{ $t("other") }}</span>
       </li>
     </nav>
   </div>
@@ -198,7 +198,7 @@ export default {
       <li class="nav-item" @click="active = !active">
         <img v-if="!active" src="../assets/others.png" alt="" />
         <img v-if="active" src="../assets/others_active.png" alt="" />
-        <span :class="{ red: active }">Другое</span>
+        <span :class="{ red: active }">{{ $t("other") }}</span>
       </li>
     </nav>
   </div>

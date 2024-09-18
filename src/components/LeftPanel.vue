@@ -52,28 +52,28 @@ export default {
         {
           img: marketplace,
           img_active: marketplace_active,
-          name: "Маркет",
+          name: this.$t("market"),
           active: false,
           route: "marketplace",
         },
         {
           img: accruals,
           img_active: accruals_active,
-          name: "Начисления и списания",
+          name: this.$t("accruals"),
           active: false,
           route: "accruals",
         },
         {
           img: cart,
           img_active: cart_active,
-          name: "Корзина",
+          name: this.$t("cart"),
           active: false,
           route: "cart",
         },
         {
           img: support,
           img_active: support_active,
-          name: "Центр помощи",
+          name: this.$t("centerHelp"),
           active: false,
           route: "support",
         },
@@ -160,7 +160,7 @@ export default {
     <div class="footer">
       <div class="banner">
         <div class="background"></div>
-        <div class="title">ТЕСТОВЫЙ ПЕРИОД 7 ДНЕЙ</div>
+        <div class="title">{{ $t("TESTPeriod") }}</div>
         <img class="asic" src="../assets/asic.png" alt="" />
       </div>
       <div @click="navClick(this.cards.slice(-1)[0].name)" class="nav-item">

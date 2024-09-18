@@ -76,7 +76,7 @@ export default {
   <div class="wrapper">
     <div class="card">
       <div class="cancel">
-        <span class="title">Регистрация</span>
+        <span class="title">{{ $t("registration") }}</span>
         <img @click="cancel" src="../assets/close.png" alt="" />
       </div>
       <div class="group">
@@ -84,25 +84,25 @@ export default {
           type="text"
           name="name"
           v-model="name"
-          placeholder="Введите имя"
+          :placeholder="$t('enterName')"
         />
-        <span class="group-value">Имя</span>
+        <span class="group-value">{{ $t("name") }}</span>
       </div>
       <div class="group">
         <input
           type="text"
           name="surname"
           v-model="surname"
-          placeholder="Введите фамилию"
+          :placeholder="$t('enterSurname')"
         />
-        <span class="group-value">Фамилия</span>
+        <span class="group-value">{{ $t("surname") }}</span>
       </div>
       <div class="group">
         <input
           type="email"
           name="email"
           v-model="email"
-          placeholder="Введите свою почту"
+          :placeholder="$t('enterEmail')"
         />
         <span class="group-value">Email</span>
       </div>
@@ -117,16 +117,16 @@ export default {
           name="number"
           placeholder="+7"
         />
-        <span class="group-value">Телефон</span>
+        <span class="group-value">{{ $t("phone") }}</span>
       </div>
       <div class="group">
         <input
           type="password"
           name="password"
           v-model="password"
-          placeholder="Введите пароль"
+          :placeholder="$t('enterPass')"
         />
-        <span class="group-value">Пароль</span>
+        <span class="group-value">{{ $t("pass") }}</span>
       </div>
       <!-- <div class="group">
         <input
@@ -138,7 +138,7 @@ export default {
         <span class="group-value">Пароль</span>
       </div> -->
       <button @click="login" v-if="!message" class="btn">
-        Зарегистрироваться
+        {{ $t("register") }}
       </button>
       <div
         class="msg"

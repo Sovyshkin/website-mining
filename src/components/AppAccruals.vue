@@ -85,22 +85,26 @@ export default {
 <template>
   <LoadingSpinner v-if="isLoading" />
   <div class="wrapper" v-else>
-    <h2>Начисления и списания</h2>
+    <h2>{{ $t("accruals") }}</h2>
     <div class="balance bx">
       <div class="info">
-        <span class="name">Баланс</span>
+        <span class="name">{{ $t("balance") }}</span>
         <div class="group">
           <span class="usd">{{ value_usd }} $</span>
           <span class="btc">(~{{ btc }} BTC)</span>
         </div>
       </div>
       <div class="wrap_btns">
-        <button class="btn">Пополнить</button>
-        <button class="btn withdraw">Вывести</button>
+        <button class="btn">{{ $t("deposit") }}</button>
+        <button class="btn withdraw">{{ $t("withdraw") }}</button>
       </div>
     </div>
-    <ChartLine v-if="history_show" :chartData="chartData" :name="'Баланс'" />
-    <h2>История операций</h2>
+    <ChartLine
+      v-if="history_show"
+      :chartData="chartData"
+      :name="$t('balance')"
+    />
+    <h2>{{ $t("historyOperation") }}</h2>
     <div class="cards" v-if="this.cards.length > 0">
       <div class="card bx" v-for="card in cards" :key="card.id">
         <div class="info">
@@ -120,7 +124,7 @@ export default {
       </div>
     </div>
     <div class="not_found" v-else>
-      <span>Ничего</span>
+      <span>{{ $t("not_found") }}</span>
     </div>
   </div>
 </template>

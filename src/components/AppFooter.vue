@@ -105,7 +105,7 @@ export default {
     />
     <nav class="group">
       <li class="item-group">{{ this.$t("equipment") }}</li>
-      <li class="item-group">Приложения</li>
+      <li class="item-group">{{ $t("applications") }}</li>
       <div class="lan" @click="active = !active">
         <img class="flag" :src="'../assets/' + lang + '.png'" alt="" />
         <span class="name-country">{{ lang }}</span>
@@ -133,8 +133,8 @@ export default {
         <span>+972 50-8981614</span>
       </div>
       <div class="group-span">
-        <span class="text">Политика конфиденциальность</span>
-        <span class="text">Публичная оферта</span>
+        <span class="text">{{ $t("policy") }}</span>
+        <span class="text">{{ $t("offer") }}</span>
       </div>
     </div>
   </div>

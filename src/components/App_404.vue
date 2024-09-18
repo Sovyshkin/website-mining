@@ -11,9 +11,9 @@ export default {
   <div class="background"></div>
   <div class="wrapper">
     <span class="err">404</span>
-    <span class="oops">Упс... Что-то пошло не так</span>
+    <span class="oops">{{ $t("oops") }}</span>
     <button @click="this.$router.push({ name: 'main' })" class="btn">
-      Вернуться на главную
+      {{ $t("goBack") }}
     </button>
   </div>
 </template>

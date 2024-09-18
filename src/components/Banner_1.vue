@@ -12,14 +12,11 @@ export default {
     <div class="banner">
       <div class="background"></div>
       <div class="title">
-        <span class="red">Желаете приобрести оборудование оптом?</span>
-        <span
-          >Мы на связи! Жмите на кнопку ниже, заполняйте форму и наш сотрудник
-          перезвонит вам в удобное время.</span
-        >
+        <span class="red">{{ $t("purchaseEquipment") }}</span>
+        <span>{{ $t("weAreTouch") }}</span>
       </div>
       <button @click="this.$emit('updateFormFeedback', true)" class="btn">
-        Обратная связь
+        {{ $t("feedback") }}
       </button>
     </div>
   </div>

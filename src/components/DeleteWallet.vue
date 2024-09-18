@@ -19,13 +19,11 @@ export default {
       <div class="cancel">
         <img @click="cancel" src="../assets/close.png" alt="" />
       </div>
-      <div class="title">Удаление кошелька</div>
-      <div class="desc">
-        Вы действительно хотите удалить кошелёк: {{ this.wallet }}
-      </div>
+      <div class="title">{{ $t("deletionWallet") }}</div>
+      <div class="desc">{{ $t("sureDeleteWallet") }} {{ this.wallet }}</div>
       <div class="wrap_btns">
-        <button class="btn">Удалить</button>
-        <button class="btn btn-cancel">Отменить</button>
+        <button class="btn">{{ $t("delete") }}</button>
+        <button class="btn btn-cancel">{{ $t("cancelAction") }}</button>
       </div>
     </div>
   </div>

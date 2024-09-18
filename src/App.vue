@@ -164,7 +164,7 @@ export default {
     <Advantages style="max-width: 1440px" />
     <Business style="max-width: 1440px" id="business" />
     <Faq style="max-width: 1440px" id="faq" />
-    <Banner_2 style="max-width: 1440px" />
+    <Banner_2 @updateLogin="handleLogin" style="max-width: 1440px" />
     <AppFooter />
   </div>
   <div

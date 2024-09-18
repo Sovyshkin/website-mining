@@ -52,12 +52,12 @@ export default {
   <div class="wrapper">
     <div class="card">
       <div class="cancel">
-        <span class="title">Изменение фото</span>
+        <span class="title">{{ $t("changingPhoto") }}</span>
         <img @click="cancel" src="../assets/close.png" alt="" />
       </div>
       <div class="group-file">
         <input type="file" id="file" accept="image/*" @change="onFileChange" />
-        <label class="select-img" for="file">Загрузить фото</label>
+        <label class="select-img" for="file">{{ $t("uploadPhoto") }}</label>
       </div>
     </div>
   </div>

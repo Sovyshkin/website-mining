@@ -78,7 +78,7 @@ export default {
   <div class="wrapper">
     <div class="card" v-if="!auth">
       <div class="cancel">
-        <span class="title">Вход</span>
+        <span class="title">{{ $t("login") }}</span>
         <img @click="cancel" src="../assets/close.png" alt="" />
       </div>
       <div class="group">
@@ -87,7 +87,7 @@ export default {
           name="email"
           id="email"
           v-model="email"
-          placeholder="Введите свою почту"
+          :placeholder="$t('enterEmail')"
         />
         <span class="group-value">Email</span>
       </div>
@@ -96,14 +96,18 @@ export default {
           type="password"
           name="pass"
           v-model="password"
-          placeholder="Введите пароль"
+          :placeholder="$t('enterPass')"
         />
-        <span class="group-value">Пароль</span>
+        <span class="group-value">{{ $t("pass") }}</span>
       </div>
       <div class="forget_pass">
-        <a @click="this.$emit('updateReset', true)" href="#">Забыли пароль?</a>
+        <a @click="this.$emit('updateReset', true)" href="#">{{
+          $t("forgotPass")
+        }}</a>
       </div>
-      <button v-if="!message" @click="login" class="btn">Войти</button>
+      <button v-if="!message" @click="login" class="btn">
+        {{ $t("login") }}
+      </button>
       <div
         class="msg"
         :class="{
@@ -115,15 +119,15 @@ export default {
         {{ message }}
       </div>
       <div class="log">
-        <span>Ещё не зарегистрировались?</span>
-        <a @click="this.$emit('updateRegister', true)" href="#"
-          >Зарегистрироваться</a
-        >
+        <span>{{ $t("notRegister") }}</span>
+        <a @click="this.$emit('updateRegister', true)" href="#">{{
+          $t("register")
+        }}</a>
       </div>
     </div>
     <div class="card" v-else>
       <div class="cancel">
-        <span class="title">Подтверждение</span>
+        <span class="title">{{ $t("confirmation") }}</span>
         <img @click="cancel" src="../assets/close.png" alt="" />
       </div>
       <div class="group">
@@ -131,11 +135,13 @@ export default {
           type="text"
           name="code"
           v-model="code"
-          placeholder="Введите код"
+          :placeholder="$t('enterCode')"
         />
-        <span class="group-value">Код из письма email</span>
+        <span class="group-value">{{ $t("emailCode") }} email</span>
       </div>
-      <button @click="verify" v-if="!message" class="btn">Войти</button>
+      <button @click="verify" v-if="!message" class="btn">
+        {{ $t("login") }}
+      </button>
       <div
         class="msg"
         :class="{

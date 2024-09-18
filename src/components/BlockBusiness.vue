@@ -42,7 +42,7 @@ export default {
 </script>
 <template>
   <div class="wrapper">
-    <h2>Готовые бизнес модели</h2>
+    <h2>{{ $t("readyBusiness") }}</h2>
     <div class="cards">
       <div
         class="card"
@@ -54,21 +54,23 @@ export default {
           <div class="main_info">
             <div class="title">{{ card.name }}</div>
             <div class="group">
-              <span class="group-name">Хешрейт:</span>
+              <span class="group-name">{{ $t("hash") }}:</span>
               <span class="group-value">{{ card.hashrate }} TH/s</span>
             </div>
             <div class="group">
-              <span class="group-name">Доход:</span>
-              <span class="group-value">${{ card.profit }}/месяц</span>
+              <span class="group-name">{{ $t("dohod") }}:</span>
+              <span class="group-value"
+                >${{ card.profit }}/{{ $t("monthOne") }}</span
+              >
             </div>
             <div class="group">
-              <span class="group-name">Расход:</span>
-              <span class="group-value">{{ card.power }} Вт</span>
+              <span class="group-name">{{ $t("rashod") }}:</span>
+              <span class="group-value">{{ card.power }} {{ $t("wt") }}</span>
             </div>
           </div>
           <div class="order">
             <div class="price">${{ card.price }}</div>
-            <button class="btn">Заказать</button>
+            <button class="btn">{{ $t("order") }}</button>
           </div>
         </div>
         <img class="asic" src="../assets/asic.png" alt="" />

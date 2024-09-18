@@ -8,10 +8,57 @@ export default {
   data() {
     return {
       card: {},
+      payment_data: "",
       isLoading: false,
+      message: "",
     };
   },
   methods: {
+    async cancelPayment() {
+      try {
+        let response = await axios.get(
+          `/billings/update/cancel?id=${this.card.id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        console.log(response);
+        let status = response.status;
+        if (status == 200) {
+          this.message = "Успешно";
+          setTimeout(() => {
+            this.message = "";
+          }, 2500);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async saveData() {
+      try {
+        let response = await axios.get(
+          `/billings/update/complete?id=${this.card.id}&data=${this.payment_data}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        console.log(response);
+        let status = response.status;
+        if (status == 200) {
+          this.message = "Успешно";
+          setTimeout(() => {
+            this.message = "";
+          }, 2500);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
     async load_info() {
       try {
         this.isLoading = true;
@@ -25,6 +72,7 @@ export default {
         );
         console.log(response);
         this.card = response.data.data;
+        this.payment_data = this.card.payment_data;
       } catch (err) {
         console.log(err);
       } finally {
@@ -106,6 +154,18 @@ export default {
       <div class="payment-hashrate">{{ card.hash_rate }}</div>
     </div>
     <div class="group-payment">
+      <span class="sum_payment">{{ $t("adressPayment") }}:</span>
+      <div class="adress-value">{{ card.payment_detail }}</div>
+    </div>
+    <div class="group-payment">
+      <span class="sum_payment">{{ $t("numberPayment") }}:</span>
+      <input
+        type="text"
+        v-model="payment_data"
+        placeholder="Введите номер платежа"
+      />
+    </div>
+    <div class="group-payment">
       <span class="status">{{ $t("status") }}:</span>
       <div class="group-status">
         <div
@@ -117,6 +177,35 @@ export default {
         ></div>
         <span class="status">{{ printStatus(card.state) }}</span>
       </div>
+    </div>
+    <div class="wrap-btns">
+      <button class="btn bx" @click="this.$router.go(-1)">
+        {{ $t("back") }}
+      </button>
+      <button
+        class="btn cancel bx"
+        v-if="card.type != 'hosting' && card.type != 'completed'"
+        @click="cancelPayment"
+      >
+        {{ $t("cancel") }}
+      </button>
+      <button
+        class="btn save bx"
+        @click="saveData"
+        v-if="card.type != 'completed'"
+      >
+        {{ $t("save") }}
+      </button>
+    </div>
+    <div
+      class="msg"
+      :class="{
+        success: this.message == 'Успешно',
+        error: this.message == 'Неверный код',
+      }"
+      v-if="message"
+    >
+      {{ message }}
     </div>
   </div>
 </template>
@@ -151,13 +240,28 @@ export default {
   transform: none;
   box-shadow: none;
 }
-
+.wrap-btns {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
 .btn {
-  width: 100%;
   border-radius: 10px;
   padding: 12px 17px;
+  font-weight: 500;
+  font-size: 16px;
+  color: #272727;
+  background-color: #fff;
+}
+
+.save {
+  background-color: #45ed0b;
   color: #fff;
+}
+
+.cancel {
   background-color: #cf0032;
+  color: #fff;
 }
 
 .not_found {
@@ -205,6 +309,11 @@ export default {
   display: flex;
   align-items: center;
   gap: 15px;
+  flex-wrap: wrap;
+}
+
+.adress-value {
+  word-wrap: break-word;
 }
 
 .time,
@@ -237,6 +346,23 @@ export default {
   background-color: #cf0032;
 }
 
+.goBack {
+  margin-top: 30px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.group-payment input {
+  border: 1px solid #272727;
+  padding: 5px 10px;
+  border-radius: 10px;
+}
+
+input::placeholder {
+  font-size: 14px;
+}
+
 @media (max-width: 910px) {
   .profit {
     flex-direction: column;
@@ -250,21 +376,24 @@ export default {
 }
 
 @media (max-width: 520px) {
-  .time,
-  .payment-hashrate,
-  .payment-btc,
-  .date,
-  .mypayment-header span,
-  .status,
-  .type {
-    font-size: 10px;
-    line-height: 10px;
-  }
-
   .payment,
   .mypayment-header {
     padding: 10px;
     border-radius: 10px;
+  }
+
+  .wrap-btns {
+    gap: 20px;
+    flex-direction: column;
+  }
+
+  .btn,
+  input {
+    width: 100%;
+  }
+
+  .adress-value {
+    font-size: 12px;
   }
 }
 

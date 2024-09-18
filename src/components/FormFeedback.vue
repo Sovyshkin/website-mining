@@ -63,16 +63,16 @@ export default {
       <div class="cancel">
         <img @click="cancel" src="../assets/close.png" alt="" />
       </div>
-      <div class="title">Заказать обратный звонок</div>
+      <div class="title">{{ $t("orderFeedback") }}</div>
       <div class="group">
         <input
           type="text"
           name="name"
           id="name"
           v-model="name"
-          placeholder="Введите ваше имя"
+          :placeholder="$t('enterName')"
         />
-        <span class="group-value">Имя</span>
+        <span class="group-value">{{ $t("name") }}</span>
       </div>
       <div class="group">
         <input
@@ -85,10 +85,10 @@ export default {
           name="number"
           placeholder="+7"
         />
-        <span class="group-value">Телефон</span>
+        <span class="group-value">{{ $t("phone") }}</span>
       </div>
       <div class="wrap_btns" v-if="!message">
-        <button @click="send" class="btn">Отправить</button>
+        <button @click="send" class="btn">{{ $t("send") }}</button>
       </div>
       <div
         class="msg"

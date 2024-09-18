@@ -1,14 +1,17 @@
 <script>
+import axios from "axios";
+
 export default {
   name: "BlockBusiness",
   components: {},
   data() {
     return {
-      cards: [
+      lang: "RU",
+      cards_ru: [
         {
           qst: "Что такое Bitcoin?",
           ans: `<p>
-          <b>Bitcoin (BTC)</b> — это первый и наиболее известный криптовалютный актив, основанный на технологии blockchain. Он был представлен в виде открытого исходного кода в 2008 году, а его разработка была завершена в январе 2009 года. Основателем Bitcoin является неизвестный программист под псевдонимом Satoshi Nakamoto.`,
+          <b>Bitcoin (BTC)</b> — это первый и наиболее известный криптовалютный актив, основанный на технологии blockchain. Он был представлен в виде открытого исходного кода в 2008 году, а его разработка была завершена в январе 2009 года. Основателем Bitcoin является неизвестный программист под псевдонимом Satoshi Nakamoto.</p>`,
           open: false,
         },
         {
@@ -48,7 +51,117 @@ export default {
           open: false,
         },
       ],
+      cards_en: [
+        {
+          qst: "What is Bitcoin?",
+          ans: `<p>
+          <b>Bitcoin (BTC)</b> — this is the first and most well-known cryptocurrency asset based on blockchain technology. It was introduced as open source in 2008, and its development was completed in January 2009. The founder of Bitcoin is an unknown programmer under the pseudonym Satoshi Nakamoto.</p>`,
+          open: false,
+        },
+        {
+          qst: "What is mining and why is it profitable?",
+          ans: `<p>
+<b>Mining</b> is the process of processing and confirming transactions in
+the cryptocurrency network, in which new blocks are added to the blockchain.
+          Miners use powerful specialized computers to solve
+          complex mathematical problems, and the one who solves the problem first gets
+          The reward is in the form of new bitcoins. This is a mechanism that
+          at the same time, it releases new bitcoins and supports the operation of the network
+          thanks to the verification and recording of transactions. Why mining can
+          be considered the best investment in Bitcoin? More Bitcoin for nested
+          Money: The main reason mining is the best
+          investing in Bitcoin is very simple - for the same amount of investment
+          In the future, the miner receives a larger amount of Bitcoin than when
+buying on the stock exchange. Hardware grows in price along with Bitcoin: The prices of
+mining equipment depend on its profitability, and profitability depends on
+          Bitcoin prices. Thus, with the increase in the price of earned Bitcoin
+          The cost of equipment is also increasing, mining doubles your bet
+          the rise in the price of Bitcoin. Passive income: After initial investment
+          in the hardware, miners can regularly receive bitcoins as
+          rewards. Infrastructure support: Miners contribute
+          the security of the Bitcoin network, which in turn can increase trust in
+          this cryptocurrency.
+        </p>`,
+          open: false,
+        },
+        {
+          qst: "Why is it important to start mining Bitcoin now?",
+          ans: `<p>Starting bitcoin mining now can bring significant financial benefits, given the current growth in the value and demand for bitcoin.</p>`,
+          open: false,
+        },
+        {
+          qst: "What is a Mining Pool?",
+          ans: `<p><b>Mining Pool</b> is a group of cryptocurrency miners who pool their resources to increase their chances of receiving rewards for opening a new block in the blockchain. Mining a block requires significant computing resources and time, so pooling efforts allows miners to use their power more efficiently and increase the likelihood of receiving rewards.</p>`,
+          open: false,
+        },
+      ],
+      cards_he: [
+        {
+          qst: "מה זה Bitcoin?",
+          ans: `<p>
+          <b> Bitcoin (BTC)</b> הוא נכס הקריפטו הראשון והידוע ביותר המבוסס על טכנולוגיית blockchain. הוא הוצג כקוד פתוח בשנת 2008, ופיתוחו הושלם בינואר 2009. מייסד Bitcoin הוא מתכנת לא ידוע תחת שם בדוי Satoshi Nakamoto.</p>`,
+          open: false,
+        },
+        {
+          qst: "מהי כרייה ומדוע היא רווחית?",
+          ans: `<p>
+          <b> כרייה</b> הוא תהליך עיבוד ואישור עסקאות ב
+          רשתות cryptocurrency, בהן מתווספות חסימות חדשות לבלוקצ ' יין.
+          כורים משתמשים במחשבים מיוחדים רבי עוצמה כדי לפתור
+          של בעיות מתמטיות מורכבות, ומי שפותר את הבעיה תחילה מקבל
+          תגמול בצורה של ביטקוין חדש. זה המנגנון ש
+          במקביל משחרר ביטקוין חדש ושומר על הרשת
+          באמצעות אימות ורישום עסקאות. מדוע כרייה יכולה
+          נחשב להשקעה הטובה ביותר בביטקוין? עוד Bitcoin על מקונן
+          כסף: הסיבה העיקרית לכרייה היא הטובה ביותר
+          השקעה בביטקוין היא פשוטה מאוד - עבור אותה כמות השקעה
+          כורה בפרספקטיבה מקבל כמות גדולה יותר של Bitcoin מאשר עם
+          לקנות בבורסה. החומרה עולה במחיר יחד עם Bitcoin: מחירי
+          ציוד הכרייה תלוי בתשואה שלו, והתשואה תלויה ב
+          מחירי Bitcoin. לפיכך, עם עליית המחיר של bitcoin הרוויח
+          גם עלות הציוד עולה, הכרייה מכפילה את ההימור שלך
+          על עליית מחיר Bitcoin. הכנסה פסיבית: לאחר השקעה ראשונית
+          בציוד, כורים יכולים לקבל ביטקוין באופן קבוע כ
+          תגמולים. תמיכה בתשתית: כורים תורמים
+          אבטחת רשת Bitcoin, אשר בתורו יכול לשפר את האמון
+          מטבע מבוזר זה.
+        </p>`,
+          open: false,
+        },
+        {
+          qst: "למה חשוב להתחיל כריית Bitcoin עכשיו?",
+          ans: `<p> תחילת כריית ביטקוין כעת יכולה להביא יתרונות פיננסיים משמעותיים, בהתחשב בעלייה הנוכחית בערך ובביקוש לביטקוין.</p>`,
+          open: false,
+        },
+        {
+          qst: "מהי בריכת כרייה?",
+          ans: `<p> <b>Mining Pool</b> היא קבוצה של כורי מטבעות קריפטוגרפיים המאגדים את המשאבים שלהם כדי להגדיל את סיכוייהם לקבל תגמול על פתיחת בלוק חדש בבלוקצ ' יין. כריית חסימות דורשת משאבי מחשוב וזמן משמעותיים, ולכן איחוד כוחות בבריכה מאפשר לכורים להשתמש בכוחותיהם בצורה יעילה יותר ולהגדיל את הסבירות לקבל תגמולים.</p>`,
+          open: false,
+        },
+      ],
+      cards: [],
     };
+  },
+  async mounted() {
+    try {
+      let response = await axios.get(`/users/${localStorage.getItem("id")}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      this.lang = response.data.user.lang;
+      if (this.lang == "RU") {
+        this.cards = this.cards_ru;
+      } else if (this.lang == "EN") {
+        this.cards = this.cards_en;
+      } else if (this.lang == "HE") {
+        this.cards = this.cards_he;
+      } else {
+        this.cards = this.cards_ru;
+      }
+    } catch (err) {
+      console.log(err);
+    }
   },
 };
 </script>

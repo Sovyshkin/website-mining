@@ -61,9 +61,9 @@ export default {
       <div class="cancel">
         <img @click="cancel" src="../assets/close.png" alt="" />
       </div>
-      <div class="title">Подтвердите действие</div>
+      <div class="title">{{ $t("confirmAction") }}</div>
       <div class="desc">
-        Вы уверены, что хотите снизить уровень защиты профиля?
+        {{ $t("lowerSec") }}
       </div>
       <div class="group">
         <input
@@ -73,11 +73,13 @@ export default {
           v-model="code"
           placeholder="Введите код"
         />
-        <span class="group-value">Код Google 2fa из приложения</span>
+        <span class="group-value">{{ $t("code2fa") }}</span>
       </div>
       <div class="wrap_btns" v-if="!message">
-        <button @click="cancel" class="btn">Отменить действие</button>
-        <button @click="disableMFA()" class="btn btn-cancel">Удалить</button>
+        <button @click="cancel" class="btn">{{ $t("cancelAction") }}</button>
+        <button @click="disableMFA()" class="btn btn-cancel">
+          {{ $t("delete") }}
+        </button>
       </div>
       <div
         class="msg"

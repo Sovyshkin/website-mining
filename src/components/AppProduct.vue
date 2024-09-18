@@ -83,27 +83,28 @@ export default {
       <div class="info">
         <span class="name">{{ card.name }}</span>
         <div class="group">
-          <span class="group-name">Хостинг:</span>
+          <span class="group-name">{{ $t("hosting") }}:</span>
           <span class="group-value"
-            >${{ roundTwo(card.hosting * 31) }} / месяц</span
+            >${{ roundTwo(card.hosting * 31) }} / {{ $t("monthOne") }}</span
           >
         </div>
         <div class="group">
-          <span class="group-name">Доход:</span>
+          <span class="group-name">{{ $t("dohod") }}:</span>
           <span class="group-value"
-            >${{ roundTwo(card.income * 31) }} / месяц</span
+            >${{ roundTwo(card.income * 31) }} / {{ $t("monthOne") }}</span
           >
         </div>
         <div class="group">
-          <span class="group-name">Расход:</span>
+          <span class="group-name">{{ $t("rashod") }}:</span>
           <span class="group-value"
-            >{{ roundTwo(card.energy_consumption * 31) }} Вт / месяц</span
+            >{{ roundTwo(card.energy_consumption * 31) }} {{ $t("wt") }} /
+            {{ $t("monthOne") }}</span
           >
         </div>
         <div class="group">
-          <span class="group-name">Прибыль:</span>
+          <span class="group-name">{{ $t("income") }}:</span>
           <span class="group-value"
-            >${{ roundTwo(card.profit * 31) }} / месяц</span
+            >${{ roundTwo(card.profit * 31) }} / {{ $t("monthOne") }}</span
           >
         </div>
         <div class="wrap-scale">
@@ -113,11 +114,11 @@ export default {
           ></div>
         </div>
         <div class="time_profit">
-          Время окупаемости: {{ card.payback }} месяцев
+          {{ $t("timeProfit") }}: {{ card.payback }} {{ $t("months") }}
         </div>
       </div>
     </div>
-    <button @click="addCart()" class="buy">Добавить в корзину</button>
+    <button @click="addCart()" class="buy">{{ $t("addCart") }}</button>
   </div>
 </template>
 <style scoped>

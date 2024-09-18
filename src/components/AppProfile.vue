@@ -270,14 +270,14 @@ export default {
 <template>
   <LoadingSpinner v-if="isLoading" />
   <div class="wrapper" v-else>
-    <h2>Профиль</h2>
+    <h2>{{ $t("profile") }}</h2>
     <div class="wrap_btns">
       <button
         @click="this.active = 1"
         class="btn"
         :class="{ active: this.active == 1 }"
       >
-        Личная информация
+        {{ $t("personalInfo") }}
       </button>
       <button
         @click="this.active = 2"
@@ -291,51 +291,51 @@ export default {
         class="btn"
         :class="{ active: this.active == 3 }"
       >
-        Кошелек для выплат
+        {{ $t("walletPayments") }}
       </button>
     </div>
     <div class="info" v-if="active == 1">
       <div class="personal">
-        <h3>Личные данные</h3>
+        <h3>{{ $t("personalData") }}</h3>
         <div class="personal_info">
           <div class="group-avatar">
             <img class="avatar" v-if="image" :src="image" alt="" />
             <img class="avatar" v-else src="../assets/profile.png" alt="" />
-            <span class="change_avatar" @click="goChange(true)"
-              >Изменить фото</span
-            >
+            <span class="change_avatar" @click="goChange(true)">{{
+              $t("changePhoto")
+            }}</span>
           </div>
           <div class="group">
             <select v-model="profiletype" id="">
-              <option value="id">Индивидуальный</option>
-              <option value="business">Бизнес</option>
+              <option value="id">{{ $t("individual") }}</option>
+              <option value="business">{{ $t("bisnes") }}</option>
             </select>
-            <span class="group-value">Тип профиля</span>
+            <span class="group-value">{{ $t("typeProfile") }}</span>
           </div>
           <div class="group">
             <input
               type="text"
               name="firstname"
               v-model="firstname"
-              placeholder="Введите имя"
+              :placeholder="$t('enterName')"
             />
-            <span class="group-value">Имя</span>
+            <span class="group-value">{{ $t("name") }}</span>
           </div>
           <div class="group">
             <input
               type="text"
               name="lastname"
               v-model="lastname"
-              placeholder="Введите фамилию"
+              :placeholder="$t('enterSurname')"
             />
-            <span class="group-value">Фамилия</span>
+            <span class="group-value">{{ $t("surname") }}</span>
           </div>
           <div class="group">
             <input
               type="email"
               name="email"
               v-model="email"
-              placeholder="Введите свою почту"
+              :placeholder="$t('enterEmail')"
             />
             <span class="group-value">Email</span>
           </div>
@@ -350,7 +350,7 @@ export default {
               name="number"
               placeholder="+7"
             />
-            <span class="group-value">Телефон</span>
+            <span class="group-value">{{ $t("phone") }}</span>
           </div>
           <div class="group">
             <select v-model="country">
@@ -362,37 +362,37 @@ export default {
                 {{ item.name }}
               </option>
             </select>
-            <span class="group-value">Страна</span>
+            <span class="group-value">{{ $t("country") }}</span>
           </div>
           <div class="group">
             <input
               type="text"
               name="address"
               v-model="address"
-              placeholder="Введите свой адрес"
+              :placeholder="$t('enterAddress')"
             />
-            <span class="group-value">Адрес</span>
+            <span class="group-value">{{ $t("address") }}</span>
           </div>
           <div class="group">
             <input
               type="text"
               name="inn"
               v-model="inn"
-              placeholder="Введите ИНН"
+              :placeholder="$t('enterInn')"
             />
-            <span class="group-value">ИНН</span>
+            <span class="group-value">{{ $t("inn") }}</span>
           </div>
           <div class="group">
             <input
               type="text"
               name="telegram"
               v-model="telegram"
-              placeholder="Введите свой телеграм"
+              :placeholder="$t('enterTelegram')"
             />
             <span class="group-value">Telegram</span>
           </div>
           <button v-if="!this.message" class="btn" @click="updateProfile">
-            Обновить информацию
+            {{ $t("refreshInfo") }}
           </button>
           <div
             class="msg"
@@ -405,40 +405,40 @@ export default {
             {{ message }}
           </div>
         </div>
-        <button @click="exit()" class="btn exit">Выйти</button>
+        <button @click="exit()" class="btn exit">{{ $t("exit") }}</button>
       </div>
       <div class="pass">
-        <h3>Сменить пароль</h3>
+        <h3>{{ $t("changePass") }}</h3>
         <div class="pass_info">
           <div class="group">
             <input
               type="password"
               name="password"
               v-model="old_password"
-              placeholder="Введите пароль"
+              :placeholder="$t('enterPass')"
             />
-            <span class="group-value">Старый пароль</span>
+            <span class="group-value">{{ $t("oldPass") }}</span>
           </div>
           <div class="group">
             <input
               type="password"
               name="password"
               v-model="new_password"
-              placeholder="Введите новый пароль"
+              :placeholder="$t('enterNewPassword')"
             />
-            <span class="group-value">Новый пароль</span>
+            <span class="group-value">{{ $t("newPass") }}</span>
           </div>
           <div class="group">
             <input
               type="password"
               name="password2"
               v-model="new_password2"
-              placeholder="Введите пароль снова"
+              :placeholder="$t('enterNewPassAgain')"
             />
-            <span class="group-value">Повторите пароль</span>
+            <span class="group-value">{{ $t("passAgain") }}</span>
           </div>
           <button class="btn" v-if="!message2" @click="updatePassword">
-            Изменить пароль
+            {{ $t("changePass") }}
           </button>
           <div
             class="msg"
@@ -455,23 +455,22 @@ export default {
     </div>
     <div class="fa2" v-if="active == 2 && !mfa_url && !mfa">
       <div class="open" v-if="!confirm2fa">
-        <h3>1. Откройте приложение Google 2Fa</h3>
+        <h3>1. {{ $t("openGoogle") }}</h3>
         <div class="open_info">
           <p class="text">
-            Введите текущий пароль от этой учетной записи, чтобы получить QR-код
-            для Google 2Fa.
+            {{ $t("google2fa") }}
           </p>
           <div class="group">
             <input
               type="password"
               name="password"
               v-model="password"
-              placeholder="Введите текущий пароль"
+              :placeholder="$t('enterCurrentPass')"
             />
-            <span class="group-value">Пароль</span>
+            <span class="group-value">{{ $t("pass") }}</span>
           </div>
           <button @click="getmfa" type="button" class="btn" v-if="!message5">
-            Получить QR-code
+            {{ $t("getQr") }}
           </button>
           <div
             class="msg"
@@ -486,22 +485,22 @@ export default {
         </div>
       </div>
       <div class="confirmation" v-if="confirm2fa">
-        <h3>2. Подтвердите код Google 2Fa</h3>
+        <h3>2. {{ $t("confirCode2fa") }}</h3>
         <div class="confirmation_info">
           <p class="text">
-            Введите ниже код 2Fa, сгенерированный приложением Google.
+            {{ $t("enterCode2fa") }}
           </p>
           <div class="group">
             <input
               type="text"
               name="code_2fa"
               v-model="code_2fa"
-              placeholder="Введите код"
+              :placeholder="$t('enterCode')"
             />
-            <span class="group-value">Код Google 2Fa из приложения:</span>
+            <span class="group-value">{{ $t("code2fa") }}:</span>
           </div>
           <button v-if="!message3" type="button" class="btn" @click="enablemfa">
-            Включить Google 2Fa
+            {{ $t("enable2fa") }}
           </button>
           <div
             class="msg"
@@ -517,52 +516,54 @@ export default {
       </div>
     </div>
     <div class="qr" v-if="mfa_url && !confirm2fa && !mfa">
-      <span>Отсканируйте QR-code</span>
+      <span>{{ $t("scanQr") }}</span>
       <qrcode class="qrcode" :value="mfa_url"></qrcode>
       <a :href="mfa_url">{{ mfa_url }}</a>
-      <button @click="authComfirm" type="button" class="btn">Продолжить</button>
+      <button @click="authComfirm" type="button" class="btn">
+        {{ $t("continue") }}
+      </button>
     </div>
     <button
       v-if="mfa"
       class="btn exit"
       @click="this.$emit('updateDeleteAuth', true)"
     >
-      Отлючить 2fa
+      {{ $t("disable2fa") }}
     </button>
     <div class="wallet" v-if="active == 3">
       <div class="current_wallet">
-        <h3>Текущий кошелек</h3>
+        <h3>{{ $t("currentWallet") }}</h3>
         <div class="wallet_info">
           <div class="group">
             <input type="text" name="wallet" v-model="wallet" placeholder="" />
-            <span class="group-value">Кошелек №1</span>
+            <span class="group-value">{{ $t("wallet") }} №1</span>
           </div>
-          <button class="btn">Получить QR-code</button>
+          <button class="btn">{{ $t("getQr") }}</button>
         </div>
       </div>
       <div class="connect_wallet">
-        <h3>Подключить кошелек</h3>
+        <h3>{{ $t("connectWallet") }}</h3>
         <div class="connect_info">
           <div class="group">
             <input
               type="text"
               name="walletNew"
               v-model="walletNew"
-              placeholder="Новый кошелек"
+              :placeholder="$t('newWallet')"
             />
-            <span class="group-value">Добавить новый кошелек</span>
+            <span class="group-value">{{ $t("addWallet") }}</span>
           </div>
           <div class="group">
             <input
               type="text"
               name="code"
               v-model="otp"
-              placeholder="Введите код"
+              :placeholder="$t('enterCode')"
             />
-            <span class="group-value">Код Google 2Fa из приложения:</span>
+            <span class="group-value">{{ $t("code2fa") }}:</span>
           </div>
           <button v-if="!message4" @click="setWallet" class="btn">
-            Добавить
+            {{ $t("Добавить") }}
           </button>
           <div
             class="msg"

@@ -5,22 +5,24 @@ export default {
   components: {},
   data() {
     return {
-      lang: this.$i18n.locale,
+      lang: "RU",
       names: {
         marketplace: "Маркет",
-        main: "Главная",
+        main: this.$t("main"),
         dashboard: "Приборная панель",
         myminers: "Мои майнеры",
         mypayments: "Мои платежи",
         accruals: "Начисления и списания",
-        cart: "Корзина",
+        cart: this.$t("cart"),
         support: "Центр помощи",
         profile: "Профиль",
+        payment: "Платеж",
       },
       id: null,
       avatar: "",
       countries: ["RU", "EN", "HE"],
       active: false,
+      active_billings: false,
     };
   },
   props: {
@@ -72,6 +74,7 @@ export default {
         this.lang = response.data.user.lang;
         this.$i18n.locale = this.lang;
         this.avatar = response.data.user.image.url;
+        this.active_billings = response.data.user.active_billings;
       } catch (err) {
         console.log(err);
       }
@@ -218,6 +221,15 @@ export default {
       </div>
     </div>
   </div>
+  <div class="active-billings" v-if="active_billings">
+    <span>{{ $t("warning") }}</span>
+    <button
+      class="btn goPay"
+      @click="this.$router.push({ name: 'mypayments' })"
+    >
+      {{ $t("goPay") }}
+    </button>
+  </div>
 </template>
 <style scoped>
 .wrapper {
@@ -230,6 +242,19 @@ export default {
   justify-content: space-between;
   background-color: white;
   margin-bottom: 0px;
+}
+
+.active-billings {
+  width: 100%;
+  padding: 5px 10px;
+  background-color: #cf0032;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.active-billings span {
+  color: #fff;
 }
 
 .logo {
@@ -283,6 +308,7 @@ export default {
   background-color: #fff;
   box-shadow: 0 0 10px 0 #00000037;
   z-index: 3;
+  min-width: 57px;
 }
 
 .group-country {
@@ -355,6 +381,11 @@ export default {
   display: none;
 }
 
+.goPay {
+  color: #fff;
+  border: 1px solid #fff;
+}
+
 @media (max-width: 1000px) {
   .group-nav {
     display: none;
@@ -385,11 +416,42 @@ export default {
   }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 472px) {
   .contacts {
+    width: fit-content;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
+    gap: 6px;
+  }
+
+  .wrapper {
+    padding: 0 7px !important;
+  }
+
+  .logo {
+    height: 45px;
+  }
+}
+
+@media (max-width: 420px) {
+  .avatar img {
+    height: 32px;
+    width: 32px;
+  }
+
+  .contacts img {
+    height: 18px;
+    width: 18px;
+  }
+
+  .arrow {
+    height: 12px;
+    width: 12px;
+  }
+
+  .lan span {
+    font-size: 14px;
   }
 }
 </style>

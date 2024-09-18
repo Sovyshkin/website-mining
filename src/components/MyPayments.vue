@@ -47,6 +47,45 @@ export default {
         return false;
       }
     },
+    printStatus(state) {
+      if (this.$i18n.locale == "RU") {
+        if (state == "waiting") {
+          return "В ожидании";
+        } else if (state == "invoiced") {
+          return "Запрос";
+        } else if (state == "confirmation") {
+          return "На подтверждении";
+        } else if (state == "completed") {
+          return "Оплачен";
+        } else if (state == "canceled") {
+          return "Отменен";
+        }
+      } else if (this.$i18n.locale == "EN") {
+        if (state == "waiting") {
+          return "Waiting";
+        } else if (state == "invoiced") {
+          return "Invoiced";
+        } else if (state == "confirmation") {
+          return "Confirmation";
+        } else if (state == "completed") {
+          return "Completed";
+        } else if (state == "canceled") {
+          return "Canceled";
+        }
+      } else if (this.$i18n.locale == "HE") {
+        if (state == "waiting") {
+          return "מחכה";
+        } else if (state == "invoiced") {
+          return "בקשה";
+        } else if (state == "confirmation") {
+          return "על אישור";
+        } else if (state == "completed") {
+          return "שולם";
+        } else if (state == "canceled") {
+          return "בוטל";
+        }
+      }
+    },
   },
   mounted() {
     document.body.style.overflow = "auto";
@@ -81,8 +120,14 @@ export default {
           <div class="payment-hashrate">{{ card.hash_rate }}</div>
         </div>
         <div class="group-status">
-          <div class="online"></div>
-          <span class="status">Completed</span>
+          <div
+            class="wait"
+            :class="{
+              online: card.state == 'completed',
+              offline: card.state == 'canceled',
+            }"
+          ></div>
+          <span class="status">{{ printStatus(card.state) }}</span>
         </div>
       </div>
     </div>
@@ -203,15 +248,19 @@ export default {
   gap: 5px;
 }
 
-.online,
-.offline {
+.wait {
   width: 8px;
   height: 8px;
   border-radius: 13px;
+  background-color: yellow;
 }
 
 .online {
   background-color: #45ed0b;
+}
+
+.offline {
+  background-color: #cf0032;
 }
 
 .group-payment,

@@ -131,7 +131,7 @@ export default {
 </script>
 <template>
   <div class="wrapper" :class="{ insert: this.white }">
-    <h2>Калькулятор доходности</h2>
+    <h2>{{ $t("profitCalc") }}</h2>
     <div class="wrapper-btns">
       <button
         @click="updateActive(1)"
@@ -167,7 +167,7 @@ export default {
         <div class="inputs_range" v-if="active != 4">
           <div class="group-range">
             <label class="group-label" for="range"
-              ><span class="invest">Инвестиции</span>
+              ><span class="invest">{{ $t("investment") }}</span>
               <span class="rangeUsd">{{ invest }} USD / 300000 USD</span></label
             >
             <input
@@ -201,7 +201,7 @@ export default {
             @input="twoCalc()"
             class="profit"
             v-model="dohod"
-            placeholder="Укажите желаемый доход"
+            :placeholder="$t('enterDesireIncome')"
           />
           <select
             v-model="dayCalc"
@@ -217,19 +217,19 @@ export default {
         </div>
         <div class="info">
           <div class="group" v-if="active == 4">
-            <span class="group-name">Инвестиции:</span>
+            <span class="group-name">{{ $t("investment") }}:</span>
             <span class="group-value">${{ invest }}</span>
           </div>
           <div class="group" v-if="active != 4">
-            <span class="group-name">Доход:</span>
+            <span class="group-name">{{ $t("dohod") }}:</span>
             <span class="group-value">${{ dohod }}</span>
           </div>
           <div class="group">
-            <span class="group-name">Расходы на хостинг:</span>
+            <span class="group-name">{{ $t("hostingCost") }}:</span>
             <span class="group-value">${{ rashod }}</span>
           </div>
           <div class="group">
-            <span class="group-name">Электричество</span>
+            <span class="group-name">{{ $t("electricity") }}</span>
             <span class="group-value">{{ electricity }}/kW</span>
           </div>
           <div class="group" v-if="active == 4">
@@ -238,23 +238,23 @@ export default {
           </div>
 
           <p class="detailInfo">
-            Данные рассчитываются в автоматическом режиме через платформу
+            {{ $t("detailInfo1") }}
             <a
               href="https://whattomine.com/coins/193-bch-sha-256"
               target="_blank"
               >whattomine.com</a
             >
-            с учетом стоимости электроэнергии 0.06$ за кВт⋅ч и цены биткоина.
+            {{ $t("detailInfo2") }}
           </p>
         </div>
       </div>
       <div class="right" :class="{ white: this.white }">
-        <div class="title">Ожидаемая прибыль</div>
+        <div class="title">{{ $t("expectedProfit") }}</div>
         <div class="earn">
           <span class="title-earn">{{ this.profit }} USD</span>
           <span class="btc">{{ btc }} BTC</span>
           <span class="procent">({{ procent }}%)</span>
-          <span class="procent">Возврат инвестиций</span>
+          <span class="procent">{{ $t("returnInvest") }}</span>
         </div>
         <div class="earn-time" v-if="dayCalc == '1'">{{ $t("day") }}</div>
         <div class="earn-time" v-if="dayCalc == '31'">{{ $t("month") }}</div>

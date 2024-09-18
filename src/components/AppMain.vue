@@ -4,6 +4,7 @@ import BlockCalculator from "./BlockCalculator.vue";
 import BannerMain from "./BannerMain.vue";
 import LoadingSpinner from "./LoadingSpinner.vue";
 import BlockMiniMarket from "./BlockMiniMarket.vue";
+import MyPayments from "./MyPayments.vue";
 export default {
   name: "AppMain",
   components: {
@@ -11,6 +12,7 @@ export default {
     BannerMain,
     LoadingSpinner,
     BlockMiniMarket,
+    MyPayments,
   },
   data() {
     return {
@@ -96,7 +98,7 @@ export default {
   <LoadingSpinner v-if="isLoading" />
   <div class="wrapper" v-else>
     <BannerMain />
-    <h2>Общая сумма заработанных активов</h2>
+    <h2>{{ $t("totalEarned") }}</h2>
     <div class="total bx">
       <img src="../assets/btc.svg" alt="" />
       <span class="usd">{{ total_earn_value_usd }} $</span>
@@ -104,14 +106,14 @@ export default {
     </div>
     <div class="profit">
       <div class="day bx">
-        <span class="title">Ежедневный доход:</span>
+        <span class="title">{{ $t("dailyIncome") }}:</span>
         <div class="group">
           <span class="usd">{{ expected_income }} $</span>
           <div class="btc">(~{{ roundSix(expected_income_btc) }} BTC)</div>
         </div>
       </div>
       <div class="month bx">
-        <div class="title">Ежемесячный доход:</div>
+        <div class="title">{{ $t("monthlyIncome") }}:</div>
         <div class="group">
           <span class="usd">{{ roundTwo(expected_income * 31) }} $</span>
           <span class="btc"
@@ -120,7 +122,7 @@ export default {
         </div>
       </div>
       <div class="year bx">
-        <div class="title">Ежегодный доход:</div>
+        <div class="title">{{ $t("annualIncome") }}:</div>
         <div class="group">
           <span class="usd">{{ roundTwo(expected_income * 365) }} $</span>
           <span class="btc"
@@ -131,13 +133,13 @@ export default {
     </div>
     <BlockCalculator :white="true" />
     <BlockMiniMarket />
-    <h2>Мои платежи</h2>
+    <!-- <h2>Мои платежи</h2>
     <div class="mypayments">
       <div class="mypayment-header">
-        <span class="date">Дата</span>
-        <span class="type">Тип</span>
-        <span class="sum_payment">Сумма платежа</span>
-        <span class="status">Статус</span>
+        <span class="date">{{ $t("date") }}</span>
+        <span class="type">{{ $t("type") }}</span>
+        <span class="sum_payment">{{ $t("amountPayment") }}</span>
+        <span class="status">{{ $t("status") }}</span>
       </div>
       <div class="payment" v-for="card in paymentsSorted" :key="card.id">
         <div class="group-payment">
@@ -156,7 +158,8 @@ export default {
           <span class="status">Completed</span>
         </div>
       </div>
-    </div>
+    </div> -->
+    <MyPayments />
   </div>
 </template>
 <style scoped>

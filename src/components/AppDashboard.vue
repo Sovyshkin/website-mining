@@ -133,18 +133,18 @@ export default {
 <template>
   <LoadingSpinner v-if="isLoading" />
   <div class="wrapper" v-else>
-    <h2>Приборная панель</h2>
+    <h2>{{ $t("dash") }}</h2>
     <div class="balance bx">
       <div class="info">
-        <span class="name">Баланс</span>
+        <span class="name">{{ $t("balance") }}</span>
         <div class="group">
           <span class="usd">{{ value_usd }} $</span>
           <span class="btc">(~{{ btc }} BTC)</span>
         </div>
       </div>
       <div class="wrap_btns">
-        <button class="btn">Пополнить</button>
-        <button class="btn withdraw">Вывести</button>
+        <button class="btn">{{ $t("deposit") }}</button>
+        <button class="btn withdraw">{{ $t("withdraw") }}</button>
       </div>
     </div>
     <div class="wrap-cards">
@@ -171,46 +171,46 @@ export default {
         <div class="value">{{ total_energy_consumption }}</div>
       </div>
       <div class="card">
-        <div class="title">Ожидаемая прибыль</div>
+        <div class="title">{{ $t("expectedProfit") }}</div>
         <div class="value profit">
           <div class="day">
             <span class="value">{{ expected_profit }}</span>
-            <span class="usd-day">USD/день</span>
+            <span class="usd-day">USD/{{ $t("dayOne") }}</span>
           </div>
           <div class="month">
             <span class="value">{{ roundTwo(expected_profit * 31) }}</span>
-            <span class="usd-month">USD/месяц</span>
+            <span class="usd-month">USD/{{ $t("monthOne") }}</span>
           </div>
         </div>
       </div>
       <div class="card">
-        <div class="title">Ожидаемый доход</div>
+        <div class="title">{{ $t("expectedIncome") }}</div>
         <div class="value profit">
           <div class="day">
             <span class="value">{{ expected_income }}</span>
-            <span class="usd-day">USD/день</span>
+            <span class="usd-day">USD/{{ $t("dayOne") }}</span>
           </div>
           <div class="month">
             <span class="value">{{ roundTwo(expected_income * 31) }}</span>
-            <span class="usd-month">USD/месяц</span>
+            <span class="usd-month">USD/{{ $t("monthOne") }}</span>
           </div>
         </div>
       </div>
       <div class="card">
-        <div class="title">Хостинг</div>
+        <div class="title">{{ $t("hosting") }}</div>
         <div class="value profit">
           <div class="day">
             <span class="value">{{ expected_hosting }}</span>
-            <span class="usd-day">USD/день</span>
+            <span class="usd-day">USD/{{ $t("dayOne") }}</span>
           </div>
           <div class="month">
             <span class="value">{{ roundTwo(expected_hosting * 31) }}</span>
-            <span class="usd-month">USD/месяц</span>
+            <span class="usd-month">USD/{{ $t("monthOne") }}</span>
           </div>
         </div>
       </div>
       <div class="card">
-        <div class="title">Электричество</div>
+        <div class="title">{{ $t("electricity") }}</div>
         <div class="value profit">
           <div class="day">
             <span class="value">{{ electricity_cost }} $</span>
@@ -219,18 +219,18 @@ export default {
         </div>
       </div>
     </div>
-    <ChartLine v-if="income_show" :chartData="chartData" :name="'Доход'" />
+    <ChartLine v-if="income_show" :chartData="chartData" :name="$t('dohod')" />
 
     <ChartLine
       v-if="hosting_show"
       :chartData="hostingData"
-      :name="'Cтоимость хостинга'"
+      :name="$t('costHosting')"
     />
 
     <ChartLine
       v-if="hashrate_show"
       :chartData="hashrateData"
-      :name="'Хешрейт'"
+      :name="$t('hash')"
     />
   </div>
 </template>

@@ -132,34 +132,35 @@ export default {
 <template>
   <LoadingSpinner v-if="isLoading" />
   <div class="wrapper" v-else>
-    <h2>Корзина</h2>
+    <h2>{{ $t("cart") }}</h2>
     <div class="cards">
       <div class="card bx" v-for="card in cards" :key="card.id">
         <img class="asic" v-if="card.image" :src="card.image.url" alt="" />
         <div class="info">
           <span class="name">{{ card.name }}</span>
           <div class="group">
-            <span class="group-name">Хостинг:</span>
+            <span class="group-name">{{ $t("hosting") }}:</span>
             <span class="group-value"
-              >${{ roundTwo(card.hosting * 31) }} / месяц</span
+              >${{ roundTwo(card.hosting * 31) }} / {{ $t("monthOne") }}</span
             >
           </div>
           <div class="group">
-            <span class="group-name">Доход:</span>
+            <span class="group-name">{{ $t("dohod") }}:</span>
             <span class="group-value"
-              >${{ roundTwo(card.income * 31) }} / месяц</span
+              >${{ roundTwo(card.income * 31) }} / {{ $t("monthOne") }}</span
             >
           </div>
           <div class="group">
-            <span class="group-name">Расход:</span>
+            <span class="group-name">{{ $t("rashod") }}:</span>
             <span class="group-value"
-              >{{ roundTwo(card.energy_consumption * 31) }} Вт / месяц</span
+              >{{ roundTwo(card.energy_consumption * 31) }} {{ $t("wt") }} /
+              {{ $t("monthOne") }}</span
             >
           </div>
           <div class="group">
-            <span class="group-name">Прибыль:</span>
+            <span class="group-name">{{ $t("income") }}:</span>
             <span class="group-value"
-              >${{ roundTwo(card.profit * 31) }} / месяц</span
+              >${{ roundTwo(card.profit * 31) }} / {{ $t("monthOne") }}</span
             >
           </div>
           <div class="wrap-scale">
@@ -169,7 +170,7 @@ export default {
             ></div>
           </div>
           <div class="time_profit">
-            Время окупаемости: {{ card.payback }} месяцев
+            {{ $t("timeProfit") }}: {{ card.payback }} {{ $t("months") }}
           </div>
           <div class="counter">
             <div class="minus" @click="minus(card.id, card.count)">-</div>
@@ -180,10 +181,10 @@ export default {
       </div>
     </div>
     <div class="itog bx">
-      <span class="result">Итого:</span>
+      <span class="result">{{ $t("total") }}:</span>
       <span class="price">$ {{ summary }}</span>
     </div>
-    <h2>Выберите способ оплаты</h2>
+    <h2>{{ $t("choosePayment") }}</h2>
     <div class="payments">
       <div
         @click="methodPay = pay.value"
@@ -202,7 +203,7 @@ export default {
       </div>
     </div>
     <button v-if="!message" @click="goBuy()" class="buy bx">
-      Оформить заказ
+      {{ $t("placeOrder") }}
     </button>
     <div
       class="msg"

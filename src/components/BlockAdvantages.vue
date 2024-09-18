@@ -4,6 +4,7 @@ import driverRefresh from "../assets/driver-refresh.svg";
 import pcPhone from "../assets/pcPhone.svg";
 import verify from "../assets/verify.svg";
 import support from "../assets/24-support.svg";
+import axios from "axios";
 export default {
   name: "BlockAdvantages",
   components: {},
@@ -12,37 +13,49 @@ export default {
       cards: [
         {
           img: clock,
-          title: "Uptime 24",
-          desc: "Стабильное подключение к электроэнергии и интернету",
+          title: this.$t("uptime"),
+          desc: this.$t("stableConnect"),
         },
         {
           img: support,
-          title: "Тех. поддержка",
-          desc: "Круглосуточное обслуживание оборудования",
+          title: this.$t("support"),
+          desc: this.$t("supportText"),
         },
         {
           img: verify,
-          title: "Гарантия",
-          desc: "Заводская гарантия на все оборудование",
+          title: this.$t("garant"),
+          desc: this.$t("garantText"),
         },
         {
           img: driverRefresh,
-          title: "Быстрое подключение",
-          desc: "Быстрое подключение без ожидания доставки",
+          title: this.$t("fastConnect"),
+          desc: this.$t("fastConnectText"),
         },
         {
           img: pcPhone,
-          title: "Удобное управление",
-          desc: "Управляйте с любой точки мира",
+          title: this.$t("control"),
+          desc: this.$t("controlText"),
         },
       ],
     };
+  },
+  async mounted() {
+    try {
+      let response = await axios.get(`/users/${localStorage.getItem("id")}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      this.$i18n.locale = response.data.user.lang;
+    } catch (err) {
+      console.log(err);
+    }
   },
 };
 </script>
 <template>
   <div class="wrapper">
-    <h2>Наши преимущества</h2>
+    <h2>{{ $t("usAdvantages") }}</h2>
     <div class="cards">
       <div class="card" v-for="card in cards" :key="card">
         <img :src="card.img" alt="" class="icon" />

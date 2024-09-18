@@ -19,17 +19,18 @@ export default {
       <div class="cancel">
         <img @click="cancel" src="../assets/close.png" alt="" />
       </div>
-      <div class="title">Чтобы совершить покупку зарегистрируйтесь</div>
+      <div class="title">{{ $t("needRegister") }}</div>
       <div class="desc">
-        Мы передадим вам майнер <b>“Antiminer T21”</b>, но для этого вам нужен
-        аккаунт
+        {{ $t("needAccount") }}
       </div>
       <button @click="this.$emit('updateRegister', true)" class="btn">
-        Зарегистроваться
+        {{ $t("register") }}
       </button>
       <div class="log">
-        <span>Уже есть аккаунт?</span>
-        <a href="#" @click="this.$emit('updateLogin', true)">Войти</a>
+        <span>{{ $t("haveAccount") }}</span>
+        <a href="#" @click="this.$emit('updateLogin', true)">{{
+          $t("login")
+        }}</a>
       </div>
     </div>
   </div>

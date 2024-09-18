@@ -88,7 +88,7 @@ export default {
 <template>
   <LoadingSpinner v-if="isLoading" />
   <div class="wrapper" v-else>
-    <h2>Маркет</h2>
+    <h2>{{ $t("market") }}</h2>
     <div class="wrap-categories">
       <div
         class="category"
@@ -114,24 +114,30 @@ export default {
             :style="'width: ' + (100 - card.payback_percent) + '%'"
           ></div>
         </div>
-        <div class="time_profit">Время окупаемости: {{ card.payback }}</div>
+        <div class="time_profit">
+          {{ $t("timeProfit") }}: {{ card.payback }}
+        </div>
         <div class="info">
           <span class="price">${{ card.price }}</span>
           <span class="name">{{ card.name }}</span>
           <div class="group">
-            <span class="group-name">Хешрейт:</span>
+            <span class="group-name">{{ $t("hash") }}:</span>
             <span class="group-value">{{ card.hash_rate_str }}</span>
           </div>
           <div class="group">
-            <span class="group-name">Доход:</span>
-            <span class="group-value">${{ card.income }}/месяц</span>
+            <span class="group-name">{{ $t("dohod") }}:</span>
+            <span class="group-value"
+              >${{ card.income }}/{{ $t("monthOne") }}</span
+            >
           </div>
           <div class="group">
-            <span class="group-name">Расход:</span>
-            <span class="group-value">{{ card.energy_consumption }} Вт</span>
+            <span class="group-name">{{ $t("rashod") }}:</span>
+            <span class="group-value"
+              >{{ card.energy_consumption }} {{ $t("wt") }}</span
+            >
           </div>
         </div>
-        <button @click="goTry(card.id)" class="btn">Заказать</button>
+        <button @click="goTry(card.id)" class="btn">{{ $t("order") }}</button>
       </div>
     </div>
   </div>
@@ -140,9 +146,9 @@ export default {
     @click="this.$router.push({ name: 'cart' })"
     class="cart"
   >
-    Добавлено в корзину
+    {{ $t("addedCart") }}
   </div>
-  <div v-if="cart == 'Ошибка'" class="cart cart_error">Ошибка</div>
+  <div v-if="cart == 'Ошибка'" class="cart cart_error">{{ $t("error") }}</div>
 </template>
 <style scoped>
 .wrapper {

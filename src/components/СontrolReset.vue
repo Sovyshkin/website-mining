@@ -47,7 +47,7 @@ export default {
   <div class="wrapper">
     <div class="card">
       <div class="cancel">
-        <span class="title">Придумайте новый пароль</span>
+        <span class="title">{{ $t("comeUpPass") }}</span>
         <img @click="cancel" src="../assets/close.png" alt="" />
       </div>
       <div class="group">
@@ -55,20 +55,22 @@ export default {
           type="password"
           name="password"
           v-model="new_password"
-          placeholder="Введите новый пароль"
+          :placeholder="this.$t('enterNewPassword')"
         />
-        <span class="group-value">Новый пароль</span>
+        <span class="group-value">{{ $t("newPass") }}</span>
       </div>
       <div class="group">
         <input
           type="password"
           name="password2"
           v-model="new_password2"
-          placeholder="Введите пароль снова"
+          :placeholder="$t('enterNewPassAgain')"
         />
-        <span class="group-value">Повторите пароль</span>
+        <span class="group-value">{{ $t("passAgain") }}</span>
       </div>
-      <button @click="save" v-if="!message" class="btn">Сохранить</button>
+      <button @click="save" v-if="!message" class="btn">
+        {{ $t("save") }}
+      </button>
       <div
         class="msg"
         :class="{
