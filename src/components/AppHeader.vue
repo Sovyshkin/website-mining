@@ -71,10 +71,11 @@ export default {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
+        console.log("HEADER", response);
         this.lang = response.data.user.lang;
         this.$i18n.locale = this.lang;
-        this.avatar = response.data.user.image.url;
         this.active_billings = response.data.user.active_billings;
+        this.avatar = response.data.user.image.url;
       } catch (err) {
         console.log(err);
       }
