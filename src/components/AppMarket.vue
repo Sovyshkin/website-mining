@@ -308,7 +308,6 @@ export default {
 }
 
 .category {
-  width: 20%;
   font-weight: 600;
   font-size: 16px;
   line-height: 16px;

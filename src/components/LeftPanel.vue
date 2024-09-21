@@ -24,61 +24,93 @@ export default {
         {
           img: main,
           img_active: main_active,
-          name: this.$t("main"),
+          name: "",
           active: false,
           route: "main",
         },
         {
           img: dashboard,
           img_active: dashboard_active,
-          name: this.$t("dashboard"),
+          name: "",
           active: false,
           route: "dashboard",
         },
         {
           img: myminers,
           img_active: myminers_active,
-          name: this.$t("myMiners"),
+          name: "",
           active: false,
           route: "myminers",
         },
         {
           img: payments,
           img_active: payments_active,
-          name: this.$t("myPayments"),
+          name: "",
           active: false,
           route: "mypayments",
         },
         {
           img: marketplace,
           img_active: marketplace_active,
-          name: this.$t("market"),
+          name: "",
           active: false,
           route: "marketplace",
         },
         {
           img: accruals,
           img_active: accruals_active,
-          name: this.$t("accruals"),
+          name: "",
           active: false,
           route: "accruals",
         },
         {
           img: cart,
           img_active: cart_active,
-          name: this.$t("cart"),
+          name: "",
           active: false,
           route: "cart",
         },
         {
           img: support,
           img_active: support_active,
-          name: this.$t("centerHelp"),
+          name: "",
           active: false,
           route: "support",
         },
       ],
+      name_ru: [
+        "Главная",
+        "Дашбоард",
+        "Мои майнеры",
+        "Мои платежи",
+        "Маркет",
+        "Начисления и платежи",
+        "Корзина",
+        "Центр помощи",
+      ],
+      name_en: [
+        "Main",
+        "Dashboard",
+        "My miners",
+        "My payments",
+        "Market",
+        "Accruals and write-offs",
+        "Cart",
+        "The Help Center",
+      ],
+      name_he: [
+        "ראשי",
+        "דשבורד",
+        "הכורים שלי",
+        "התשלומים שלי",
+        "שוק",
+        "צבירות ומחיקות",
+        "עגלת קניות",
+        "מרכז סיוע",
+      ],
       count: 0,
+      lang: "RU",
+      isLoading: true,
     };
   },
   methods: {
@@ -127,8 +159,39 @@ export default {
         console.log(err);
       }
     },
+
+    async loadLang() {
+      try {
+        this.isLoading = true;
+        let response = await axios.get(`/users/${localStorage.getItem("id")}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        this.lang = response.data.user.lang;
+        let names = [];
+        if (this.lang == "HE") {
+          names = this.name_he;
+        } else if (this.lang == "EN") {
+          names = this.name_en;
+        } else {
+          names = this.name_ru;
+        }
+        for (let i = 0; i < this.cards.length; i++) {
+          let card = this.cards[i];
+          let item = names[i];
+          card.name = item;
+          this.cards[i] = card;
+          console.log("LEFT PANEL", card);
+        }
+        this.isLoading = false;
+      } catch (err) {
+        console.log(err);
+      }
+    },
   },
-  mounted() {
+  async mounted() {
+    await this.loadLang();
     this.checkRoute();
     this.loadCart();
     setInterval(() => {
@@ -138,7 +201,7 @@ export default {
 };
 </script>
 <template>
-  <div class="panel">
+  <div class="panel" v-if="!isLoading">
     <nav class="group-nav">
       <li class="nav-item" @click="this.$router.push({ name: 'home' })">
         <img class="logo" src="../assets/logo.png" alt="" />
