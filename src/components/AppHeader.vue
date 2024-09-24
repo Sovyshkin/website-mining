@@ -17,6 +17,8 @@ export default {
         support: "Центр помощи",
         profile: "Профиль",
         payment: "Платеж",
+        tickets: "Мои тикеты",
+        ticket: "Тикет",
       },
       id: null,
       avatar: "",
@@ -74,6 +76,12 @@ export default {
         console.log("HEADER", response);
         this.lang = response.data.user.lang;
         this.$i18n.locale = this.lang;
+        let app = document.querySelector(`.wrap`);
+        if (this.lang == "HE") {
+          app.style.direction = "rtl";
+        } else {
+          app.style.direction = "ltr";
+        }
         this.active_billings = response.data.user.active_billings;
         this.avatar = response.data.user.image.url;
       } catch (err) {
@@ -140,10 +148,10 @@ export default {
       <a href="https://wa.me/+972508981614" target="_blank"
         ><img src="../assets/WhatsApp.svg" alt="WhatAapp"
       /></a>
-      <a href="https://t.me/@Totalminers" target="_blank"
+      <a href="https://t.me/Totalminers" target="_blank"
         ><img src="../assets/Telegram.svg" alt="Telegram"
       /></a>
-      <span class="number">+972 50-8981614</span>
+      <a class="number" href="tel: 972 50-8981614">+972 50-8981614</a>
     </div>
     <div class="info" v-if="!id">
       <div class="lan" @click="active = !active">

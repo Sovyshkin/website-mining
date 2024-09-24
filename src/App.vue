@@ -114,9 +114,7 @@ export default {
       console.log("Тут");
     },
   },
-  mounted() {
-    console.log(this.$i18n.messages);
-  },
+  mounted() {},
 };
 </script>
 <template>

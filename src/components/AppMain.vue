@@ -4,7 +4,6 @@ import BlockCalculator from "./BlockCalculator.vue";
 import BannerMain from "./BannerMain.vue";
 import LoadingSpinner from "./LoadingSpinner.vue";
 import BlockMiniMarket from "./BlockMiniMarket.vue";
-import MyPayments from "./MyPayments.vue";
 export default {
   name: "AppMain",
   components: {
@@ -12,7 +11,6 @@ export default {
     BannerMain,
     LoadingSpinner,
     BlockMiniMarket,
-    MyPayments,
   },
   data() {
     return {
@@ -88,6 +86,46 @@ export default {
       }
       return "";
     },
+
+    printStatus(state) {
+      if (this.$i18n.locale == "RU") {
+        if (state == "waiting") {
+          return "В ожидании";
+        } else if (state == "invoiced") {
+          return "Запрос";
+        } else if (state == "confirmation") {
+          return "На подтверждении";
+        } else if (state == "completed") {
+          return "Оплачен";
+        } else if (state == "canceled") {
+          return "Отменен";
+        }
+      } else if (this.$i18n.locale == "EN") {
+        if (state == "waiting") {
+          return "Waiting";
+        } else if (state == "invoiced") {
+          return "Invoiced";
+        } else if (state == "confirmation") {
+          return "Confirmation";
+        } else if (state == "completed") {
+          return "Completed";
+        } else if (state == "canceled") {
+          return "Canceled";
+        }
+      } else if (this.$i18n.locale == "HE") {
+        if (state == "waiting") {
+          return "מחכה";
+        } else if (state == "invoiced") {
+          return "בקשה";
+        } else if (state == "confirmation") {
+          return "על אישור";
+        } else if (state == "completed") {
+          return "שולם";
+        } else if (state == "canceled") {
+          return "בוטל";
+        }
+      }
+    },
   },
   mounted() {
     this.load_info();
@@ -133,15 +171,14 @@ export default {
     </div>
     <BlockCalculator :white="true" />
     <BlockMiniMarket />
-    <!-- <h2>Мои платежи</h2>
-    <div class="mypayments">
+    <h2>{{ $t("myPayments") }}</h2>
+    <div class="mypayments" v-if="payments.length > 0">
       <div class="mypayment-header">
         <span class="date">{{ $t("date") }}</span>
         <span class="type">{{ $t("type") }}</span>
         <span class="sum_payment">{{ $t("amountPayment") }}</span>
-        <span class="status">{{ $t("status") }}</span>
       </div>
-      <div class="payment" v-for="card in paymentsSorted" :key="card.id">
+      <div class="payment bx" v-for="card in paymentsSorted" :key="card.id">
         <div class="group-payment">
           <span class="date">{{ card.date }}</span>
           <span class="time">{{ card.time }}</span>
@@ -149,17 +186,13 @@ export default {
         <span class="type">{{ printType(card.type) }}</span>
         <div class="group-payment">
           <div class="payment-btc">{{ card.value }} {{ card.currency }}</div>
-          <div class="payment-hashrate" v-if="card.hash_rate">
-            {{ card.hash_rate }} Th/s
-          </div>
-        </div>
-        <div class="group-status">
-          <div class="online"></div>
-          <span class="status">Completed</span>
+          <div class="payment-hashrate">{{ card.hash_rate }}</div>
         </div>
       </div>
-    </div> -->
-    <MyPayments />
+    </div>
+    <div class="not_found" v-else>
+      <span>{{ $t("not_found") }}</span>
+    </div>
   </div>
 </template>
 <style scoped>
@@ -310,6 +343,21 @@ export default {
   flex: 22%;
 }
 
+.not_found {
+  height: 30vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  opacity: 40%;
+}
+
+.not_found span {
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 20px;
+  color: #272727;
+}
 @media (max-width: 1200px) {
   .usd,
   .btc {

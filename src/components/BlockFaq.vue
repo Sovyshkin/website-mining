@@ -142,6 +142,24 @@ mining equipment depend on its profitability, and profitability depends on
       cards: [],
     };
   },
+  methods: {
+    goCreate() {
+      let token = localStorage.getItem("token");
+      if (token) {
+        this.$router.push({ name: "createTicket" });
+      } else {
+        this.$emit("updateLogin", true);
+      }
+    },
+    goTickets() {
+      let token = localStorage.getItem("token");
+      if (token) {
+        this.$router.push({ name: "tickets" });
+      } else {
+        this.$emit("updateLogin", true);
+      }
+    },
+  },
   async mounted() {
     try {
       let response = await axios.get(`/users/${localStorage.getItem("id")}`, {
@@ -167,7 +185,15 @@ mining equipment depend on its profitability, and profitability depends on
 </script>
 <template>
   <div class="wrapper">
-    <h2>FAQ</h2>
+    <div class="wrap-title">
+      <h2>FAQ</h2>
+      <div class="wrap-btns">
+        <button @click="goCreate" class="btn">{{ $t("createTicket") }}</button>
+        <button @click="goTickets" class="btn myTickets">
+          {{ $t("myTickets") }}
+        </button>
+      </div>
+    </div>
     <div class="cards">
       <div
         class="card"
@@ -204,6 +230,26 @@ mining equipment depend on its profitability, and profitability depends on
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+
+.wrap-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.btn {
+  background-color: #cf0032;
+  color: #fff;
+  border: 1px solid #cf0032;
+  border-radius: 10px;
+  padding: 12px 17px;
+  width: 224px;
+  height: 50px;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 16px;
 }
 
 .cards {
@@ -268,5 +314,17 @@ mining equipment depend on its profitability, and profitability depends on
   transform: scale(1.02);
 
   transition: all 500ms ease;
+}
+
+.wrap-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.myTickets {
+  background-color: transparent;
+  border: 1px solid #cf0032;
+  color: #cf0032;
 }
 </style>

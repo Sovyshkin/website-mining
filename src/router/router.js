@@ -13,6 +13,9 @@ import AppAccruals from "@/components/AppAccruals.vue";
 import AppDashboard from "@/components/AppDashboard.vue";
 import AppProduct from "../components/AppProduct.vue";
 import AppPayment from "../components/AppPayment.vue";
+import CreateTicket from "../components/CreateTicket.vue";
+import AppTicket from "../components/AppTicket.vue";
+import AppTickets from "../components/AppTickets.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -86,6 +89,21 @@ const router = createRouter({
       path: "/payment",
       name: "payment",
       component: AppPayment,
+    },
+    {
+      path: "/create_ticket",
+      name: "createTicket",
+      component: CreateTicket,
+    },
+    {
+      path: "/ticket",
+      name: "ticket",
+      component: AppTicket,
+    },
+    {
+      path: "/tickets",
+      name: "tickets",
+      component: AppTickets,
     },
   ],
 });

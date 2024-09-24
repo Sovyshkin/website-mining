@@ -35,7 +35,7 @@ export default {
           value: "usdt",
         },
       ],
-      methodPay: "visa",
+      methodPay: "btc",
       isLoading: false,
       status: "",
       message: "",

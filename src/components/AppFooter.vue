@@ -69,16 +69,41 @@ export default {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
+        console.log("HEADER", response);
+        this.lang = response.data.user.lang;
+        this.$i18n.locale = this.lang;
+        let app = document.querySelector(`.wrap`);
+        if (this.lang == "HE") {
+          app.style.direction = "rtl";
+        } else {
+          app.style.direction = "ltr";
+        }
+        this.active_billings = response.data.user.active_billings;
         this.avatar = response.data.user.image.url;
       } catch (err) {
         console.log(err);
       }
     },
 
-    changeLang(lang) {
+    async changeLang(lang) {
       try {
         this.lang = lang;
-        this.$i18n.locale = lang;
+        let response = await axios.post(
+          `/users/update/lang`,
+          {
+            lang: lang,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        console.log(response);
+        if (response.data.status == "ok") {
+          this.$i18n.locale = lang;
+          location.reload();
+        }
       } catch (err) {
         console.log(err);
       }

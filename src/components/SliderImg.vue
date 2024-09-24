@@ -128,7 +128,7 @@ export default {
     },
     imgsrc: {
       type: String,
-      default: "https://i.imgur.com/PJYgAr0.png",
+      default: "https://i.imgur.com/FB9w44d.jpeg",
     },
     barWidth: {
       type: Number,

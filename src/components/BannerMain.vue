@@ -1,6 +1,7 @@
 <script>
+import axios from "axios";
 export default {
-  name: "BlockBusiness",
+  name: "BannerMain",
   components: {},
   data() {
     return {
@@ -13,18 +14,38 @@ export default {
         time_profit: "5 месяцев",
         img: "asic",
       },
+      id: "",
     };
+  },
+  methods: {
+    async load_info() {
+      try {
+        let settings = await axios.get(`/settings/get?key=miner_banner`);
+        console.log(settings);
+        this.id = settings.data.value;
+        let response = await axios.get(`/miners/get?id=${this.id}`);
+        this.card = response.data.miner_item;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+  },
+  mounted() {
+    this.load_info();
   },
 };
 </script>
 <template>
-  <div class="card main">
+  <div
+    class="card main"
+    @click="this.$router.push({ name: 'product', query: { id: this.id } })"
+  >
     <div class="info">
       <div class="main_info">
         <div class="title">{{ card.name }}</div>
         <div class="group">
           <span class="group-name">{{ $t("hash") }}:</span>
-          <span class="group-value">{{ card.hashrate }} TH/s</span>
+          <span class="group-value">{{ card.hash_rate_str }}</span>
         </div>
         <div class="group">
           <span class="group-name">{{ $t("dohod") }}:</span>
@@ -34,7 +55,9 @@ export default {
         </div>
         <div class="group">
           <span class="group-name">{{ $t("rashod") }}:</span>
-          <span class="group-value">{{ card.power }} {{ $t("wt") }}</span>
+          <span class="group-value"
+            >{{ card.energy_consumption }} {{ $t("wt") }}</span
+          >
         </div>
       </div>
     </div>

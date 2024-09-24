@@ -108,7 +108,8 @@ export default {
         "עגלת קניות",
         "מרכז סיוע",
       ],
-      count: 0,
+      countCart: 0,
+      countBillings: 0,
       lang: "RU",
       isLoading: true,
     };
@@ -154,7 +155,8 @@ export default {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
-        this.count = response.data.count;
+        this.countCart = response.data.count;
+        this.countBillings = response.data.billing_count;
       } catch (err) {
         console.log(err);
       }
@@ -215,9 +217,14 @@ export default {
         <img v-if="item.active" :src="item.img_active" alt="" />
         <img v-if="!item.active" :src="item.img" alt="" />
         <span :class="{ red: item.active }">{{ item.name }}</span>
-        <span class="count" v-if="item.route == 'cart' && count > 0">{{
-          count
+        <span class="count" v-if="item.route == 'cart' && countCart > 0">{{
+          countCart
         }}</span>
+        <span
+          class="count"
+          v-if="item.route == 'mypayments' && countBillings > 0"
+          >{{ countBillings }}</span
+        >
       </li>
     </nav>
     <div class="footer">

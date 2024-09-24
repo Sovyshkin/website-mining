@@ -128,10 +128,11 @@ export default {
       try {
         if (this.new_password == this.new_password2) {
           let response = await axios.post(
-            `/users/updatePassword`,
+            `/users/update/password`,
             {
               old_password: this.old_password,
               new_password: this.new_password,
+              otp: this.otp,
             },
             {
               headers: {
@@ -139,18 +140,16 @@ export default {
               },
             }
           );
-          this.message2 = response.data.message;
+          this.message2 = response.data.status;
           if (this.message2 == "ok") {
             this.message2 = "Успешно";
           }
         } else {
           this.message2 = "Пароли не совпадают!";
         }
-        setTimeout(() => {
-          this.message2 = "";
-        }, 2500);
       } catch (err) {
         console.log(err);
+        this.message2 = err.data.description;
       }
     },
 
@@ -227,11 +226,12 @@ export default {
             },
           }
         );
-        this.message4 = response.data.message;
+        this.message4 = response.data.status;
         if (this.message4 == "ok") {
           this.message4 = "Успешно";
           setTimeout(() => {
             this.message4 = "";
+            this.otp = "";
             this.load_info();
           }, 3000);
         }
@@ -240,6 +240,7 @@ export default {
         this.message4 = "Неверный код";
         setTimeout(() => {
           this.message4 = "";
+          this.otp = "";
         }, 3000);
       }
     },
@@ -436,6 +437,15 @@ export default {
               :placeholder="$t('enterNewPassAgain')"
             />
             <span class="group-value">{{ $t("passAgain") }}</span>
+          </div>
+          <div class="group">
+            <input
+              type="text"
+              name="code"
+              v-model="otp"
+              :placeholder="$t('enterCode')"
+            />
+            <span class="group-value">{{ $t("code2fa") }}:</span>
           </div>
           <button class="btn" v-if="!message2" @click="updatePassword">
             {{ $t("changePass") }}
