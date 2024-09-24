@@ -149,7 +149,7 @@ export default {
       @updateFormFeedback="handleFormFeedback"
       style="max-width: 1440px"
     />
-    <Calculator style="max-width: 1440px" />
+    <Calculator @updateLogin="handleLogin" style="max-width: 1440px" />
     <Equipment
       style="max-width: 1440px"
       @updateGoTry="handleTry"
@@ -161,7 +161,7 @@ export default {
     />
     <Advantages style="max-width: 1440px" />
     <Business style="max-width: 1440px" id="business" />
-    <Faq style="max-width: 1440px" id="faq" />
+    <Faq @updateLogin="handleLogin" style="max-width: 1440px" id="faq" />
     <Banner_2 @updateLogin="handleLogin" style="max-width: 1440px" />
     <AppFooter />
   </div>

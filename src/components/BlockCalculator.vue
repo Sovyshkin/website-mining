@@ -122,6 +122,15 @@ export default {
       this.active = num;
       this.calc();
     },
+
+    goOrder() {
+      let token = localStorage.getItem("token");
+      if (token) {
+        this.$router.push({ name: "marketplace" });
+      } else {
+        this.$emit("updateLogin", true);
+      }
+    },
   },
   async mounted() {
     await this.load_info();
@@ -256,9 +265,7 @@ export default {
           <span class="procent">({{ procent }}%)</span>
           <span class="procent">{{ $t("returnInvest") }}</span>
         </div>
-        <div class="earn-time" v-if="dayCalc == '1'">{{ $t("day") }}</div>
-        <div class="earn-time" v-if="dayCalc == '31'">{{ $t("month") }}</div>
-        <div class="earn-time" v-if="dayCalc == '365'">{{ $t("year") }}</div>
+        <button class="btn order" @click="goOrder">Заказать</button>
       </div>
     </div>
   </div>
@@ -561,6 +568,18 @@ input[type="range"]::-webkit-slider-thumb:after {
 .left:hover,
 .right:hover {
   box-shadow: 0 0 10px 0 #00000037;
+}
+
+.order {
+  background-color: transparent;
+  color: #cf0032;
+  border: 2px solid #cf0032;
+  font-weight: 500;
+  padding: 12px 17px;
+}
+
+.order:hover {
+  transform: translateY(-3px);
 }
 
 @media (max-width: 880px) {

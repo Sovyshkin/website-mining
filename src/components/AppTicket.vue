@@ -107,6 +107,16 @@ export default {
   async mounted() {
     this.load_info();
     this.load_messages();
+    setTimeout(() => {
+      let chat = document.querySelector(`.chat`);
+      if (chat) {
+        console.log(chat);
+        console.log(chat.scrollTop);
+        console.log(chat.scrollHeight);
+        chat.scrollTop = chat.scrollHeight;
+        console.log(chat.scrollTop);
+      }
+    }, 500);
     setInterval(() => {
       this.load_messages();
     }, 2500);
@@ -220,6 +230,12 @@ textarea::placeholder {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.chat::-webkit-scrollbar {
+  width: 0;
 }
 
 .wrap-message {
@@ -249,8 +265,8 @@ textarea::placeholder {
 
 .date {
   position: absolute;
-  bottom: 2%;
-  right: 4%;
+  bottom: 4%;
+  right: 7%;
   font-size: 10px;
   font-weight: 500;
   opacity: 60%;
