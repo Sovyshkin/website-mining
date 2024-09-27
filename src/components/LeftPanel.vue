@@ -184,7 +184,6 @@ export default {
           let item = names[i];
           card.name = item;
           this.cards[i] = card;
-          console.log("LEFT PANEL", card);
         }
         this.isLoading = false;
       } catch (err) {

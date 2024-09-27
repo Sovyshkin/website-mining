@@ -1,4 +1,6 @@
 <script>
+import axios from "axios";
+
 export default {
   name: "BlockBusiness",
   components: {},
@@ -38,7 +40,33 @@ export default {
       ],
     };
   },
-  mounted() {},
+  methods: {
+    async load_info() {
+      try {
+        let response = await axios.get(`/miners/get/all`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        console.log("BUSINESS", response);
+        this.cards = response.data.miners_items.slice(0, 4);
+        this.cards[0].main = true;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    goMarket() {
+      let token = localStorage.getItem("token");
+      if (token) {
+        this.$router.push("marketplace");
+      } else {
+        this.$emit("updateLogin", true);
+      }
+    },
+  },
+  mounted() {
+    this.load_info();
+  },
 };
 </script>
 <template>
@@ -50,23 +78,26 @@ export default {
         :class="{ main: card.main }"
         v-for="card in cards"
         :key="card"
+        @click="goMarket"
       >
         <div class="info">
           <div class="main_info">
             <div class="title">{{ card.name }}</div>
             <div class="group">
               <span class="group-name">{{ $t("hash") }}:</span>
-              <span class="group-value">{{ card.hashrate }} TH/s</span>
+              <span class="group-value">{{ card.hash_rate_str }}</span>
             </div>
             <div class="group">
               <span class="group-name">{{ $t("dohod") }}:</span>
               <span class="group-value"
-                >${{ card.profit }}/{{ $t("monthOne") }}</span
+                >${{ card.income }}/{{ $t("monthOne") }}</span
               >
             </div>
             <div class="group">
               <span class="group-name">{{ $t("rashod") }}:</span>
-              <span class="group-value">{{ card.power }} {{ $t("wt") }}</span>
+              <span class="group-value"
+                >{{ card.energy_consumption }} {{ $t("wt") }}</span
+              >
             </div>
           </div>
           <div class="order">

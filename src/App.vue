@@ -160,7 +160,11 @@ export default {
       @updateFormFeedback="handleFormFeedback"
     />
     <Advantages style="max-width: 1440px" />
-    <Business style="max-width: 1440px" id="business" />
+    <Business
+      @updateLogin="handleLogin"
+      style="max-width: 1440px"
+      id="business"
+    />
     <Faq @updateLogin="handleLogin" style="max-width: 1440px" id="faq" />
     <Banner_2 @updateLogin="handleLogin" style="max-width: 1440px" />
     <AppFooter />

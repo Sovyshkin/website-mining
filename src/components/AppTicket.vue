@@ -1,9 +1,10 @@
 <script>
 import axios from "axios";
+import LoadingSpinner from "./LoadingSpinner.vue";
 
 export default {
   name: "AppTicket",
-  components: {},
+  components: { LoadingSpinner },
   data() {
     return {
       title: "",
@@ -12,6 +13,7 @@ export default {
       lang: "",
       ticket: {},
       messages: [],
+      isLoading: false,
     };
   },
   methods: {
@@ -23,7 +25,7 @@ export default {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
-        console.log(response);
+        console.log("TICKET INFO", response);
         this.ticket = response.data.ticket;
         let res = await axios.get(`/users/${localStorage.getItem("id")}`, {
           headers: {
@@ -103,6 +105,32 @@ export default {
         }
       }
     },
+
+    async closeTicket() {
+      try {
+        this.isLoading = true;
+        let response = await axios.post(
+          `/tickets/close`,
+          {
+            id: this.id,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        console.log(response);
+        let status = response.data.status;
+        if (status == "ok") {
+          this.$router.go(-1);
+        }
+      } catch (err) {
+        console.log(err);
+      } finally {
+        this.isLoading = false;
+      }
+    },
   },
   async mounted() {
     this.load_info();
@@ -124,15 +152,21 @@ export default {
 };
 </script>
 <template>
-  <div class="wrapper">
+  <LoadingSpinner v-if="isLoading" />
+  <div class="wrapper" v-else>
     <div class="wrap-title">
-      <img
-        @click="$router.push({ name: 'tickets' })"
-        class="back"
-        src="../assets/back.png"
-        alt=""
-      />
-      <h1>{{ ticket.title }}</h1>
+      <div class="title">
+        <img
+          @click="$router.push({ name: 'tickets' })"
+          class="back"
+          src="../assets/back.png"
+          alt=""
+        />
+        <h1>{{ ticket.title }}</h1>
+      </div>
+      <button v-if="ticket.is_open" class="btn" @click="closeTicket()">
+        {{ $t("closeTicket") }}
+      </button>
     </div>
     <div class="info">
       <div class="group">
@@ -161,7 +195,7 @@ export default {
         </div>
       </div>
     </div>
-    <div class="group-send">
+    <div class="group-send" v-if="ticket.is_open">
       <textarea
         v-model="text"
         name="text"
@@ -299,6 +333,14 @@ textarea {
 }
 
 .wrap-title {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.title {
   display: flex;
   align-items: center;
   gap: 10px;

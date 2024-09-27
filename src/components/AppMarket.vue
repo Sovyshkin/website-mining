@@ -115,7 +115,7 @@ export default {
           ></div>
         </div>
         <div class="time_profit">
-          {{ $t("timeProfit") }}: {{ card.payback }}
+          {{ $t("timeProfit") }}: {{ card.payback }} {{ $t("months") }}
         </div>
         <div class="info">
           <span class="price">${{ card.price }}</span>

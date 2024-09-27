@@ -62,7 +62,15 @@ export default {
 </script>
 <template>
   <div class="wrapper">
-    <h1>{{ $t("myTickets") }}</h1>
+    <div class="wrap-title">
+      <img
+        @click="$router.push({ name: 'support' })"
+        class="back"
+        src="../assets/back.png"
+        alt=""
+      />
+      <h1>{{ $t("myTickets") }}</h1>
+    </div>
     <div
       class="ticket"
       @click="$router.push({ name: 'ticket', query: { id: ticket.id } })"
@@ -118,5 +126,17 @@ export default {
   font-size: 18px;
   line-height: 18px;
   font-weight: 500;
+}
+
+.wrap-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.back {
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
 }
 </style>
