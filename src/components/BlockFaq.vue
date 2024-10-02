@@ -162,12 +162,29 @@ mining equipment depend on its profitability, and profitability depends on
   },
   async mounted() {
     try {
-      let response = await axios.get(`/users/${localStorage.getItem("id")}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      this.lang = response.data.user.lang;
+      let id = localStorage.getItem("id");
+      if (id) {
+        let response = await axios.get(`/users/${id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        this.lang = response.data.user.lang;
+      } else {
+        setInterval(() => {
+          this.lang = localStorage.getItem("lang");
+          console.log("Сработало");
+          if (this.lang == "RU") {
+            this.cards = this.cards_ru;
+          } else if (this.lang == "EN") {
+            this.cards = this.cards_en;
+          } else if (this.lang == "HE") {
+            this.cards = this.cards_he;
+          } else {
+            this.cards = this.cards_ru;
+          }
+        }, 1000);
+      }
       if (this.lang == "RU") {
         this.cards = this.cards_ru;
       } else if (this.lang == "EN") {
@@ -187,7 +204,7 @@ mining equipment depend on its profitability, and profitability depends on
   <div class="wrapper">
     <div class="wrap-title">
       <h2>FAQ</h2>
-      <div class="wrap-btns">
+      <div class="wrap-btns" v-if="$route.name == 'support'">
         <button @click="goCreate" class="btn">{{ $t("createTicket") }}</button>
         <button @click="goTickets" class="btn myTickets">
           {{ $t("myTickets") }}

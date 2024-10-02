@@ -1,16 +1,25 @@
 <script>
 import axios from "axios";
+import LoadingSpinner from "./LoadingSpinner.vue";
 export default {
   name: "AppRegister",
+  components: { LoadingSpinner },
   data() {
     return {
       name: "",
+      nameFill: false,
       surname: "",
+      surnameFill: false,
       password: "",
+      passFill: false,
       password2: "",
+      pass2Fill: false,
       number: "+7",
+      numberFill: false,
       email: "",
+      emailFill: "",
       message: "",
+      isLoading: false,
     };
   },
   computed: {
@@ -26,39 +35,72 @@ export default {
 
     async login() {
       try {
-        let response = await axios.post(`/auth/register`, {
-          firstname: this.name,
-          lastname: this.surname,
-          email: this.email,
-          password: this.password,
-          phone: this.number,
-        });
-        this.message = response.data.message;
-        console.log(this.message);
-        if (this.message == "ok") {
-          this.message = "Успешно";
+        if (
+          this.name &&
+          this.surname &&
+          this.password &&
+          this.number.length > 11 &&
+          this.email
+        ) {
+          (this.nameFill = false),
+            (this.surnameFill = false),
+            (this.passFill = false),
+            (this.numberFill = false),
+            (this.emailFill = false);
+          this.isLoading = true;
+          let response = await axios.post(`/auth/register`, {
+            firstname: this.name,
+            lastname: this.surname,
+            email: this.email,
+            password: this.password,
+            phone: this.number,
+          });
+          let status = response.status;
+          console.log(response);
+          if (status == "200") {
+            this.message = "Успешно";
+          }
+          setTimeout(() => {
+            this.message = "";
+            this.$emit("updateRegister", false);
+          }, 3000);
         } else {
-          this.message = "Ошибка";
+          if (!this.name) {
+            this.nameFill = true;
+          }
+          if (!this.surname) {
+            this.surnameFill = true;
+          }
+          if (!this.password) {
+            this.passFill = true;
+          }
+          if (this.number.length < 11) {
+            this.numberFill = true;
+          }
+          if (!this.email) {
+            this.emailFill = true;
+          }
         }
-        setTimeout(() => {
-          this.message = "";
-          this.$emit("updateRegister", false);
-        }, 3000);
       } catch (err) {
         console.log(err.response.data.detail);
         if (err.response.data.detail == "User already exists") {
           this.message = "Пользователь с такими данными уже существует";
+          (this.nameFill = true),
+            (this.surnameFill = true),
+            (this.passFill = true),
+            (this.pass2Fill = true),
+            (this.numberFill = true),
+            (this.emailFill = true);
           setTimeout(() => {
             this.message = "";
           }, 3000);
         }
+      } finally {
+        this.isLoading = false;
       }
     },
     updateValue(e) {
       let input = e.target.value.replace(/[^+\d]/g, "");
-      if (input.length > 12) {
-        input = input.slice(0, 12);
-      }
       if (!input.startsWith("+")) {
         input = "+";
       }
@@ -74,6 +116,7 @@ export default {
 </script>
 <template>
   <div class="wrapper">
+    <LoadingSpinner v-if="isLoading" />
     <div class="card">
       <div class="cancel">
         <span class="title">{{ $t("registration") }}</span>
@@ -85,8 +128,11 @@ export default {
           name="name"
           v-model="name"
           :placeholder="$t('enterName')"
+          :class="{ nofillBorder: nameFill }"
         />
-        <span class="group-value">{{ $t("name") }}</span>
+        <span class="group-value" :class="{ nofillText: nameFill }">{{
+          $t("name")
+        }}</span>
       </div>
       <div class="group">
         <input
@@ -94,8 +140,11 @@ export default {
           name="surname"
           v-model="surname"
           :placeholder="$t('enterSurname')"
+          :class="{ nofillBorder: surnameFill }"
         />
-        <span class="group-value">{{ $t("surname") }}</span>
+        <span class="group-value" :class="{ nofillText: surnameFill }">{{
+          $t("surname")
+        }}</span>
       </div>
       <div class="group">
         <input
@@ -103,8 +152,11 @@ export default {
           name="email"
           v-model="email"
           :placeholder="$t('enterEmail')"
+          :class="{ nofillBorder: emailFill }"
         />
-        <span class="group-value">Email</span>
+        <span class="group-value" :class="{ nofillText: emailFill }"
+          >Email</span
+        >
       </div>
       <div class="group">
         <input
@@ -112,12 +164,14 @@ export default {
           @input="updateValue($event)"
           type="tel"
           size="20"
-          maxlength="12"
           required
           name="number"
           placeholder="+7"
+          :class="{ nofillBorder: numberFill }"
         />
-        <span class="group-value">{{ $t("phone") }}</span>
+        <span class="group-value" :class="{ nofillText: numberFill }">{{
+          $t("phone")
+        }}</span>
       </div>
       <div class="group">
         <input
@@ -125,8 +179,11 @@ export default {
           name="password"
           v-model="password"
           :placeholder="$t('enterPass')"
+          :class="{ nofillBorder: passFill }"
         />
-        <span class="group-value">{{ $t("pass") }}</span>
+        <span class="group-value" :class="{ nofillText: passFill }">{{
+          $t("pass")
+        }}</span>
       </div>
       <!-- <div class="group">
         <input
@@ -288,6 +345,14 @@ input::placeholder {
 
 .error {
   background-color: #cf0032;
+}
+
+.nofillBorder {
+  border: 1px solid #cf0032;
+}
+
+.nofillText {
+  color: #cf0032;
 }
 
 @media (max-width: 680px) {

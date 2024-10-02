@@ -77,14 +77,35 @@ export default {
     },
 
     printType(type) {
-      if (type == "hosting") {
-        return "Плата за хостинг";
-      } else if (type == "reward") {
-        return "Награда за майнинг";
-      } else if (type == "payout") {
-        return "Вывод средств";
+      let lang = localStorage.getItem("lang");
+      if (lang == "RU") {
+        if (type == "hosting") {
+          return "Плата за хостинг";
+        } else if (type == "reward") {
+          return "Награда за майнинг";
+        } else if (type == "payout") {
+          return "Вывод средств";
+        }
+        return "";
+      } else if (lang == "EN") {
+        if (type == "hosting") {
+          return "Hosting fees";
+        } else if (type == "reward") {
+          return "Mining Reward";
+        } else if (type == "payout") {
+          return "Withdrawal of funds";
+        }
+        return "";
+      } else if (lang == "HE") {
+        if (type == "hosting") {
+          return "דמי אירוח";
+        } else if (type == "reward") {
+          return "פרס כרייה";
+        } else if (type == "payout") {
+          return "משיכת כספים";
+        }
+        return "";
       }
-      return "";
     },
 
     printStatus(state) {

@@ -7,18 +7,18 @@ export default {
     return {
       lang: "RU",
       names: {
-        marketplace: "Маркет",
+        marketplace: this.$t("market"),
         main: this.$t("main"),
-        dashboard: "Приборная панель",
-        myminers: "Мои майнеры",
-        mypayments: "Мои платежи",
-        accruals: "Начисления и списания",
+        dashboard: this.$t("dash"),
+        myminers: this.$t("myMiners"),
+        mypayments: this.$t("myPayments"),
+        accruals: this.$t("accruals"),
         cart: this.$t("cart"),
-        support: "Центр помощи",
-        profile: "Профиль",
-        payment: "Платеж",
-        tickets: "Мои тикеты",
-        ticket: "Тикет",
+        support: this.$t("centerHelp"),
+        profile: this.$t("profile"),
+        payment: this.$t("payment"),
+        tickets: this.$t("myTickets"),
+        ticket: this.$t("ticket"),
       },
       id: null,
       avatar: "",
@@ -89,24 +89,56 @@ export default {
       }
     },
 
+    loadLang() {
+      try {
+        this.lang = localStorage.getItem("lang");
+        console.log(localStorage.getItem("lang"));
+        if (this.lang) {
+          this.i18n.locale = this.lang;
+        } else {
+          this.lang = "RU";
+        }
+        let app = document.querySelector(`.wrap`);
+        if (this.lang == "HE") {
+          app.style.direction = "rtl";
+        } else {
+          app.style.direction = "ltr";
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
     async changeLang(lang) {
       try {
         this.lang = lang;
-        let response = await axios.post(
-          `/users/update/lang`,
-          {
-            lang: lang,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
+        if (this.id != null) {
+          let response = await axios.post(
+            `/users/update/lang`,
+            {
+              lang: lang,
             },
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }
+          );
+          console.log(response);
+          if (response.data.status == "ok") {
+            this.$i18n.locale = lang;
+            localStorage.setItem("lang", this.lang);
+            location.reload();
           }
-        );
-        console.log(response);
-        if (response.data.status == "ok") {
-          this.$i18n.locale = lang;
-          location.reload();
+        } else {
+          localStorage.setItem("lang", this.lang);
+          this.$i18n.locale = this.lang;
+          let app = document.querySelector(`.wrap`);
+          if (this.lang == "HE") {
+            app.style.direction = "rtl";
+          } else {
+            app.style.direction = "ltr";
+          }
         }
       } catch (err) {
         console.log(err);
@@ -120,7 +152,13 @@ export default {
     window.addEventListener("storage", () => {
       this.id = localStorage.getItem("id") || null;
     });
-    this.load_avatar();
+    if (this.id != null) {
+      console.log("я тут");
+      this.load_avatar();
+    } else {
+      console.log("Я ТУТ");
+      this.loadLang();
+    }
   },
 };
 </script>
@@ -136,11 +174,17 @@ export default {
       <li @click="scrollToBottom('services')" class="item-nav">
         {{ $t("services") }}
       </li>
+      <li @click="scrollToBottom('equipment')" class="item-nav">
+        {{ $t("equipment") }}
+      </li>
+      <li @click="scrollToBottom('advantages')" class="item-nav">
+        {{ $t("advantages") }}
+      </li>
       <li @click="scrollToBottom('business')" class="item-nav">
         {{ $t("business") }}
       </li>
-      <li @click="scrollToBottom('equipment')" class="item-nav">
-        {{ $t("equipment") }}
+      <li @click="scrollToBottom('faq')" class="item-nav">
+        {{ $t("information") }}
       </li>
       <li @click="scrollToBottom('test')" class="item-nav">{{ $t("test") }}</li>
     </nav>
@@ -285,7 +329,7 @@ export default {
 .group-nav {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 7px;
   list-style: none;
 }
 

@@ -137,7 +137,9 @@ export default {
             >
           </div>
         </div>
-        <button @click="goTry(card.id)" class="btn">{{ $t("order") }}</button>
+        <button @click.stop.prevent="goTry(card.id)" class="btn">
+          {{ $t("order") }}
+        </button>
       </div>
     </div>
   </div>

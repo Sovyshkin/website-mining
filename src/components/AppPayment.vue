@@ -81,12 +81,29 @@ export default {
     },
 
     printType(type) {
-      if (type == "hosting") {
-        return "Плата за хостинг";
-      } else if (type == "buy_request") {
-        return "Покупка";
+      let lang = localStorage.getItem("lang");
+      if (lang == "RU") {
+        if (type == "hosting") {
+          return "Плата за хостинг";
+        } else if (type == "buy_request") {
+          return "Покупка";
+        }
+        return "";
+      } else if (lang == "EN") {
+        if (type == "hosting") {
+          return "Hosting fees";
+        } else if (type == "buy_request") {
+          return "Purchase";
+        }
+        return "";
+      } else if (lang == "HE") {
+        if (type == "hosting") {
+          return "דמי אירוח";
+        } else if (type == "buy_request") {
+          return "רכישה";
+        }
+        return "";
       }
-      return "";
     },
 
     printStatus(state) {
@@ -162,7 +179,8 @@ export default {
       <input
         type="text"
         v-model="payment_data"
-        placeholder="Введите номер платежа"
+        :placeholder="$t('enterNumberPayment')"
+        :disabled="card.state == 'completed' || card.state == 'canceled'"
       />
     </div>
     <div class="group-payment">
@@ -184,7 +202,11 @@ export default {
       </button>
       <button
         class="btn cancel bx"
-        v-if="card.type != 'hosting' && card.type != 'completed'"
+        v-if="
+          card.type != 'hosting' &&
+          card.state != 'completed' &&
+          card.state != 'canceled'
+        "
         @click="cancelPayment"
       >
         {{ $t("cancel") }}
@@ -192,7 +214,7 @@ export default {
       <button
         class="btn save bx"
         @click="saveData"
-        v-if="card.type != 'completed'"
+        v-if="card.state != 'completed' && card.state != 'canceled'"
       >
         {{ $t("save") }}
       </button>

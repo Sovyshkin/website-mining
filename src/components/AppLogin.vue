@@ -1,14 +1,20 @@
 <script>
 import axios from "axios";
+import LoadingSpinner from "./LoadingSpinner.vue";
 export default {
   name: "AppLogin",
+  components: { LoadingSpinner },
   data() {
     return {
       email: "",
+      emailFill: false,
       password: "",
+      passFill: false,
       auth: false,
       code: "",
+      codeFill: false,
       message: "",
+      isLoading: false,
     };
   },
   methods: {
@@ -20,6 +26,9 @@ export default {
     async login() {
       try {
         if (this.email && this.password) {
+          this.isLoading = true;
+          this.emailFill = false;
+          this.passFill = false;
           let response = await axios.post(`/auth/login`, {
             email: this.email,
             password: this.password,
@@ -28,18 +37,31 @@ export default {
           if (msg == "check email") {
             this.auth = true;
           }
+        } else {
+          if (!this.email) {
+            this.emailFill = true;
+          }
+          if (!this.password) {
+            this.passFill = true;
+          }
         }
       } catch (res) {
         this.message = "Пользователь с такими данными не найден";
+        this.emailFill = true;
+        this.passFill = true;
         setTimeout(() => {
           this.message = "";
         }, 2500);
+      } finally {
+        this.isLoading = false;
       }
     },
 
     async verify() {
       try {
         if (this.code) {
+          this.isLoading = true;
+          this.codeFill = false;
           let response = await axios.post(`/auth/verify_totp`, {
             email: this.email,
             otp: this.code,
@@ -59,12 +81,19 @@ export default {
           } else {
             console.log(response);
           }
+        } else {
+          this.codeFill = true;
         }
       } catch (res) {
         let response = res.response.data.detail;
-        if (response) {
-          console.log;
-        }
+        console.log(response);
+        this.message = "Неверный код";
+        this.codeFill = true;
+        setTimeout(() => {
+          this.message = "";
+        }, 2500);
+      } finally {
+        this.isLoading = false;
       }
     },
   },
@@ -76,6 +105,7 @@ export default {
 </script>
 <template>
   <div class="wrapper">
+    <LoadingSpinner v-if="isLoading" />
     <div class="card" v-if="!auth">
       <div class="cancel">
         <span class="title">{{ $t("login") }}</span>
@@ -88,8 +118,17 @@ export default {
           id="email"
           v-model="email"
           :placeholder="$t('enterEmail')"
+          :class="{
+            nofillBorder: emailFill,
+          }"
         />
-        <span class="group-value">Email</span>
+        <span
+          class="group-value"
+          :class="{
+            nofillText: emailFill,
+          }"
+          >Email</span
+        >
       </div>
       <div class="group">
         <input
@@ -97,8 +136,17 @@ export default {
           name="pass"
           v-model="password"
           :placeholder="$t('enterPass')"
+          :class="{
+            nofillBorder: passFill,
+          }"
         />
-        <span class="group-value">{{ $t("pass") }}</span>
+        <span
+          class="group-value"
+          :class="{
+            nofillText: passFill,
+          }"
+          >{{ $t("pass") }}</span
+        >
       </div>
       <div class="forget_pass">
         <a @click="this.$emit('updateReset', true)" href="#">{{
@@ -136,8 +184,17 @@ export default {
           name="code"
           v-model="code"
           :placeholder="$t('enterCode')"
+          :class="{
+            nofillBorder: codeFill,
+          }"
         />
-        <span class="group-value">{{ $t("emailCode") }} email</span>
+        <span
+          class="group-value"
+          :class="{
+            nofillText: codeFill,
+          }"
+          >{{ $t("emailCode") }} email</span
+        >
       </div>
       <button @click="verify" v-if="!message" class="btn">
         {{ $t("login") }}
@@ -202,6 +259,7 @@ export default {
   font-weight: 500;
   font-size: 16px;
   line-height: 16px;
+  outline: none;
 }
 
 .log {
@@ -272,5 +330,13 @@ input::placeholder {
 .card:hover {
   cursor: auto;
   transform: none;
+}
+
+.nofillBorder {
+  border: 1px solid #cf0032;
+}
+
+.nofillText {
+  color: #cf0032;
 }
 </style>

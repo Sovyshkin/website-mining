@@ -25,6 +25,7 @@ export default {
 .wrapper {
   margin-top: 40px;
   padding: 0 40px;
+  width: 100%;
 }
 
 .banner {

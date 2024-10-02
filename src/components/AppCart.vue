@@ -108,13 +108,18 @@ export default {
           }
         );
         this.status = response.status;
+        console.log(response);
         if (this.status == 200) {
           this.message = "Успешно";
+          let id = response.data.billing_id;
           setTimeout(() => {
             this.message = "";
             this.cards = [];
             this.summary = 0;
-          }, 3500);
+            if (id) {
+              this.$router.push({ name: "payment", query: { id: id } });
+            }
+          }, 2000);
         } else {
           this.message = "Ошибка";
         }

@@ -7,7 +7,7 @@ const messages = {
     business: "Ready business",
     equipment: "Equipment",
     test: "Test mode",
-    login: "Log in",
+    login: "Authorization",
     main: "Main",
     block1_1:
       "Immerse yourself in the world of Bitcoin mining today. It's easier than it seems",
@@ -194,13 +194,16 @@ const messages = {
     enterText: "Enter a message...",
     myTickets: "My tickets",
     ticket: "Ticket",
+    enterNumberPayment: "Enter the payment number",
+    advantages: "Advantages",
+    information: "Information",
   },
   RU: {
     services: "Наши сервисы",
     business: "Готовый бизнес",
     equipment: "Оборудование",
     test: "Тест режим",
-    login: "Вход",
+    login: "Авторизация",
     main: "Главная",
     block1_1:
       "Погрузитесь в мир майнинга Биткойна уже сегодня. Это проще чем кажется",
@@ -389,13 +392,16 @@ const messages = {
     myTickets: "Мои тикеты",
     ticket: "Тикет",
     closeTicket: "Закрыть тикет",
+    enterNumberPayment: "Введите номер платежа",
+    advantages: "Преимущества",
+    information: "Информация",
   },
   HE: {
     services: "השירותים שלנו",
     business: "עסק מוכן",
     equipment: "ציוד",
     test: "מבחן מצב",
-    login: "כניסה",
+    login: "הרשאה",
     main: "ראשי",
     block1_1: "צלול לעולם כריית הביטקוין היום. זה קל יותר ממה שזה נראה",
     block1_2:
@@ -580,6 +586,9 @@ const messages = {
     enterText: "הקלד הודעה...",
     myTickets: "הפוסטים שלי",
     ticket: "כרטיס כניסה",
+    enterNumberPayment: "הזן את מספר התשלום",
+    advantages: "יתרונות",
+    information: "מידע",
   },
 };
 

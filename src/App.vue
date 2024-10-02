@@ -149,7 +149,7 @@ export default {
       @updateFormFeedback="handleFormFeedback"
       style="max-width: 1440px"
     />
-    <Calculator @updateLogin="handleLogin" style="max-width: 1440px" />
+    <Calculator @updateGoTry="handleTry" style="max-width: 1440px" />
     <Equipment
       style="max-width: 1440px"
       @updateGoTry="handleTry"
@@ -159,7 +159,7 @@ export default {
       style="max-width: 1440px"
       @updateFormFeedback="handleFormFeedback"
     />
-    <Advantages style="max-width: 1440px" />
+    <Advantages style="max-width: 1440px" id="advantages" />
     <Business
       @updateLogin="handleLogin"
       style="max-width: 1440px"
@@ -376,7 +376,7 @@ button::-moz-focus-inner {
 }
 
 .success {
-  background-color: #45ed0b;
+  background-color: #3cca0d;
 }
 
 .error {

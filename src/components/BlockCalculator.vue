@@ -128,7 +128,7 @@ export default {
       if (token) {
         this.$router.push({ name: "marketplace" });
       } else {
-        this.$emit("updateLogin", true);
+        this.$emit("updateGoTry", true);
       }
     },
   },
@@ -200,6 +200,7 @@ export default {
               min="30000"
               max="130000"
               type="range"
+              oninput="this.style.background = #cf0032"
               class="range"
               id="range2"
             />
@@ -444,26 +445,6 @@ export default {
   height: 7px;
 }
 
-/* Для Chrome и Safari */
-.range::-webkit-slider-thumb {
-  background-color: #cf0132;
-}
-
-/* Для Firefox */
-.range::-moz-range-thumb {
-  background-color: #cf0132;
-}
-
-/* Для Edge */
-.range::-ms-thumb {
-  background-color: #cf0132;
-}
-
-/* Для IE */
-.range::-o-range-thumb {
-  background-color: #cf0132;
-}
-
 .inputs_range {
   display: flex;
   flex-direction: column;
@@ -508,44 +489,6 @@ span {
   opacity: 50%;
 }
 
-/* input[type="range"] {
-  overflow-x: hidden;
-  width: 100%;
-  height: 7px;
-  -webkit-appearance: none;
-  background-color: #f5f5f8;
-  border-radius: 5px;
-}
-
-input[type="range"]::-webkit-slider-runnable-track {
-  height: 10px;
-  -webkit-appearance: none;
-  color: #13bba4;
-  margin-top: -1px;
-}
-
-input[type="range"]::-webkit-slider-thumb {
-  width: 15px;
-  -webkit-appearance: none;
-  height: 15px;
-  cursor: ew-resize;
-  border-radius: 100%;
-  background: #cf0132;
-  box-shadow: -2000px 0 0 2000px #cf0132;
-}
-input[type="range"]::-moz-range-progress {
-  background-color: #cf0132;
-}
-input[type="range"]::-moz-range-track {
-  background-color: #f5f5f8;
-}
-input[type="range"]::-ms-fill-lower {
-  background-color: #cf0132;
-}
-input[type="range"]::-ms-fill-upper {
-  background-color: #f5f5f8;
-} */
-
 input[type="range"]::-webkit-slider-thumb:after {
   content: "";
   position: absolute;
@@ -558,6 +501,59 @@ input[type="range"]::-webkit-slider-thumb:after {
   transform: rotateX(90deg);
   transform-origin: 0 0px 0;
   transform: rotateX(90deg) translateY(-140px) translateZ(-18px);
+}
+
+input[type="range"] {
+  /* removing default appearance */
+  -webkit-appearance: none;
+  appearance: none;
+  /* creating a custom design */
+  width: 100%;
+  cursor: pointer;
+  outline: none;
+  /*  slider progress trick  */
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+/* Track: webkit browsers */
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 15px;
+  background: #ccc;
+  border-radius: 16px;
+}
+
+/* Track: Mozilla Firefox */
+input[type="range"]::-moz-range-track {
+  height: 15px;
+  background: #ccc;
+  border-radius: 16px;
+}
+
+/* Thumb: webkit */
+input[type="range"]::-webkit-slider-thumb {
+  /* removing default appearance */
+  -webkit-appearance: none;
+  appearance: none;
+  /* creating a custom design */
+  height: 15px;
+  width: 15px;
+  background-color: #fff;
+  border-radius: 50%;
+  border: 2px solid #cf0132;
+  /*  slider progress trick  */
+  box-shadow: -407px 0 0 400px #cf0132;
+}
+
+/* Thumb: Firefox */
+input[type="range"]::-moz-range-thumb {
+  height: 15px;
+  width: 15px;
+  background-color: #fff;
+  border-radius: 50%;
+  border: 1px solid #cf0132;
+  /*  slider progress trick  */
+  box-shadow: -407px 0 0 400px #cf0132;
 }
 
 .left,

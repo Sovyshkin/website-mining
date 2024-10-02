@@ -1,43 +1,10 @@
 <script>
-import clock from "../assets/clock.svg";
-import driverRefresh from "../assets/driver-refresh.svg";
-import pcPhone from "../assets/pcPhone.svg";
-import verify from "../assets/verify.svg";
-import support from "../assets/24-support.svg";
 import axios from "axios";
 export default {
   name: "BlockAdvantages",
   components: {},
   data() {
-    return {
-      cards: [
-        {
-          img: clock,
-          title: this.$t("uptime"),
-          desc: this.$t("stableConnect"),
-        },
-        {
-          img: support,
-          title: this.$t("support"),
-          desc: this.$t("supportText"),
-        },
-        {
-          img: verify,
-          title: this.$t("garant"),
-          desc: this.$t("garantText"),
-        },
-        {
-          img: driverRefresh,
-          title: this.$t("fastConnect"),
-          desc: this.$t("fastConnectText"),
-        },
-        {
-          img: pcPhone,
-          title: this.$t("control"),
-          desc: this.$t("controlText"),
-        },
-      ],
-    };
+    return {};
   },
   async mounted() {
     try {
@@ -57,10 +24,30 @@ export default {
   <div class="wrapper">
     <h2>{{ $t("usAdvantages") }}</h2>
     <div class="cards">
-      <div class="card" v-for="card in cards" :key="card">
-        <img :src="card.img" alt="" class="icon" />
-        <div class="title">{{ card.title }}</div>
-        <div class="desc">{{ card.desc }}</div>
+      <div class="card">
+        <img src="../assets/clock.svg" alt="" class="icon" />
+        <div class="title">{{ $t("uptime") }}</div>
+        <div class="desc">{{ $t("stableConnect") }}</div>
+      </div>
+      <div class="card">
+        <img src="../assets/24-support.svg" alt="" class="icon" />
+        <div class="title">{{ $t("support") }}</div>
+        <div class="desc">{{ $t("supportText") }}</div>
+      </div>
+      <div class="card">
+        <img src="../assets/verify.svg" alt="" class="icon" />
+        <div class="title">{{ $t("garant") }}</div>
+        <div class="desc">{{ $t("garantText") }}</div>
+      </div>
+      <div class="card">
+        <img src="../assets/driver-refresh.svg" alt="" class="icon" />
+        <div class="title">{{ $t("fastConnect") }}</div>
+        <div class="desc">{{ $t("fastConnectText") }}</div>
+      </div>
+      <div class="card">
+        <img src="../assets/pcPhone.svg" alt="" class="icon" />
+        <div class="title">{{ $t("control") }}</div>
+        <div class="desc">{{ $t("controlText") }}</div>
       </div>
     </div>
   </div>
@@ -72,6 +59,7 @@ h2 {
 .wrapper {
   margin-top: 40px;
   padding: 0 40px;
+  width: 100%;
 }
 
 .cards {

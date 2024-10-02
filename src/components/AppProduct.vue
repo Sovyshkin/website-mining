@@ -77,7 +77,15 @@ export default {
 <template>
   <LoadingSpinner v-if="isLoading" />
   <div class="wrapper" v-else>
-    <h2>{{ card.name }}</h2>
+    <div class="wrap-title">
+      <img
+        @click="$router.go(-1)"
+        class="back"
+        src="../assets/back.png"
+        alt=""
+      />
+      <h1>{{ card.name }}</h1>
+    </div>
     <div class="card">
       <img class="asic" v-if="card.image" :src="card.image.url" alt="" />
       <div class="info">
@@ -363,6 +371,19 @@ export default {
 
 .buy:hover {
   transform: translateY(-3px);
+}
+
+.wrap-title {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.back {
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
 }
 
 @media (max-width: 765px) {

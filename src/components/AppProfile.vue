@@ -260,6 +260,26 @@ export default {
     goChange(b) {
       this.$emit("updateAvatar", b);
     },
+
+    async deleteWallet() {
+      try {
+        let response = await axios.get(`/users/wallet/delete`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        console.log(response);
+        if (response.status == "200") {
+          this.message4 = "Успешно";
+          setTimeout(() => {
+            this.message4 = "";
+          }, 2500);
+        }
+      } catch (err) {
+        console.log(err);
+        this.message4 = "Ошибка";
+      }
+    },
   },
   mounted() {
     document.body.style.overflow = "auto";
@@ -548,7 +568,7 @@ export default {
             <input type="text" name="wallet" v-model="wallet" placeholder="" />
             <span class="group-value">{{ $t("wallet") }} №1</span>
           </div>
-          <button class="btn">{{ $t("getQr") }}</button>
+          <button @click="deleteWallet" class="btn">{{ $t("delete") }}</button>
         </div>
       </div>
       <div class="connect_wallet">
