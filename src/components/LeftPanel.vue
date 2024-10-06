@@ -150,13 +150,16 @@ export default {
 
     async loadCart() {
       try {
-        let response = await axios.get(`/market/cart/get/all`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-        this.countCart = response.data.count;
-        this.countBillings = response.data.billing_count;
+        let token = localStorage.getItem("token");
+        if (token) {
+          let response = await axios.get(`/market/cart/get/all`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          this.countCart = response.data.count;
+          this.countBillings = response.data.billing_count;
+        }
       } catch (err) {
         console.log(err);
       }

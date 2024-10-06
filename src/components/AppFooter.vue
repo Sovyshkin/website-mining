@@ -155,7 +155,7 @@ export default {
         <span>WhatsApp</span>
         <img src="../assets/Telegram.svg" alt="" />
         <span>Telegram</span>
-        <span>+972 50-8981614</span>
+        <span class="number">+972 50-8981614</span>
       </div>
       <div class="group-span">
         <span class="text">{{ $t("policy") }}</span>
@@ -300,6 +300,10 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+.number {
+  direction: ltr !important;
 }
 
 @media (max-width: 850px) {

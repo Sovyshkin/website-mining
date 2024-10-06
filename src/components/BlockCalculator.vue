@@ -538,7 +538,7 @@ input[type="range"]::-webkit-slider-thumb {
   /* creating a custom design */
   height: 15px;
   width: 15px;
-  background-color: #fff;
+  background-color: #cf0132;
   border-radius: 50%;
   border: 2px solid #cf0132;
   /*  slider progress trick  */
@@ -549,7 +549,7 @@ input[type="range"]::-webkit-slider-thumb {
 input[type="range"]::-moz-range-thumb {
   height: 15px;
   width: 15px;
-  background-color: #fff;
+  background-color: #cf0132;
   border-radius: 50%;
   border: 1px solid #cf0132;
   /*  slider progress trick  */

@@ -76,14 +76,17 @@ export default {
     async load_info() {
       try {
         this.isLoading = true;
-        let response = await axios.get(`/market/cart/get/all`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-        this.cards = response.data.data;
-        this.summary = response.data.summary;
-        console.log(this.cards);
+        let token = localStorage.getItem("token");
+        if (token) {
+          let response = await axios.get(`/market/cart/get/all`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          this.cards = response.data.data;
+          this.summary = response.data.summary;
+          console.log(this.cards);
+        }
       } catch (err) {
         console.log(err);
       } finally {

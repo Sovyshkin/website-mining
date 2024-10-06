@@ -440,6 +440,10 @@ export default {
   border: 1px solid #fff;
 }
 
+.number {
+  direction: ltr !important;
+}
+
 @media (max-width: 1000px) {
   .group-nav {
     display: none;

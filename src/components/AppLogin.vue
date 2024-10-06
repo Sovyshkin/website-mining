@@ -33,9 +33,11 @@ export default {
             email: this.email,
             password: this.password,
           });
-          let msg = response.data.message;
-          if (msg == "check email") {
+          let msg = response.data.status;
+          if (msg == "ok") {
             this.auth = true;
+          } else {
+            this.message = this.$t(`${response.data.description}`);
           }
         } else {
           if (!this.email) {
@@ -46,7 +48,8 @@ export default {
           }
         }
       } catch (res) {
-        this.message = "Пользователь с такими данными не найден";
+        console.log(res);
+        this.message = "Error";
         this.emailFill = true;
         this.passFill = true;
         setTimeout(() => {

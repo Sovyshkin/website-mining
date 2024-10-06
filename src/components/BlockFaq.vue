@@ -173,7 +173,6 @@ mining equipment depend on its profitability, and profitability depends on
       } else {
         setInterval(() => {
           this.lang = localStorage.getItem("lang");
-          console.log("Сработало");
           if (this.lang == "RU") {
             this.cards = this.cards_ru;
           } else if (this.lang == "EN") {

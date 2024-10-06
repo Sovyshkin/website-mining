@@ -32,10 +32,12 @@ export default {
       message3: "",
       message4: "",
       message5: "",
+      messageWallet: "",
       mfa_url: "",
       confirm2fa: false,
       mfa: false,
       isLoading: false,
+      otp2: "",
     };
   },
   computed: {
@@ -228,7 +230,7 @@ export default {
         );
         this.message4 = response.data.status;
         if (this.message4 == "ok") {
-          this.message4 = "Успешно";
+          this.message4 = this.$t("success");
           setTimeout(() => {
             this.message4 = "";
             this.otp = "";
@@ -263,21 +265,35 @@ export default {
 
     async deleteWallet() {
       try {
-        let response = await axios.get(`/users/wallet/delete`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-        console.log(response);
-        if (response.status == "200") {
-          this.message4 = "Успешно";
+        if (this.otp2) {
+          let response = await axios.post(
+            `/users/wallet/delete`,
+            {
+              otp: this.otp2,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }
+          );
+          console.log(response);
+          if (response.status == "200") {
+            this.messageWallet = this.$t("success");
+            setTimeout(() => {
+              this.messageWallet = "";
+              this.load_info();
+            }, 2500);
+          }
+        } else {
+          this.messageWallet = this.$t("enterCode");
           setTimeout(() => {
-            this.message4 = "";
+            this.messageWallet = "";
           }, 2500);
         }
       } catch (err) {
         console.log(err);
-        this.message4 = "Ошибка";
+        this.messageWallet = err.data.description;
       }
     },
   },
@@ -561,14 +577,35 @@ export default {
       {{ $t("disable2fa") }}
     </button>
     <div class="wallet" v-if="active == 3">
-      <div class="current_wallet">
+      <div class="current_wallet" v-if="wallet">
         <h3>{{ $t("currentWallet") }}</h3>
         <div class="wallet_info">
           <div class="group">
             <input type="text" name="wallet" v-model="wallet" placeholder="" />
             <span class="group-value">{{ $t("wallet") }} №1</span>
           </div>
-          <button @click="deleteWallet" class="btn">{{ $t("delete") }}</button>
+          <div class="group">
+            <input
+              type="text"
+              name="code"
+              v-model="otp2"
+              :placeholder="$t('enterCode')"
+            />
+            <span class="group-value">{{ $t("code2fa") }}:</span>
+          </div>
+          <button v-if="!messageWallet" @click="deleteWallet" class="btn">
+            {{ $t("delete") }}
+          </button>
+          <div
+            class="msg"
+            :class="{
+              success: this.messageWallet == $t('success'),
+              error: this.messageWallet != $t('success'),
+            }"
+            v-if="messageWallet"
+          >
+            {{ messageWallet }}
+          </div>
         </div>
       </div>
       <div class="connect_wallet">
@@ -593,7 +630,7 @@ export default {
             <span class="group-value">{{ $t("code2fa") }}:</span>
           </div>
           <button v-if="!message4" @click="setWallet" class="btn">
-            {{ $t("Добавить") }}
+            {{ $t("add") }}
           </button>
           <div
             class="msg"

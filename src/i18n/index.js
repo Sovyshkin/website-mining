@@ -197,6 +197,9 @@ const messages = {
     enterNumberPayment: "Enter the payment number",
     advantages: "Advantages",
     information: "Information",
+    user_not_found: "The user was not found",
+    wrong_password: "Incorrect password",
+    account_blocked: "The account is blocked",
   },
   RU: {
     services: "Наши сервисы",
@@ -395,6 +398,10 @@ const messages = {
     enterNumberPayment: "Введите номер платежа",
     advantages: "Преимущества",
     information: "Информация",
+    success: "Успешно",
+    user_not_found: "Пользователь не найден",
+    wrong_password: "Неправильный пароль",
+    account_blocked: "Аккаунт заблокирован",
   },
   HE: {
     services: "השירותים שלנו",
@@ -589,6 +596,9 @@ const messages = {
     enterNumberPayment: "הזן את מספר התשלום",
     advantages: "יתרונות",
     information: "מידע",
+    user_not_found: "המשתמש לא נמצא",
+    wrong_password: "סיסמה שגויה",
+    account_blocked: "חשבון חסום",
   },
 };
 

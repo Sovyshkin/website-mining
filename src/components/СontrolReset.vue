@@ -33,7 +33,6 @@ export default {
         }
         setTimeout(() => {
           this.message = "";
-          this.$router.push({ name: "home" });
         }, 2500);
       } catch (err) {
         console.log(err);
