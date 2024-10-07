@@ -76,7 +76,7 @@ export default {
             let token = response.data.token;
             localStorage.setItem("id", id);
             localStorage.setItem("token", token);
-            this.message = "Успешно";
+            this.message = this.$t("success");
             setTimeout(() => {
               this.message = "";
               this.$emit("sliderVerify", false);

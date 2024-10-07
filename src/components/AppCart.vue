@@ -113,7 +113,7 @@ export default {
         this.status = response.status;
         console.log(response);
         if (this.status == 200) {
-          this.message = "Успешно";
+          this.message = this.$t("success");
           let id = response.data.billing_id;
           setTimeout(() => {
             this.message = "";

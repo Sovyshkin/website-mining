@@ -14,7 +14,7 @@ export default {
       passFill: false,
       password2: "",
       pass2Fill: false,
-      number: "+7",
+      number: "+972",
       numberFill: false,
       email: "",
       emailFill: "",
@@ -58,7 +58,7 @@ export default {
           let status = response.status;
           console.log(response);
           if (status == "200") {
-            this.message = "Успешно";
+            this.message = this.$t("success");
           }
           setTimeout(() => {
             this.message = "";
@@ -166,7 +166,7 @@ export default {
           size="20"
           required
           name="number"
-          placeholder="+7"
+          placeholder="+972"
           :class="{ nofillBorder: numberFill }"
         />
         <span class="group-value" :class="{ nofillText: numberFill }">{{

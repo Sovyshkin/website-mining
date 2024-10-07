@@ -27,7 +27,7 @@ export default {
         console.log(response);
         let status = response.status;
         if (status == 200) {
-          this.message = "Успешно";
+          this.message = this.$t("success");
           setTimeout(() => {
             this.message = "";
           }, 2500);
@@ -49,7 +49,7 @@ export default {
         console.log(response);
         let status = response.status;
         if (status == 200) {
-          this.message = "Успешно";
+          this.message = this.$t("success");
           setTimeout(() => {
             this.message = "";
           }, 2500);

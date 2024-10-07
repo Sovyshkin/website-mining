@@ -32,7 +32,7 @@ export default {
           console.log(response);
           let status = response.data.status;
           if (status == "ok") {
-            this.message = "Успешно";
+            this.message = this.$t("success");
             setTimeout(() => {
               location.reload();
             }, 2500);

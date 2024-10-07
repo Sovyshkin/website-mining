@@ -142,9 +142,6 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  height: 60vh;
 }
 .cards {
   display: flex;

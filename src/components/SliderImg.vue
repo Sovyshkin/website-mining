@@ -92,7 +92,7 @@ export default {
     },
     successText: {
       type: String,
-      default: "Успешно",
+      default: "",
     },
     background: {
       type: String,

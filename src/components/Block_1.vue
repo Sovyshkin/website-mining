@@ -73,9 +73,9 @@ export default {
         ref="player"
         src="../assets/asic.mp4"
         muted
-        loop
         autoplay
-        oncanplay="this.muted=true"
+        playsinline
+        loop
       >
         Ваш браузер не поддерживает HTML5 видео.
       </video>

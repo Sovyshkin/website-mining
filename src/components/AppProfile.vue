@@ -113,7 +113,7 @@ export default {
 
         this.message = response.data.message;
         if (this.message == "ok") {
-          this.message = "Успешно";
+          this.message = this.$t("success");
         } else {
           this.message = "Ошибка";
         }
@@ -144,7 +144,7 @@ export default {
           );
           this.message2 = response.data.status;
           if (this.message2 == "ok") {
-            this.message2 = "Успешно";
+            this.message2 = this.$t("success");
           }
         } else {
           this.message2 = "Пароли не совпадают!";
@@ -196,7 +196,7 @@ export default {
           );
           this.message3 = response.data.message;
           if (this.message3 == "ok") {
-            this.message3 = "Успешно";
+            this.message3 = this.$t("success");
             this.load_info();
           }
         }

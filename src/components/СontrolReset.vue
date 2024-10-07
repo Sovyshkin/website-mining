@@ -26,7 +26,7 @@ export default {
           console.log(response);
           this.message = response.data.message;
           if (this.message == "ok") {
-            this.message = "Успешно";
+            this.message = this.$t("success");
           }
         } else {
           this.message = "Пароли не совпадают!";
