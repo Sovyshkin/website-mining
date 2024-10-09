@@ -82,14 +82,7 @@ export default {
 
     printType(type) {
       let lang = localStorage.getItem("lang");
-      if (lang == "RU") {
-        if (type == "hosting") {
-          return "Плата за хостинг";
-        } else if (type == "buy_request") {
-          return "Покупка";
-        }
-        return "";
-      } else if (lang == "EN") {
+      if (lang == "EN") {
         if (type == "hosting") {
           return "Hosting fees";
         } else if (type == "buy_request") {
@@ -101,6 +94,13 @@ export default {
           return "דמי אירוח";
         } else if (type == "buy_request") {
           return "רכישה";
+        }
+        return "";
+      } else {
+        if (type == "hosting") {
+          return "Плата за хостинг";
+        } else if (type == "buy_request") {
+          return "Покупка";
         }
         return "";
       }
@@ -195,6 +195,11 @@ export default {
         ></div>
         <span class="status">{{ printStatus(card.state) }}</span>
       </div>
+    </div>
+    <div class="wrap-img" v-if="card.image">
+      <a :href="card.image.url" target="_blank"
+        ><img class="billing-img" :src="card.image.url" alt=""
+      /></a>
     </div>
     <div class="wrap-btns">
       <button class="btn bx" @click="this.$router.go(-1)">
@@ -383,6 +388,15 @@ export default {
 
 input::placeholder {
   font-size: 14px;
+}
+
+.wrap-img {
+  max-width: 300px;
+  max-height: 200px;
+}
+
+.billing-img {
+  border-radius: 15px;
 }
 
 @media (max-width: 910px) {

@@ -39,6 +39,9 @@ export default {
           } else {
             this.message = this.$t(`${response.data.description}`);
           }
+          setTimeout(() => {
+            this.message = "";
+          }, 2500);
         } else {
           if (!this.email) {
             this.emailFill = true;
