@@ -12,20 +12,6 @@ export default {
     };
   },
   methods: {
-    goTry() {
-      this.$emit("updateGoTry", true);
-    },
-
-    minus() {
-      if (this.card.count > 1) {
-        this.card.count -= 1;
-      }
-    },
-
-    plus() {
-      this.card.count++;
-    },
-
     async load_info() {
       try {
         this.isLoading = true;
@@ -35,11 +21,17 @@ export default {
           },
         });
         console.log(response);
-        this.cards = response.data.data;
+        this.cards = response.data.workers;
       } catch (err) {
         console.log(err);
       } finally {
         this.isLoading = false;
+      }
+    },
+
+    roundTwo(n) {
+      if (n) {
+        return Math.round(n * 100) / 100;
       }
     },
   },
@@ -54,16 +46,21 @@ export default {
   <div class="wrapper" v-else>
     <h2>{{ $t("myMiners") }}</h2>
     <div class="cards" v-if="this.cards.length > 0">
-      <div class="card" v-for="card in cards" :key="card.id">
-        <img class="asic" src="../assets/asic.png" alt="" />
+      <div class="card" v-for="card in cards" :key="card.miner_item.id">
+        <img
+          class="asic"
+          v-if="card.miner_item.image"
+          :src="card.miner_item.image.url"
+          :alt="card.miner_item.image.filename"
+        />
         <div class="info">
           <div class="title">
             <span class="name">{{ card.name }}</span>
-            <div class="status" v-if="card.online">
+            <div class="status" v-if="card.status == 'stable'">
               <div class="online"></div>
               Online
             </div>
-            <div class="status" v-if="!card.online">
+            <div class="status" v-if="card.status != 'stable'">
               <div class="offline"></div>
               Offline
             </div>
@@ -71,23 +68,26 @@ export default {
           <div class="group">
             <span class="group-name">{{ $t("hosting") }}:</span>
             <span class="group-value"
-              >${{ card.hosting }} / {{ $t("monthOne") }}</span
+              >${{ roundTwo(card.miner_item.hosting * 31) }} /
+              {{ $t("monthOne") }}</span
             >
             <span class="group-name">{{ $t("dohod") }}:</span>
             <span class="group-value"
-              >${{ card.profit }} / {{ $t("monthOne") }}</span
+              >${{ roundTwo(card.miner_item.income * 31) }} /
+              {{ $t("monthOne") }}</span
             >
             <span class="group-name">{{ $t("rashod") }}:</span>
             <span class="group-value"
-              >{{ card.power }} {{ $t("wt") }} / {{ $t("monthOne") }}</span
+              >{{ roundTwo(card.miner_item.energy_consumption * 31) }}
+              {{ $t("wt") }} / {{ $t("monthOne") }}</span
             >
             <span class="group-name">{{ $t("income") }}:</span>
             <span class="group-value"
-              >${{ card.power }} / {{ $t("monthOne") }}</span
+              >${{ roundTwo(card.miner_item.profit * 31) }} /
+              {{ $t("monthOne") }}</span
             >
           </div>
         </div>
-        <!-- <button @click="goTry" class="btn">Оформить заказ</button> -->
       </div>
     </div>
     <div class="not_found" v-else>

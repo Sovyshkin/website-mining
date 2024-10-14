@@ -198,7 +198,10 @@ export default {
     </div>
     <div class="wrap-img" v-if="card.image">
       <a :href="card.image.url" target="_blank"
-        ><img class="billing-img" :src="card.image.url" alt=""
+        ><img
+          class="billing-img"
+          :src="card.image.url"
+          :alt="card.image.filename"
       /></a>
     </div>
     <div class="wrap-btns">
@@ -393,6 +396,7 @@ input::placeholder {
 .wrap-img {
   max-width: 300px;
   max-height: 200px;
+  margin-bottom: 20px;
 }
 
 .billing-img {
