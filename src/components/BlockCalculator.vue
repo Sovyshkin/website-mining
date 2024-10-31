@@ -266,7 +266,7 @@ export default {
           <span class="procent">({{ procent }}%)</span>
           <span class="procent">{{ $t("returnInvest") }}</span>
         </div>
-        <button class="btn order" @click="goOrder">Заказать</button>
+        <button class="btn order" @click="goOrder">{{ $t('order') }}</button>
       </div>
     </div>
   </div>

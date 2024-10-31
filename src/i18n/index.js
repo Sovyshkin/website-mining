@@ -201,6 +201,7 @@ const messages = {
     user_not_found: "The user was not found",
     wrong_password: "Incorrect password",
     account_blocked: "The account is blocked",
+    wrongCode: "Invalid code",
   },
   RU: {
     services: "Наши сервисы",
@@ -403,6 +404,7 @@ const messages = {
     user_not_found: "Пользователь не найден",
     wrong_password: "Неправильный пароль",
     account_blocked: "Аккаунт заблокирован",
+    wrongCode: "Неверный код",
   },
   HE: {
     services: "השירותים שלנו",
@@ -601,6 +603,7 @@ const messages = {
     user_not_found: "המשתמש לא נמצא",
     wrong_password: "סיסמה שגויה",
     account_blocked: "חשבון חסום",
+    wrongCode: "קוד שגוי",
   },
 };
 

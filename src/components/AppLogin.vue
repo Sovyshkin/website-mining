@@ -165,8 +165,14 @@ export default {
       <div
         class="msg"
         :class="{
-          success: this.message == 'Успешно',
-          error: this.message != 'Успешно',
+          success:
+            this.message == 'Успешно' ||
+            this.message == 'Success' ||
+            this.message == 'בהצלחה',
+          error:
+            this.message != 'Успешно' &&
+            this.message != 'Success' &&
+            this.message != 'בהצלחה',
         }"
         v-if="message"
       >
@@ -208,8 +214,14 @@ export default {
       <div
         class="msg"
         :class="{
-          success: this.message == 'Успешно',
-          error: this.message == 'Неверный код',
+          success:
+            this.message == 'Успешно' ||
+            this.message == 'Success' ||
+            this.message == 'בהצלחה',
+          error:
+            this.message != 'Успешно' &&
+            this.message != 'Success' &&
+            this.message != 'בהצלחה',
         }"
         v-if="message"
       >

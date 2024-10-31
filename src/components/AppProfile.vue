@@ -237,9 +237,14 @@ export default {
             this.load_info();
           }, 3000);
         }
+        setTimeout(() => {
+          this.message4 = "";
+          this.otp = "";
+          this.walletNew = "";
+        }, 3000);
       } catch (err) {
         console.log(err);
-        this.message4 = "Неверный код";
+        this.message4 = this.$t("success");
         setTimeout(() => {
           this.message4 = "";
           this.otp = "";
@@ -635,8 +640,8 @@ export default {
           <div
             class="msg"
             :class="{
-              success: this.message4 == 'Успешно',
-              error: this.message4 == 'Неверный код',
+              success: this.message4 == $t('success'),
+              error: this.message4 != $t('success'),
             }"
             v-if="message4"
           >
