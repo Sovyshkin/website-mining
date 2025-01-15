@@ -7,6 +7,7 @@ export default {
     return {
       code: "",
       message: "",
+      status: "",
     };
   },
   methods: {
@@ -31,20 +32,36 @@ export default {
           );
           console.log(response);
           let status = response.data.status;
+          this.status = response.status;
           if (status == "ok") {
             this.message = this.$t("success");
             setTimeout(() => {
               location.reload();
+            }, 2500);
+          } else {
+            this.status = 400;
+            let desc = response.data.description;
+            if (desc == "Wrong mfa code") {
+              this.message = this.$t("wrongCode");
+            } else {
+              this.message = desc;
+              this.status = 400;
+            }
+            setTimeout(() => {
+              this.message = "";
+              this.status = "";
             }, 2500);
           }
         }
       } catch (err) {
         console.log(err);
         let status = err.data.description;
-        if (status == "wrong code") {
-          this.message = "Неправильный код";
+        if (status == "Wrong mfa code") {
+          this.status = 400;
+          this.message = this.$t("wrongCode");
         } else {
           this.message = status;
+          this.status = 400;
         }
       }
     },
@@ -75,7 +92,7 @@ export default {
         />
         <span class="group-value">{{ $t("code2fa") }}</span>
       </div>
-      <div class="wrap_btns" v-if="!message">
+      <div class="wrap_btns" v-if="!status">
         <button @click="cancel" class="btn">{{ $t("cancelAction") }}</button>
         <button @click="disableMFA()" class="btn btn-cancel">
           {{ $t("delete") }}
@@ -84,10 +101,10 @@ export default {
       <div
         class="msg"
         :class="{
-          success: this.message == 'Успешно',
-          error: this.message != 'Успешно',
+          success: this.status == 200,
+          error: this.status != 200,
         }"
-        v-if="message"
+        v-if="status"
       >
         {{ message }}
       </div>

@@ -2,13 +2,14 @@
 import axios from "axios";
 
 export default {
-  name: "DeleteAuth",
+  name: "FormFeedback",
   data() {
     return {
       code: "",
       message: "",
       phone: "+7",
       name: "",
+      agreement: false,
     };
   },
   computed: {
@@ -36,15 +37,25 @@ export default {
 
     async send() {
       try {
-        let response = await axios.post(`/feedbacks/create`, {
-          name: this.name,
-          phone: this.phone,
-        });
-        let status = response.data.status;
-        if (status == "ok") {
-          this.message = "Успешно, ожидайте звонка!";
-        } else if (status == "error") {
-          this.message = "Заявка уже существует с этим номером телефона";
+        if (this.name && this.phone) {
+          let response = await axios.post(`/feedbacks/create`, {
+            name: this.name,
+            phone: this.phone,
+          });
+          let status = response.data.status;
+          if (status == "ok") {
+            this.message = "Успешно, ожидайте звонка!";
+          } else if (status == "error") {
+            this.message = "Заявка уже существует с этим номером телефона";
+            setTimeout(() => {
+              this.message = "";
+            }, 3000);
+          }
+        } else {
+          this.message = "Заполните поля";
+          setTimeout(() => {
+            this.message = "";
+          }, 3000);
         }
       } catch (err) {
         console.log(err);
@@ -87,8 +98,23 @@ export default {
         />
         <span class="group-value">{{ $t("phone") }}</span>
       </div>
+      <div class="agreement">
+        <label class="toggler-wrapper style-27">
+          <input type="checkbox" v-model="agreement" />
+          <div class="toggler-slider">
+            <div
+              class="toggler-knob"
+              :data-i18n-after="$t('checkbox_yes')"
+              :data-i18n-before="$t('checkbox_no')"
+            ></div>
+          </div>
+        </label>
+        <span class="agreement-text">{{ $t("agreement") }}</span>
+      </div>
       <div class="wrap_btns" v-if="!message">
-        <button @click="send" class="btn">{{ $t("send") }}</button>
+        <button @click="send" class="btn" :class="{ disabled: !agreement }">
+          {{ $t("send") }}
+        </button>
       </div>
       <div
         class="msg"
@@ -231,5 +257,135 @@ input::placeholder {
   font-weight: 500;
   font-size: 10px;
   line-height: 13.66px;
+}
+.agreement {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.toggler-wrapper {
+  display: block;
+  width: 45px;
+  height: 25px;
+  cursor: pointer;
+  position: relative;
+}
+
+.toggler-wrapper input[type="checkbox"] {
+  display: none;
+}
+
+.toggler-wrapper input[type="checkbox"]:checked + .toggler-slider {
+  background-color: #44cc66;
+}
+
+.toggler-wrapper .toggler-slider {
+  background-color: #ccc;
+  position: absolute;
+  border-radius: 100px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  -webkit-transition: all 300ms ease;
+  transition: all 300ms ease;
+}
+
+.toggler-wrapper .toggler-knob {
+  position: absolute;
+  -webkit-transition: all 300ms ease;
+  transition: all 300ms ease;
+}
+.toggler-wrapper.style-27 {
+  width: 54px;
+  height: 30px;
+}
+
+.toggler-wrapper.style-27
+  input[type="checkbox"]:checked
+  + .toggler-slider
+  .toggler-knob:before {
+  left: -100%;
+}
+
+.toggler-wrapper.style-27
+  input[type="checkbox"]:checked
+  + .toggler-slider
+  .toggler-knob:after {
+  right: 3px;
+}
+
+.toggler-wrapper.style-27 .toggler-knob {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.toggler-wrapper.style-27 .toggler-knob:before {
+  content: "No";
+  position: absolute;
+  width: calc(30px - 6px);
+  height: calc(30px - 6px);
+  border-radius: 50%;
+  left: 3px;
+  top: 3px;
+  background-color: #fff;
+  -webkit-transition: all 300ms ease;
+  transition: all 300ms ease;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  font-size: 75%;
+  font-weight: 500;
+}
+
+.toggler-wrapper.style-27 .toggler-knob:after {
+  content: "Yes";
+  position: absolute;
+  width: calc(30px - 6px);
+  height: calc(30px - 6px);
+  border-radius: 50%;
+  right: -100%;
+  top: 3px;
+  background-color: #fff;
+  -webkit-transition: all 300ms ease;
+  transition: all 300ms ease;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  font-size: 75%;
+  font-weight: 500;
+}
+
+.toggler-wrapper.style-27 .toggler-knob[data-i18n-before]::before {
+  content: attr(data-i18n-before);
+}
+
+.toggler-wrapper.style-27 .toggler-knob[data-i18n-after]::after {
+  content: attr(data-i18n-after);
+}
+
+.agreement-text {
+  color: #a5a5a5;
+  font-weight: 500;
+  font-size: 10px;
+  line-height: 13.66px;
+}
+
+.disabled {
+  cursor: not-allowed;
 }
 </style>

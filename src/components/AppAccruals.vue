@@ -9,6 +9,9 @@ export default {
   data() {
     return {
       cards: [],
+      cards_show: [],
+      counterLeft: 0,
+      counterRight: 10,
       value_usd: 0,
       btc: 0,
       history: [],
@@ -56,6 +59,11 @@ export default {
         let cards = resPayments.data.data;
         if (cards) {
           this.cards = cards.filter((item) => item.type != "reward");
+          if (this.cards.length >= 10) {
+            this.cards_show = this.cards.splice(0, 10);
+          } else {
+            this.cards_show = this.cards.splice(0, this.cards.length);
+          }
         }
         // ВСЁ КРОМЕ reward
       } catch (err) {
@@ -73,7 +81,7 @@ export default {
         } else if (type == "reward") {
           return "Награда за майнинг";
         } else if (type == "payout") {
-          return "Вывод средств";
+          return "Выплата";
         }
         return "";
       } else if (lang == "EN") {
@@ -82,7 +90,7 @@ export default {
         } else if (type == "reward") {
           return "Mining Reward";
         } else if (type == "payout") {
-          return "Withdrawal of funds";
+          return "Payout";
         }
         return "";
       } else if (lang == "HE") {
@@ -91,9 +99,53 @@ export default {
         } else if (type == "reward") {
           return "פרס כרייה";
         } else if (type == "payout") {
-          return "משיכת כספים";
+          return "תשלום";
         }
         return "";
+      }
+    },
+
+    goLeft() {
+      try {
+        this.isLoading = true;
+        if (
+          this.counterLeft != 0 &&
+          this.counterRight <= Math.ceil(this.cards.length / 10) * 10
+        ) {
+          this.counterLeft -= 10;
+          this.counterRight -= 10;
+          this.cards_show = this.cards.slice(
+            this.counterLeft,
+            this.counterRight
+          );
+        }
+      } catch (err) {
+        console.log(err);
+      } finally {
+        this.isLoading = false;
+      }
+    },
+    goRight() {
+      try {
+        this.isLoading = true;
+        console.log(
+          this.counterRight <= Math.ceil(this.cards.length / 10) * 10
+        );
+        if (
+          this.counterRight <= Math.ceil(this.cards.length / 10) * 10 &&
+          this.counterRight <= this.cards.length
+        ) {
+          this.counterLeft += 10;
+          this.counterRight += 10;
+          this.cards_show = this.cards.slice(
+            this.counterLeft,
+            this.counterRight
+          );
+        }
+      } catch (err) {
+        console.log(err);
+      } finally {
+        this.isLoading = false;
       }
     },
   },
@@ -115,10 +167,10 @@ export default {
           <span class="btc">(~{{ btc }} BTC)</span>
         </div>
       </div>
-      <div class="wrap_btns">
+      <!-- <div class="wrap_btns">
         <button class="btn">{{ $t("deposit") }}</button>
         <button class="btn withdraw">{{ $t("withdraw") }}</button>
-      </div>
+      </div> -->
     </div>
     <ChartLine
       v-if="history_show"
@@ -126,8 +178,8 @@ export default {
       :name="$t('balance')"
     />
     <h2>{{ $t("historyOperation") }}</h2>
-    <div class="cards" v-if="this.cards.length > 0">
-      <div class="card bx" v-for="card in cards" :key="card.id">
+    <div class="cards" v-if="this.cards_show.length > 0">
+      <div class="card bx" v-for="card in cards_show" :key="card.id">
         <div class="info">
           <span class="card-name">{{ printType(card.type) }}</span>
           <span class="date">{{ card.date }}</span>
@@ -142,6 +194,11 @@ export default {
           <img src="" alt="" /> -->
           <span class="summ">{{ card.value }} {{ card.currency }}</span>
         </div>
+      </div>
+      <div class="menu">
+        <img src="../assets/arrow-left.png" alt="" @click="goLeft()" />
+        <span>{{ counterLeft }} ... {{ counterRight }}</span>
+        <img src="../assets/arrow-right.png" alt="" @click="goRight()" />
       </div>
     </div>
     <div class="not_found" v-else>
@@ -307,6 +364,25 @@ export default {
 
 .card:hover {
   transform: translateY(-3px);
+}
+
+.menu {
+  padding: 10px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.menu img {
+  cursor: pointer;
+}
+
+.menu span {
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 18px;
 }
 
 @media (max-width: 940px) {

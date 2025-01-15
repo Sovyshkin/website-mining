@@ -42,15 +42,12 @@ export default {
     },
     async load_categories() {
       try {
-        this.isLoading = true;
         let resCategories = await axios.get(`/miners/categories/get/all`);
         console.log(resCategories);
         this.categories = resCategories.data.miners_items_categories;
         this.category_id = this.categories[0].id;
       } catch (err) {
         console.log(err);
-      } finally {
-        this.isLoading = false;
       }
     },
 

@@ -135,9 +135,7 @@ export default {
   async mounted() {
     await this.load_info();
     this.calc();
-    for (let e of document.querySelectorAll(
-      '.slider-progress'
-    )) {
+    for (let e of document.querySelectorAll(".slider-progress")) {
       e.style.setProperty("--value", e.value);
       e.style.setProperty("--min", e.min == "" ? "0" : e.min);
       e.style.setProperty("--max", e.max == "" ? "100" : e.max);
@@ -197,6 +195,7 @@ export default {
               type="range"
               class="range slider-progress"
               id="range"
+              dir="ltr"
             />
           </div>
           <div class="group-range">
@@ -212,6 +211,7 @@ export default {
               type="range"
               class="range slider-progress"
               id="range2"
+              dir="ltr"
             />
           </div>
         </div>
@@ -747,6 +747,24 @@ span {
   .rangeUsd {
     font-size: 12px;
     line-height: 12px;
+  }
+}
+
+@media (direction: rtl) {
+  .group-range {
+    flex-direction: row-reverse;
+  }
+
+  .group-label {
+    justify-content: space-between;
+  }
+
+  .rangeUsd {
+    order: 1;
+  }
+
+  .invest {
+    order: 2;
   }
 }
 </style>

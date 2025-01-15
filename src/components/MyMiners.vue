@@ -3,7 +3,7 @@ import axios from "axios";
 import LoadingSpinner from "./LoadingSpinner.vue";
 
 export default {
-  name: "AppMarket",
+  name: "MyMiners",
   components: { LoadingSpinner },
   data() {
     return {
@@ -55,7 +55,18 @@ export default {
         />
         <div class="info">
           <div class="title">
-            <span class="name">{{ card.name }}</span>
+            <div class="group-title">
+              <span class="name">{{ card.name }}</span>
+              <span class="miner-item">{{ card.miner_item.name }}</span>
+              <div class="wrap-scale">
+                <div
+                  class="scale"
+                  :style="
+                    'width: ' + (100 - card.miner_item.payback_percent) + '%'
+                  "
+                ></div>
+              </div>
+            </div>
             <div class="status" v-if="card.status == 'stable'">
               <div class="online"></div>
               Online
@@ -78,8 +89,8 @@ export default {
             >
             <span class="group-name">{{ $t("rashod") }}:</span>
             <span class="group-value"
-              >{{ roundTwo(card.miner_item.energy_consumption * 31) }}
-              {{ $t("wt") }} / {{ $t("monthOne") }}</span
+              >{{ roundTwo(card.miner_item.energy_consumption) }}
+              {{ $t("wt") }} / {{ $t("hour") }}</span
             >
             <span class="group-name">{{ $t("income") }}:</span>
             <span class="group-value"
@@ -246,7 +257,21 @@ export default {
   font-weight: 600;
   font-size: 24px;
   line-height: 24px;
-  color: #272727;
+  color: black;
+}
+
+.group-title {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.miner-item {
+  color: rgb(166, 166, 166);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 15px;
+  letter-spacing: 0.02px;
 }
 
 .not_found {

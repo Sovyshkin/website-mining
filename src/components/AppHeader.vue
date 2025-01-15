@@ -94,7 +94,7 @@ export default {
         this.lang = localStorage.getItem("lang");
         console.log(localStorage.getItem("lang"));
         if (this.lang) {
-          this.i18n.locale = this.lang;
+          this.$i18n.locale = this.lang;
         } else {
           this.lang = "RU";
         }
@@ -471,6 +471,12 @@ export default {
   .wrapper {
     gap: 10px;
     padding: 0 15px;
+  }
+}
+
+@media (max-width: 576px) {
+  .contacts {
+    display: none;
   }
 }
 

@@ -8,7 +8,7 @@ export default {
   components: { Qrcode, LoadingSpinner },
   data() {
     return {
-      active: 1,
+      active: 2,
       profiletype: "",
       image: "",
       firstname: "",
@@ -27,6 +27,7 @@ export default {
       walletNew: "",
       otp: "",
       countries: [],
+      status: "",
       message: "",
       message2: "",
       message3: "",
@@ -79,8 +80,10 @@ export default {
         this.address = response.data.user.address;
         this.telegram = response.data.user.telegram;
         this.wallet = response.data.user.wallet;
-        this.image = response.data.user.image.url;
         this.mfa = response.data.user.mfa_enabled;
+        if (response.data.user.image) {
+          this.image = response.data.user.image.url;
+        }
       } catch (err) {
         console.log(err);
       } finally {
@@ -505,7 +508,7 @@ export default {
       </div>
     </div>
     <div class="fa2" v-if="active == 2 && !mfa_url && !mfa">
-      <div class="open" v-if="!confirm2fa">
+      <div class="open" v-if="!confirm2fa && !mfa">
         <h3>1. {{ $t("openGoogle") }}</h3>
         <div class="open_info">
           <p class="text">
@@ -574,20 +577,24 @@ export default {
         {{ $t("continue") }}
       </button>
     </div>
-    <button
-      v-if="mfa"
-      class="btn exit"
-      @click="this.$emit('updateDeleteAuth', true)"
-    >
-      {{ $t("disable2fa") }}
-    </button>
+    <div class="enabled" v-if="mfa && active == 2">
+      <img src="../assets/enabled.png" alt="" />
+      <span>{{ $t("connected2fa") }}</span>
+      <button
+        v-if="mfa"
+        class="btn exit"
+        @click="this.$emit('updateDeleteAuth', true)"
+      >
+        {{ $t("disable2fa") }}
+      </button>
+    </div>
     <div class="wallet" v-if="active == 3">
       <div class="current_wallet" v-if="wallet">
         <h3>{{ $t("currentWallet") }}</h3>
         <div class="wallet_info">
           <div class="group">
             <input type="text" name="wallet" v-model="wallet" placeholder="" />
-            <span class="group-value">{{ $t("wallet") }} №1</span>
+            <span class="group-value">{{ $t("wallet") }}</span>
           </div>
           <div class="group">
             <input
@@ -613,7 +620,7 @@ export default {
           </div>
         </div>
       </div>
-      <div class="connect_wallet">
+      <div class="connect_wallet" v-if="!wallet">
         <h3>{{ $t("connectWallet") }}</h3>
         <div class="connect_info">
           <div class="group">
@@ -853,6 +860,29 @@ h3 {
   cursor: pointer;
 }
 
+.enabled {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+.enabled img {
+  height: 100px;
+}
+
+.enabled {
+  background-color: #fff;
+  padding: 20px 10px;
+  border-radius: 20px;
+  font-size: 18px;
+  line-height: 18px;
+  font-weight: 500;
+}
+
+.enabled button {
+  margin-top: 20px;
+}
 @media (max-width: 980px) {
   .info,
   .wallet,

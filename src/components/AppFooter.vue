@@ -315,6 +315,12 @@ export default {
   }
 }
 
+@media (max-width: 769px) {
+  .wrapper {
+    padding: 20px 40px 100px 40px;
+  }
+}
+
 @media (max-width: 500px) {
   .contacts {
     gap: 6px;

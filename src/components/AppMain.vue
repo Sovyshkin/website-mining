@@ -192,8 +192,8 @@ export default {
     </div>
     <BlockCalculator :white="true" />
     <BlockMiniMarket />
-    <h2>{{ $t("myPayments") }}</h2>
-    <div class="mypayments" v-if="payments.length > 0">
+    <h2 v-if="false">{{ $t("myPayments") }}</h2>
+    <div class="mypayments" v-if="payments.length > 0 && false">
       <div class="mypayment-header">
         <span class="date">{{ $t("date") }}</span>
         <span class="type">{{ $t("type") }}</span>
@@ -211,7 +211,7 @@ export default {
         </div>
       </div>
     </div>
-    <div class="not_found" v-else>
+    <div class="not_found" v-if="false">
       <span>{{ $t("not_found") }}</span>
     </div>
   </div>

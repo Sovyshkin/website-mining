@@ -22,6 +22,11 @@ export default {
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
       },
       dashboards: [],
       income: [],
