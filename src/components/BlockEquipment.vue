@@ -50,7 +50,9 @@ export default {
         <div class="background"></div>
         <div class="title">{{ $t("testPeriod") }}</div>
         <img class="asic" src="../assets/asic.png" alt="" />
-        <button @click="goMarket" class="btn">{{ $t("try") }}</button>
+        <button @click="this.$emit('updateFormFeedback', true)" class="btn">
+          {{ $t("try") }}
+        </button>
       </div>
       <div
         class="card"

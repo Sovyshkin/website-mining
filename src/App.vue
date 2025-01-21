@@ -153,6 +153,7 @@ export default {
     <Equipment
       style="max-width: 1440px"
       @updateGoTry="handleTry"
+      @updateFormFeedback="handleFormFeedback"
       id="equipment"
     />
     <Banner_1
@@ -162,6 +163,7 @@ export default {
     <Advantages style="max-width: 1440px" id="advantages" />
     <Business
       @updateLogin="handleLogin"
+      @updateFormFeedback="handleFormFeedback"
       style="max-width: 1440px"
       id="business"
     />

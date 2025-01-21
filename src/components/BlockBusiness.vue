@@ -78,7 +78,7 @@ export default {
         :class="{ main: card.main }"
         v-for="card in cards"
         :key="card"
-        @click="goMarket"
+        @click="this.$emit('updateFormFeedback', true)"
       >
         <div class="info">
           <div class="main_info">
@@ -102,7 +102,9 @@ export default {
           </div>
           <div class="order">
             <div class="price">${{ card.price }}</div>
-            <button class="btn">{{ $t("order") }}</button>
+            <button class="btn">
+              {{ $t("order") }}
+            </button>
           </div>
         </div>
         <img class="asic" src="../assets/asic.png" alt="" />
