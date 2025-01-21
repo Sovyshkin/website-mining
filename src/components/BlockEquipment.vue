@@ -78,7 +78,7 @@ export default {
           <div class="group">
             <span class="group-name">{{ $t("dohod") }}:</span>
             <span class="group-value"
-              >${{ card.income }}/{{ $t("monthOne") }}</span
+              >${{ card.income }}/{{ $t("dayOne") }}</span
             >
           </div>
           <div class="group">

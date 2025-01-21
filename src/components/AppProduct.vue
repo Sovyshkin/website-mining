@@ -93,26 +93,26 @@ export default {
         <div class="group">
           <span class="group-name">{{ $t("hosting") }}:</span>
           <span class="group-value"
-            >${{ roundTwo(card.hosting * 31) }} / {{ $t("monthOne") }}</span
+            >${{ card.hosting }} / {{ $t("dayOne") }}</span
           >
         </div>
         <div class="group">
           <span class="group-name">{{ $t("dohod") }}:</span>
           <span class="group-value"
-            >${{ roundTwo(card.income * 31) }} / {{ $t("monthOne") }}</span
+            >${{ card.income }} / {{ $t("dayOne") }}</span
           >
         </div>
         <div class="group">
           <span class="group-name">{{ $t("rashod") }}:</span>
           <span class="group-value"
-            >{{ roundTwo(card.energy_consumption * 31) }} {{ $t("wt") }} /
-            {{ $t("monthOne") }}</span
+            >{{ card.energy_consumption }} {{ $t("wt") }} /
+            {{ $t("dayOne") }}</span
           >
         </div>
         <div class="group">
           <span class="group-name">{{ $t("income") }}:</span>
           <span class="group-value"
-            >${{ roundTwo(card.profit * 31) }} / {{ $t("monthOne") }}</span
+            >${{ card.profit }} / {{ $t("dayOne") }}</span
           >
         </div>
         <div class="wrap-scale">

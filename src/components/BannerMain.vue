@@ -49,9 +49,7 @@ export default {
         </div>
         <div class="group">
           <span class="group-name">{{ $t("dohod") }}:</span>
-          <span class="group-value"
-            >${{ card.profit }}/{{ $t("monthOne") }}</span
-          >
+          <span class="group-value">${{ card.profit }}/{{ $t("dayOne") }}</span>
         </div>
         <div class="group">
           <span class="group-name">{{ $t("rashod") }}:</span>
