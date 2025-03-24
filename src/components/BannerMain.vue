@@ -114,7 +114,7 @@ export default {
 }
 
 .main {
-  background-image: url("../assets/bg_card.png");
+  background-image: url("../assets/red_bg.svg");
 }
 
 .main .group-value {

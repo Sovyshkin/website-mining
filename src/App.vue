@@ -4,10 +4,10 @@ import Block_1 from "./components/Block_1.vue";
 import Calculator from "./components/BlockCalculator.vue";
 import Equipment from "./components/BlockEquipment.vue";
 import Banner_1 from "./components/Banner_1.vue";
+import Banner_2 from "./components/Banner_2.vue";
 import Advantages from "./components/BlockAdvantages.vue";
 import Business from "./components/BlockBusiness.vue";
-import Faq from "./components/BlockFaq.vue";
-import Banner_2 from "./components/Banner_2.vue";
+import Banner_3 from "./components/Banner_3.vue";
 import GoTry from "./components/GoTry.vue";
 import AppLogin from "./components/AppLogin.vue";
 import AppRegister from "./components/AppRegister.vue";
@@ -21,6 +21,8 @@ import SliderImg from "./components/SliderImg.vue";
 import ChangeAvatar from "./components/ChangeAvatar.vue";
 import FormFeedback from "./components/FormFeedback.vue";
 import AppFooter from "./components/AppFooter.vue";
+import AppPartners from "./components/AppPartners.vue";
+import AppManual from "./components/AppManual.vue";
 
 export default {
   name: "App",
@@ -30,8 +32,8 @@ export default {
     Calculator,
     Equipment,
     Banner_1,
+    Banner_3,
     Business,
-    Faq,
     Banner_2,
     Advantages,
     GoTry,
@@ -47,6 +49,8 @@ export default {
     DeleteAuth,
     FormFeedback,
     AppFooter,
+    AppPartners,
+    AppManual
   },
   data() {
     return {
@@ -156,19 +160,22 @@ export default {
       @updateFormFeedback="handleFormFeedback"
       id="equipment"
     />
-    <Banner_1
-      style="max-width: 1440px"
-      @updateFormFeedback="handleFormFeedback"
-    />
-    <Advantages style="max-width: 1440px" id="advantages" />
+    <Banner_1 style="max-width: 1440px"/>
+    <AppManual style="max-width: 1440px"/>
     <Business
       @updateLogin="handleLogin"
       @updateFormFeedback="handleFormFeedback"
       style="max-width: 1440px"
       id="business"
     />
-    <Faq @updateLogin="handleLogin" style="max-width: 1440px" id="faq" />
-    <Banner_2 @updateLogin="handleLogin" style="max-width: 1440px" />
+    <Advantages style="max-width: 1440px" id="advantages" />
+    <!-- <Faq @updateLogin="handleLogin" style="max-width: 1440px" id="faq" /> -->
+    <Banner_2
+      style="max-width: 1440px"
+      @updateFormFeedback="handleFormFeedback"
+    />
+    <AppPartners style="max-width: 1440px" />
+    <Banner_3 @updateLogin="handleLogin" style="max-width: 1440px" />
     <AppFooter />
   </div>
   <div
@@ -219,7 +226,7 @@ export default {
   </div>
 </template>
 <style>
-@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 #app {
   font-family: "Manrope", sans-serif;
   width: 100%;
@@ -227,6 +234,7 @@ export default {
 * {
   padding: 0px;
   margin: 0px;
+  font-family: "Manrope", sans-serif;
   border: none;
   font-weight: 400;
   font-style: normal;

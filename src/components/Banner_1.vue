@@ -5,19 +5,29 @@ export default {
   data() {
     return {};
   },
+  methods: {
+    goLog() {
+      if (this.token) {
+        this.$router.push({ name: "profile" });
+      } else {
+        this.$emit("updateLogin", true);
+      }
+    },
+  }
 };
 </script>
 <template>
   <div class="wrapper">
     <div class="banner">
       <div class="background"></div>
-      <div class="title">
-        <span class="red">{{ $t("purchaseEquipment") }}</span>
-        <span>{{ $t("weAreTouch") }}</span>
+      <div class="info">
+        <h3 class="title">{{ $t('banner1_title') }}</h3>
+        <span class="desc">{{ $t('banner1_desc') }}</span>
+        <button @click="goLog" class="btn">
+          {{ $t("banner1_btn") }}
+        </button>
       </div>
-      <button @click="this.$emit('updateFormFeedback', true)" class="btn">
-        {{ $t("feedback") }}
-      </button>
+      <img class="asic" src="../assets/banner1_asic.svg" alt="">
     </div>
   </div>
 </template>
@@ -33,12 +43,11 @@ export default {
   padding: 60px 40px;
   border-radius: 20px;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
   gap: 30px;
   background: transparent;
   transition: all 500ms ease;
+  border: 1px solid #F0F0F5;
 }
 
 .background {
@@ -47,8 +56,7 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
-    url("../assets/banner1.png");
+  background-image: url("../assets/banner1_bg.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -56,27 +64,41 @@ export default {
   border-radius: 20px;
 }
 
-.title {
-  color: #fff;
-  font-weight: 600;
-  font-size: 28px;
-  line-height: 33.6px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
+.info {
+    width: 100%;
+    max-width: 580px;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
-.red {
-  color: #cf0032;
+.title {
+  color: #fff;
+  font-weight: 800;
+  font-size: 24px;
+  line-height: 120%;
+  text-transform: uppercase;
+}
+
+.desc {
+    opacity: 90%;
+    font-family: 500;
+    font-size: 16px;
+    line-height: 140%;
+    color: #fff;
 }
 
 .btn {
+    width: 100%;
   padding: 17px 24px;
   border-radius: 10px;
   background-color: #cf0032;
   color: #fff;
-  width: fit-content;
   transition: all 500ms ease;
+  font-weight: 600;
+  font-size: 17px;
+  line-height: 100%;
 }
 
 .btn:hover {
@@ -92,5 +114,22 @@ export default {
 .btn,
 .title {
   z-index: 2;
+}
+
+.asic {
+    z-index: 2;
+    position: absolute;
+    right: 3%;
+    bottom: 0;
+}
+
+@media (max-width: 1000px) {
+    .asic {
+        display: none;
+    }
+
+    .info {
+        max-width: none;
+    }
 }
 </style>

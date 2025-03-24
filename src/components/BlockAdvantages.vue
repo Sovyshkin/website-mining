@@ -49,6 +49,11 @@ export default {
         <div class="title">{{ $t("control") }}</div>
         <div class="desc">{{ $t("controlText") }}</div>
       </div>
+      <div class="card">
+        <img src="../assets/video.svg" alt="" class="icon">
+        <div class="title">{{ $t("videoEdu") }}</div>
+        <div class="desc">{{ $t("videoEduDesc") }}</div>
+      </div>
     </div>
   </div>
 </template>
@@ -63,13 +68,15 @@ h2 {
 }
 
 .cards {
+  width: 100%;
   display: flex;
   align-items: stretch;
+  flex-wrap: wrap;
   gap: 10px;
 }
 
 .card {
-  width: 20%;
+  width: 32%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -101,34 +108,19 @@ h2 {
   width: 40px;
 }
 
-@media (max-width: 870px) {
-  .cards {
-    flex-wrap: wrap;
-    justify-content: stretch;
-  }
+@media (max-width: 880px) {
   .card {
-    width: 32%;
-  }
-
-  .card:nth-last-child(2),
-  .card:nth-last-child(1) {
-    width: 48%;
+    width: 49%;
   }
 }
 
 @media (max-width: 580px) {
-  .card {
-    width: 48%;
-  }
 
-  .card:nth-last-child(1) {
+  .cards {
+    flex-direction: column;
+  }
+  .card {
     width: 100%;
-  }
-}
-
-@media (max-width: 400px) {
-  .card {
-    width: 100% !important;
   }
 }
 </style>
